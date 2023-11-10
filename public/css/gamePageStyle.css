@@ -1,0 +1,15 @@
+.videoPanel{
+    display: flex;
+    width: 70%;
+    align-items: center;
+    padding: 10px;
+}
+
+.sidePanel{
+    display: flex;
+    width: 30%;
+    align-items: flex-start;
+    padding: 10px;
+    flex-direction: column;
+    flex-wrap: wrap;
+}

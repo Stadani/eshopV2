@@ -1,0 +1,131 @@
+.table_item a{
+    color: #EEEEEE;
+    text-decoration: none;
+}
+.table_cell_info a{
+    color: #9398a0;
+    text-decoration: none;
+}
+.container{
+    margin-top: 20px;
+    background: #333333;
+    max-width: 1400px;
+    display: table;
+    table-layout: fixed;
+    border-collapse: collapse;
+    list-style: none;
+    padding: 0;
+}
+.container.bar{
+    background-color: #222222;
+}
+.container.arrow_bar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    height: auto;
+}
+
+.button_bar{
+    background-color: #4E31AA;
+    color:#EEEEEE;
+    border-radius:10px;
+    border:1px solid #4E31AA;
+}
+
+.button_arrow {
+    background-color: #4E31AA;
+    color:#EEEEEE;
+    border-radius:10px;
+    border:1px solid #4E31AA;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+
+.table_item {
+    display: flex;
+    justify-content: flex-start;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /*width: 100%;*/
+}
+.table_cell{
+    display: flex;
+    padding: 10px 10px;
+    word-wrap: break-word;
+}
+.table_cell_stats {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+}
+.table_cell_stats_right{
+    text-align: right;
+}
+.table_cell_main{
+    width: 800px;
+
+}
+.table_cell_side{
+    width: 300px;
+}
+
+.table_padding{
+    padding-left: 15px;
+    text-align: right;
+}
+
+.table_cell.table_cell_icon {
+    width: 56px;
+    position: relative;
+}
+
+.table_cell_info{
+    vertical-align: top;
+    font-size: 1.2rem;
+    color: #9398a0;
+}
+.table_cell_middle {
+    border-left:1px solid rgba(255,255,255,0.12);
+    border-right:1px solid rgba(255,255,255,0.12);
+    min-width: 100px;
+    width: 300px;
+}
+@media (max-width: 768px) {
+    .table_cell_title {
+        font-size: 1.1rem;
+    }
+    .table_cell_info{
+        font-size: 1rem;
+    }
+}
+@media (max-width: 650px) {
+    .table_cell_side, .table_cell_side.table_cell_icon{
+        display: none;
+    }
+    .table_cell_icon{
+        display: none;
+    }
+}
+@media (max-width: 450px) {
+    .table_cell_middle {
+        display: none;
+    }
+   .sidenav.just {
+        margin-left: 0;
+        justify-content: center;
+    }
+    .navabar_main{
+        margin-right: 0;
+        justify-content: center;
+    }
+}

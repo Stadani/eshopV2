@@ -1,0 +1,36 @@
+.postNameAndTags{
+    background-color: inherit;
+    flex-direction: column;
+}
+
+.postTags{
+    flex-direction: row;
+}
+
+.postUser{
+    background-color: inherit;
+    border-right: 1px solid rgba(255,255,255,0.12);
+    width: 170px;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.postUser img{
+
+    /*width: 120px;*/
+}
+
+.postContent{
+    padding: 10px;
+    background-color: inherit;
+    text-align: center;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .containerGeneral {
+        flex-wrap: wrap;
+    }
+}

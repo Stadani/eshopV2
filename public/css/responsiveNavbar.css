@@ -1,0 +1,12 @@
+@media (max-width: 768px) {
+    .navbar .nav_button {
+        display: none;
+    }
+    .navbar .navbar_tgl_button {
+        display: block;
+    }
+    .dropdown_navbar {
+        display: block;
+        z-index: 1000;
+    }
+}
