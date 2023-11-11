@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,15 +17,23 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
+
+//list is list of games
 Route::get('/list', function () {
     return view('list');
-});
-Route::get('/forum', function () {
-    return view('forum');
 });
 Route::get('/game', function () {
     return view('game');
 });
-Route::get('/post', function () {
-    return view('gameDis');
+
+//forum is list of posts
+Route::get('/forum', function () {
+    return view('forum', [
+        'forum' => Post::all()
+    ]);
+});
+Route::get('post/{post}', function ($id) {
+    return view('post', [
+        'post' => Post::findOrFail($id)
+    ]);
 });

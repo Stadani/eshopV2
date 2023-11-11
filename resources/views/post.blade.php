@@ -20,7 +20,7 @@
 @section('content')
 <div class="containerGeneral postNameAndTags">
     <div>
-        name
+        {{$post->title}}
     </div>
     <div class="postNameAndTags postTags">
         <ul>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="postContent">
-        asd
+        {{$post->body}}
     </div>
 </div>
 

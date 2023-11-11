@@ -4,8 +4,8 @@
         <img src="{{ asset('images/bruh.png') }}" width="45">
         <div class="navabar_main">
             <a href="/" class="nav_button">Home</a>
-            <a href="list" class="nav_button">Games</a>
-            <a href="forum" class="nav_button">Discussion</a>
+            <a href="/list" class="nav_button">Games</a>
+            <a href="/forum" class="nav_button">Discussion</a>
         </div>
 
         <div class="sidenav links">

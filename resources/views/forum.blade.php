@@ -11,10 +11,11 @@
     @section('listcss')
         <link rel="stylesheet" href="{{ asset('css/forumStyle.css') }}">
     @endsection
+
 </head>
 <body>
-@extends('components/otherLayout')
 
+@extends('components/otherLayout')
 @section('content')
 <!--PAGE CONTENT-->
 <div class="container bar">
@@ -39,170 +40,66 @@
 </div>
 
 <!--TABLE-->
-<div class="container">
-    <div class="table_item">
-        <div class="table_cell table_cell_icon">
-            <div class="table_cell_icon_cont">
-                <img src="{{ asset('images/favicon-32x32.png') }}" alt="profile">
-            </div>
-        </div>
-        <div class="table_cell table_cell_main">
-            <div>
-                <div class="table_cell_title">
-                    <a href="">Name of topic</a>
-                </div>
-                <div class="table_cell_info">
-                    <a href="">Username</a>
-                </div>
-            </div>
-        </div>
+    @foreach($forum as $post)
+        <div>
+            <div class="container">
+                <div class="table_item">
+                    <div class="table_cell table_cell_icon">
+                        <div class="table_cell_icon_cont">
+                            <img src="{{ asset('images/favicon-32x32.png') }}" alt="profile">
+                        </div>
+                    </div>
+                    <div class="table_cell table_cell_main">
+                        <div>
+                            <div class="table_cell_title">
+                                <a href="/post/{{ $post->id }}">
+                                    {{$post->title}}
+                                </a>
+                            </div>
+                            <div class="table_cell_info">
+                                <a href="">Username</a>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="table_cell table_cell_middle table_cell_info">
-            <div class="table_cell_stats">
-                <div>
-                    Views
-                </div>
-                <div>
-                    Replies
-                </div>
-            </div>
-            <div class="table_cell_stats table_cell_stats_right">
-                <div>
-                    123
-                </div>
-                <div>
-                    1233
-                </div>
-            </div>
-        </div>
+                    <div class="table_cell table_cell_middle table_cell_info">
+                        <div class="table_cell_stats">
+                            <div>
+                                Views
+                            </div>
+                            <div>
+                                Replies
+                            </div>
+                        </div>
+                        <div class="table_cell_stats table_cell_stats_right">
+                            <div>
+                                123
+                            </div>
+                            <div>
+                                1233
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="table_cell table_cell_side">
-            <div>
-                <div class="table_cell_info">
-                    1 min ago
+                    <div class="table_cell table_cell_side">
+                        <div>
+                            <div class="table_cell_info">
+                                1 min ago
+                            </div>
+                            <div class="table_cell_info ">
+                                <a href="">Username</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table_cell table_cell_icon">
+                        <div class="table_cell_icon_cont">
+                            <img src="{{ asset('images/albertwhisker.png') }}" alt="profile">
+                        </div>
+                    </div>
                 </div>
-                <div class="table_cell_info ">
-                    <a href="">Username</a>
-                </div>
-            </div>
         </div>
-        <div class="table_cell table_cell_icon">
-            <div class="table_cell_icon_cont">
-                <img src="{{ asset('images/albertwhisker.png') }}" alt="profile">
-            </div>
-        </div>
-    </div>
+    @endforeach
+            @endsection
 
-    <div class="table_item">
-        <div class="table_cell table_cell_icon">
-            <div class="table_cell_icon_cont">
-                <img src="{{ asset('images/albertwhisker.png') }}" alt="profile">
-            </div>
-        </div>
-        <div class="table_cell table_cell_main">
-            <div>
-                <div class="table_cell_title">
-                    <a href="#">Name of topic but longer</a>
-                </div>
-                <div class="table_cell_info">
-                    <a href="">Username</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="table_cell table_cell_middle table_cell_info">
-            <div class="table_cell_stats">
-                <div>
-                    Views
-                </div>
-                <div>
-                    Replies
-                </div>
-            </div>
-            <div class="table_cell_stats table_cell_stats_right">
-                <div>
-                    123
-                </div>
-                <div>
-                    1233
-                </div>
-            </div>
-        </div>
-
-        <div class="table_cell table_cell_side">
-            <div>
-                <div class="table_cell_info">
-                    1 min ago
-                </div>
-                <div class="table_cell_info ">
-                    <a href="">Username</a>
-                </div>
-            </div>
-        </div>
-        <div class="table_cell table_cell_icon">
-            <div class="table_cell_icon_cont">
-                <img src="{{ asset('images/albertwhisker.png') }}" alt="profile">
-            </div>
-        </div>
-    </div>
-
-    <div class="table_item">
-        <div class="table_cell table_cell_icon">
-            <div class="table_cell_icon_cont">
-                <img src="{{ asset('images/albertwhisker.png') }}" alt="profile">
-            </div>
-        </div>
-        <div class="table_cell table_cell_main">
-            <div>
-                <div class="table_cell_title">
-                    <a href="#">
-                        Name of topic
-                    </a>
-                </div>
-                <div class="table_cell_info">
-                    <a href="#">
-                        Username
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="table_cell table_cell_middle table_cell_info">
-            <div class="table_cell_stats">
-                <div>
-                    Views
-                </div>
-                <div>
-                    Replies
-                </div>
-            </div>
-            <div class="table_cell_stats table_cell_stats_right">
-                <div>
-                    123
-                </div>
-                <div>
-                    1233
-                </div>
-            </div>
-        </div>
-
-        <div class="table_cell table_cell_side">
-            <div>
-                <div class="table_cell_info">
-                    1 min ago
-                </div>
-                <div class="table_cell_info ">
-                    <a href="#">
-                        Username
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="table_cell table_cell_icon">
-            <div class="table_cell_icon_cont">
-                <img src="{{ asset('images/favicon-32x32.png') }}" alt="profile">
-            </div>
-        </div>
-    </div>
-    @endsection
 </div>
+</body>
