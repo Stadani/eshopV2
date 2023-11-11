@@ -14,4 +14,9 @@ class Post extends Model
 {
     use HasFactory;
 
+//    mass assigment only allow these attributes
+    protected $fillable = ['title', 'excerpt', 'body'];
+
+
+
 }

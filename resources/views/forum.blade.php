@@ -52,7 +52,7 @@
                     <div class="table_cell table_cell_main">
                         <div>
                             <div class="table_cell_title">
-                                <a href="/post/{{ $post->id }}">
+                                <a href="/post/{{ $post->slug }}">
                                     {{$post->title}}
                                 </a>
                             </div>
