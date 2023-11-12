@@ -33,7 +33,9 @@
                         ikona pre tagy
                     </dt>
                     <dd>
-                         <a href="/tags/{{ $post->tag->slug }}">{{$post->tag->name}}</a>
+                        @foreach($post->tag as $tag)
+                            <a href="/tags/{{ $tag->slug }}">{{$tag->name}}</a>
+                        @endforeach
                     </dd>
                 </dl>
             </li>
