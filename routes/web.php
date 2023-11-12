@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,10 +31,16 @@ Route::get('/game', function () {
 Route::get('/forum', function () {
     return view('forum', [
         'forum' => Post::all()
+        //'forum' => Post::with('tag')->get()   menej queries pre posty ktore vypisuju tagy
     ]);
 });
 Route::get('post/{post:slug}', function (Post $post) {
     return view('post', [
         'post' => $post
+    ]);
+});
+Route::get('tags/{tag:slug}', function (Tag $tag) {
+    return view('forum', [
+        'forum' => $tag->posts
     ]);
 });

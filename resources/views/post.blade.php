@@ -22,6 +22,7 @@
     <div>
         {{$post->title}}
     </div>
+
     <div class="postNameAndTags postTags">
         <ul>
             <li>username</li>
@@ -32,7 +33,7 @@
                         ikona pre tagy
                     </dt>
                     <dd>
-                        tu bude zoznam tagov
+                         <a href="/tags/{{ $post->tag->slug }}">{{$post->tag->name}}</a>
                     </dd>
                 </dl>
             </li>

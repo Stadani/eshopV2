@@ -17,6 +17,11 @@ class Post extends Model
 //    mass assigment only allow these attributes
     protected $fillable = ['title', 'excerpt', 'body'];
 
+    public function tag()
+    {
+        return $this->belongsTo(Tag::class);
+    }
+
 
 
 }
