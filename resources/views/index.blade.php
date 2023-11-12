@@ -63,7 +63,7 @@
                 <div class="container">
                     <div class="carousel-caption text-start">
                         <h1>Space Explora</h1>
-                        <p><a class="btn btn-lg btn-primary" href="list.blade.php">Browse games</a></p>
+                        <p><a class="btn btn-lg btn-primary" href="list">Browse games</a></p>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                 <div class="container">
                     <div class="carousel-caption">
                         <h1>Vagrant Samurai</h1>
-                        <p><a class="btn btn-lg btn-primary" href="list.blade.php">Browse games</a></p>
+                        <p><a class="btn btn-lg btn-primary" href="list">Browse games</a></p>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                 <div class="container">
                     <div class="carousel-caption text-end">
                         <h1>Shrine Linker</h1>
-                        <p><a class="btn btn-lg btn-primary" href="list.blade.php">Browse games</a></p>
+                        <p><a class="btn btn-lg btn-primary" href="list">Browse games</a></p>
                     </div>
                 </div>
             </div>

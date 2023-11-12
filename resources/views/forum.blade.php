@@ -57,7 +57,7 @@
                                 </a>
                             </div>
                             <div class="table_cell_info">
-                                <a href="">Username</a>
+                                <a href="">{{ $post->user->name }}</a>
                             </div>
                         </div>
                     </div>

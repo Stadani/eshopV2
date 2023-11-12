@@ -80,6 +80,7 @@
 }
 .table_cell_side{
     width: 300px;
+    flex-flow: row-reverse;
 }
 
 .table_padding{
