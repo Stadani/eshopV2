@@ -30,10 +30,8 @@ Route::get('/game', function () {
 
 //forum is list of posts
 Route::get('/forum', [PostController::class, 'index']);
-//    return view('forum', [
-//        'forum' => Post::all()
 //        //'forum' => Post::with('tag')->get()   menej queries pre posty ktore vypisuju tagy
-//    ]);
+
 
 Route::get('post/{post:slug}', [PostController::class, 'show']);
 

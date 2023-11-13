@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="/css/forumStyle.css">
         <link rel="stylesheet" href="/css/gameDiscussionStyle.css">
     @endsection
+    {{--    had to link like this because after opening post it doesnt work--}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon-32x32.png') }}">
 
 </head>
 <body>

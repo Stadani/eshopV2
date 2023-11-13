@@ -10,7 +10,8 @@
     @section('listcss')
         <link rel="stylesheet" href="/css/forumStyle.css">
     @endsection
-
+{{--    had to link like this because after opening post it doesnt work--}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon-32x32.png') }}">
 </head>
 <body>
 
@@ -34,7 +35,9 @@
             </button>
         </div>
         <div class="sidenav just">
-            <input type="text" placeholder="Search.." name="search">
+            <form method="get" action="#">
+                <input type="text"  name="search" value="{{ isset($show) ? $show : '' }}">
+            </form>
         </div>
     </div>
 

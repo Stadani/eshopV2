@@ -8,14 +8,16 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
+    /*
+     * show posts in forum that are in accordance with search query
+     * filter() is scopeFilter in Post.php
+     * */
     public function index()
     {
-
         return view('forum', [
-           'forum' => $this->getPosts(),
-           'tags' => Tag::all()
+           'forum' => Post::latest()->filter(request(['search', 'tag']))->get(),
+            'show' => request('search')
         ]);
-
     }
 
     public function show(Post $post)
@@ -25,15 +27,7 @@ class PostController extends Controller
         ]);
     }
 
-    protected function getPosts() {
-        $posts = Post::latest();
 
-        if (request('search')) {
-            $posts
-                ->where('title', 'like', '%' . request('search') . '%');
-        }
-        return $posts->get();
-    }
 
 
 }
