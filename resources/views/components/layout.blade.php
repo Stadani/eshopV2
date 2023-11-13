@@ -6,11 +6,11 @@
 
 
 
-<link rel="icon" type="image/x-icon" href="{{ asset('images/favicon-32x32.png') }}">
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
-<link rel="stylesheet" href="{{ asset('css/responsiveNavbar.css') }}">
-<link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
-<script src="{{ asset('js/navbarScript.js') }}"></script>
+<link rel="icon" type="image/x-icon" href="/images/favicon-32x32.png">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/responsiveNavbar.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<script src="/js/navbarScript.js"></script>
 
 @yield('listcss')
 

@@ -3,6 +3,7 @@
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,17 +29,14 @@ Route::get('/game', function () {
 });
 
 //forum is list of posts
-Route::get('/forum', function () {
-    return view('forum', [
-        'forum' => Post::all()
-        //'forum' => Post::with('tag')->get()   menej queries pre posty ktore vypisuju tagy
-    ]);
-});
-Route::get('post/{post:slug}', function (Post $post) {
-    return view('post', [
-        'post' => $post
-    ]);
-});
+Route::get('/forum', [PostController::class, 'index']);
+//    return view('forum', [
+//        'forum' => Post::all()
+//        //'forum' => Post::with('tag')->get()   menej queries pre posty ktore vypisuju tagy
+//    ]);
+
+Route::get('post/{post:slug}', [PostController::class, 'show']);
+
 Route::get('tags/{tag:slug}', function (Tag $tag) {
     return view('forum', [
         'forum' => $tag->posts

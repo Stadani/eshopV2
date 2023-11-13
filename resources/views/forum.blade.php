@@ -6,47 +6,46 @@
     <title>EShop | Discussion</title>
 
 
-
     @extends('components/layout')
     @section('listcss')
-        <link rel="stylesheet" href="{{ asset('css/forumStyle.css') }}">
+        <link rel="stylesheet" href="/css/forumStyle.css">
     @endsection
 
 </head>
 <body>
 
-@extends('components/otherLayout')
+@extends('components.navbar')
 @section('content')
-<!--PAGE CONTENT-->
-<div class="container bar">
-    <button type="button" class="button_bar">
-        <i class="fa-solid fa-pencil"></i> Post Thread
-    </button>
-</div>
-
-<div class="container arrow_bar">
-    <div class="navabar_main">
-        <button class="button_arrow">
-            <
+    <!--PAGE CONTENT-->
+    <div class="container bar">
+        <button type="button" class="button_bar">
+            <i class="fa-solid fa-pencil"></i> Post Thread
         </button>
+    </div>
+
+    <div class="container arrow_bar">
+        <div class="navabar_main">
+            <button class="button_arrow">
+                <
+            </button>
             1
-        <button class="button_arrow">
-            >
-        </button>
+            <button class="button_arrow">
+                >
+            </button>
+        </div>
+        <div class="sidenav just">
+            <input type="text" placeholder="Search.." name="search">
+        </div>
     </div>
-    <div class="sidenav just">
-        <input type="text" placeholder="Search..">
-    </div>
-</div>
 
-<!--TABLE-->
+    <!--TABLE-->
     @foreach($forum as $post)
         <div>
             <div class="container">
                 <div class="table_item">
                     <div class="table_cell table_cell_icon">
                         <div class="table_cell_icon_cont">
-                            <img src="{{ asset('images/favicon-32x32.png') }}" alt="profile">
+                            <img src="/images/favicon-32x32.png" alt="profile">
                         </div>
                     </div>
                     <div class="table_cell table_cell_main">
@@ -93,13 +92,13 @@
                     </div>
                     <div class="table_cell table_cell_icon">
                         <div class="table_cell_icon_cont">
-                            <img src="{{ asset('images/albertwhisker.png') }}" alt="profile">
+                            <img src="/images/albertwhisker.png" alt="profile">
                         </div>
                     </div>
                 </div>
-        </div>
-    @endforeach
+            </div>
+            @endforeach
             @endsection
 
-</div>
+        </div>
 </body>
