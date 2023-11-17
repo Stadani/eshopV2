@@ -18,7 +18,7 @@ class Post extends Model
     //looks for search query in url if there is any it shows them
     public function scopeFilter($query, array $filters)
     {
-        //Code executes if 'search' key exists and is not null or false
+
                 if ($filters['search'] ?? false) {
                     //searches only for title, commented part doesnt work correctly
             $query
@@ -49,13 +49,34 @@ class Post extends Model
 
         //not working well (shows posts with no tag when searching with title)
         // its because of orwherehas when searching for authors
-        $query->when($filters['tag'] ?? false, function ($query, $tagName) {
-            $query->whereExists(function ($subquery) use ($tagName) {
-                $subquery
-                    ->from('post_tag')
-                    ->join('tags', 'post_tag.tag_id', '=', 'tags.id')
-                    ->whereRaw('posts.id = post_tag.post_id')
-                    ->where('tags.name', '=', $tagName);
+//        $query->when($filters['tag'] ?? false, function ($query, $tagName) {
+//            $query->whereExists(function ($subquery) use ($tagName) {
+//                $subquery
+//                    ->from('post_tag')
+//                    ->join('tags', 'post_tag.tag_id', '=', 'tags.id')
+//                    ->whereRaw('posts.id = post_tag.post_id')
+//                    ->where('tags.name', '=', $tagName);
+//            });
+//        });
+
+        $query->when($filters['tag'] ?? false, function ($query, $tagNames) {
+            $tagNames = is_array($tagNames) ? $tagNames : [$tagNames];
+
+            foreach ($tagNames as $tagName) {
+                $query->whereExists(function ($subquery) use ($tagName) {
+                    $subquery
+                        ->from('post_tag')
+                        ->join('tags', 'post_tag.tag_id', '=', 'tags.id')
+                        ->whereRaw('posts.id = post_tag.post_id')
+                        ->where('tags.name', '=', $tagName);
+                });
+            }
+        });
+
+
+        $query->when($filters['tags'] ?? false, function ($query, $tags) {
+            $query->whereHas('tags', function ($tagQuery) use ($tags) {
+                $tagQuery->whereIn('slug', $tags);
             });
         });
     }

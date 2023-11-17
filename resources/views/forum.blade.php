@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>EShop | Discussion</title>
 
+    <!-- Add these lines in your HTML -->
+
 
     @extends('components/layout')
     @section('listcss')
@@ -12,6 +14,9 @@
     @endsection
 {{--    had to link like this because after opening post it doesnt work--}}
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon-32x32.png') }}">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 <body>
 
@@ -19,29 +24,76 @@
 @section('content')
     <!--PAGE CONTENT-->
     <div class="container bar">
-        <button type="button" class="button_bar">
-            <i class="fa-solid fa-pencil"></i> Post Thread
-        </button>
-    </div>
-
-    <div class="container arrow_bar">
-        <div class="navabar_main">
-            <button class="button_arrow">
-                <
-            </button>
-            1
-            <button class="button_arrow">
-                >
+        <div>
+            <button type="button" class="button_bar">
+                <i class="fa-solid fa-pencil"></i> Post Thread
             </button>
         </div>
-        <div class="sidenav just">
-            <form method="get" action="#">
-                <input type="text"  name="search" value="{{ isset($show) ? $show : '' }}">
-            </form>
+
+        <div class="container arrow_bar">
+            <div class="navabar_main">
+                <button class="button_arrow">
+                    <
+                </button>
+                1
+                <button class="button_arrow">
+                    >
+                </button>
+            </div>
+            <div class="sidenav just">
+
+{{--                <div class="dropdown">--}}
+{{--                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"--}}
+{{--                            data-bs-toggle="dropdown" aria-expanded="false">--}}
+{{--                        Tags--}}
+{{--                    </button>--}}
+{{--                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">--}}
+{{--                            @foreach($tags as $tag)--}}
+{{--                                <li>--}}
+{{--                                    <a class="dropdown-item" href="#">--}}
+{{--                                        <div class="form-check">--}}
+{{--                                            <input class="form-check-input" type="checkbox" value="{{ $tag->slug }}" id="Checkme{{ $tag->slug }}" />--}}
+{{--                                            <label class="form-check-label" for="Checkme{{ $tag->slug }}">{{ $tag->name }}</label>--}}
+{{--                                        </div>--}}
+{{--                                    </a>--}}
+{{--                                </li>--}}
+{{--                            @endforeach--}}
+
+{{--                    </ul>--}}
+{{--                </div>--}}
+
+                <form id="filterForm" method="get" action="/forum">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            Checkbox dropdown
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @foreach($tags as $tag)
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="tag[]" value="{{ $tag->slug }}" id="Checkme{{ $tag->slug }}" {{ in_array($tag->slug, request('tag', [])) ? 'checked' : '' }} />
+                                            <label class="form-check-label" for="Checkme{{ $tag->slug }}">{{ $tag->name }}</label>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </form>
+
+                <form method="get" action="#">
+                <input type="text"  name="search" value="{{ isset($showSearch) ? $showSearch : '' }}"> {{--    placeholder="{{ isset($showSearch) ? $showSearch : '' }}"--}}
+                </form>
+            </div>
+        </div>
+        <div>
         </div>
     </div>
 
     <!--TABLE-->
+
     @foreach($forum as $post)
         <div>
             <div class="container">
@@ -104,4 +156,11 @@
             @endsection
 
         </div>
+        <script>
+            $(document).ready(function() {
+                $('input[type=checkbox]').on('change', function() {
+                    $('#filterForm').submit();
+                });
+            });
+        </script>
 </body>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TagController;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
@@ -40,3 +41,6 @@ Route::get('tags/{tag:slug}', function (Tag $tag) {
         'forum' => $tag->posts
     ]);
 });
+
+Route::get('/forum', [PostController::class, 'index']);
+

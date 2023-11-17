@@ -14,9 +14,11 @@ class PostController extends Controller
      * */
     public function index()
     {
+        $tags = Tag::all();
         return view('forum', [
            'forum' => Post::latest()->filter(request(['search', 'tag']))->get(),
-            'show' => request('search')
+            'tags' => $tags,
+            'showSearch' => request('search')
         ]);
     }
 
