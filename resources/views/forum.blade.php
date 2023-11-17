@@ -42,31 +42,11 @@
             </div>
             <div class="sidenav just">
 
-{{--                <div class="dropdown">--}}
-{{--                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"--}}
-{{--                            data-bs-toggle="dropdown" aria-expanded="false">--}}
-{{--                        Tags--}}
-{{--                    </button>--}}
-{{--                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">--}}
-{{--                            @foreach($tags as $tag)--}}
-{{--                                <li>--}}
-{{--                                    <a class="dropdown-item" href="#">--}}
-{{--                                        <div class="form-check">--}}
-{{--                                            <input class="form-check-input" type="checkbox" value="{{ $tag->slug }}" id="Checkme{{ $tag->slug }}" />--}}
-{{--                                            <label class="form-check-label" for="Checkme{{ $tag->slug }}">{{ $tag->name }}</label>--}}
-{{--                                        </div>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                            @endforeach--}}
-
-{{--                    </ul>--}}
-{{--                </div>--}}
-
                 <form id="filterForm" method="get" action="/forum">
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        <button class="dropdown-toggle button_arrow" type="button" id="dropdownMenuButton"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                            Checkbox dropdown
+                            Tags
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             @foreach($tags as $tag)
@@ -81,14 +61,26 @@
                             @endforeach
                         </ul>
                     </div>
+
+                @if(request('search'))
+                        <input type="hidden" name="search" value="{{ request('search') }}">
+                    @endif
                 </form>
 
                 <form method="get" action="#">
-                <input type="text"  name="search" value="{{ isset($showSearch) ? $showSearch : '' }}"> {{--    placeholder="{{ isset($showSearch) ? $showSearch : '' }}"--}}
+                    @if(request('tag'))
+                        @foreach(request('tag') as $selectedTag)
+                            <input type="hidden" name="tag[]" value="{{ $selectedTag }}">
+                        @endforeach
+                    @endif
+                        <div class="search-container">
+                            <div class="search-icon">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </div>
+                            <input type="text" class="searchbar" name="search" value="{{ isset($showSearch) ? $showSearch : '' }}" placeholder=" ..." class="searchbar"> {{--    placeholder="{{ isset($showSearch) ? $showSearch : '' }}"--}}
+                        </div>
                 </form>
             </div>
-        </div>
-        <div>
         </div>
     </div>
 

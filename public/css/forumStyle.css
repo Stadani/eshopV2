@@ -42,15 +42,42 @@
     color:#EEEEEE;
     border-radius:10px;
     border:1px solid #4E31AA;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: bold;
     padding-right: 15px;
     padding-left: 15px;
     margin-left: 10px;
     margin-right: 10px;
-
+}
+.searchbar{
+    padding-left: 30px;
+    background-color: #333333;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    border-color: #333333;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.searchbar:focus {
+    background-color: #EEEEEE;
+}
+.search-container {
+    position: relative;
+}
+.search-icon {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    color: #222222;
+}
+.sidenav.just{
+    align-items: center;
 }
 
+
+/*TABLE*/
 .table_item {
     display: flex;
     justify-content: flex-start;
@@ -127,6 +154,8 @@
    .sidenav.just {
         margin-left: 0;
         justify-content: center;
+       display: flex;
+       flex-wrap: wrap;
     }
     .navabar_main{
         margin-right: 0;
