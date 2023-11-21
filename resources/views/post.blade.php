@@ -44,7 +44,7 @@
 
     <div class="containerGeneral">
         <div class="postUser">
-            <img src="/images/albertwhisker.png" alt="profile">
+            <img src="https://i.pravatar.cc/100" alt="profile">
             <h4 class="username">{{ $post->user->name }}</h4>
         </div>
 

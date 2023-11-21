@@ -1,0 +1,25 @@
+.containerGeneral {
+    flex-flow: column;
+}
+.searchbar.text{
+    border-color: #222222;
+}
+.input-container{
+    background-color: #333333;
+    color: #222222;
+
+}
+.mult-select-tag .body {
+    border-color: #222222;
+}
+
+.mult-select-tag .btn-container  {
+    border-color: #222222;
+    background-color: #333333;
+}
+.btn-container{
+    background-color: #333333;
+}
+.mult-select-tag .drawer ul li {
+    color: #333333;
+}

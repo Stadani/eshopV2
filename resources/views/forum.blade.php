@@ -24,24 +24,21 @@
 @section('content')
     <!--PAGE CONTENT-->
     <div class="container bar">
+        @auth()
         <div>
             <button type="button" class="button_bar">
+                <a href="/postForm">
                 <i class="fa-solid fa-pencil"></i> Post Thread
+                </a>
             </button>
         </div>
-
+        @endauth
         <div class="container arrow_bar">
-            <div class="navabar_main">
-                <button class="button_arrow">
-                    <
-                </button>
-                1
-                <button class="button_arrow">
-                    >
-                </button>
+            <div class="navbar_main">
+                {{ $forum->links() }}
             </div>
-            <div class="sidenav just">
 
+            <div class="sidenav just">
                 <form id="filterForm" method="get" action="/forum">
                     <div class="dropdown">
                         <button class="dropdown-toggle button_arrow" type="button" id="dropdownMenuButton"
@@ -92,7 +89,7 @@
                 <div class="table_item">
                     <div class="table_cell table_cell_icon">
                         <div class="table_cell_icon_cont">
-                            <img src="/images/favicon-32x32.png" alt="profile">
+                            <img src="https://i.pravatar.cc/100?u={{ $post->id }}" alt="profile">
                         </div>
                     </div>
                     <div class="table_cell table_cell_main">
@@ -139,12 +136,13 @@
                     </div>
                     <div class="table_cell table_cell_icon">
                         <div class="table_cell_icon_cont">
-                            <img src="/images/albertwhisker.png" alt="profile">
+                            <img src="https://i.pravatar.cc/100?id={{ $post->user->id }}" alt="profile">
                         </div>
                     </div>
                 </div>
             </div>
             @endforeach
+
             @endsection
 
         </div>
