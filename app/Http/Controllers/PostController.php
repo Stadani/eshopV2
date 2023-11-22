@@ -16,8 +16,11 @@ class PostController extends Controller
     public function index()
     {
         $tags = Tag::all();
+        $forum = Post::latest()->filter(request(['search', 'tag']))->paginate(6)->withQueryString();
+
+
         return view('forum', [
-           'forum' => Post::latest()->filter(request(['search', 'tag']))->paginate(6)->withQueryString(),
+           'forum' =>$forum,
             'tags' => $tags,
             'showSearch' => request('search')
         ]);
@@ -45,15 +48,17 @@ class PostController extends Controller
             'body' => 'required|string',
         ]);
 
+        $slug = Str::slug($request->title);
+//        dd($slug);
         // Create a new post
         $post = auth()->user()->posts()->create([
             'title' => $request->title,
             'body' => $request->body,
-            'slug' => Str::slug($request->title),
+            'slug' => $slug,
         ]);
 
         // Attach tags to the post
-//        $post->tags()->sync($request->tags);
+        $post->tag()->sync($request->tags);
 
         // Redirect to the post or forum page
         return view('/forum');

@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory;
 
 //    mass assigment only allow these attributes
-    protected $fillable = ['title', 'excerpt', 'body'];
+    protected $guarded = [];
 
     //looks for search query in url if there is any it shows them
     public function scopeFilter($query, array $filters)

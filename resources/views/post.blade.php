@@ -33,7 +33,7 @@
                         <dd>
                             <i class="fa-solid fa-tags"></i>
                             @foreach($post->tag as $tag)
-                                <a href="/tags/{{ $tag->slug }}">{{$tag->name}}</a>
+                                <a href="/forum?tag%5B%5D={{ $tag->slug }}">{{$tag->name}}</a>
                             @endforeach
                         </dd>
                     </dl>

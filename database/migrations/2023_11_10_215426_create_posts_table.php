@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('slug')->unique()->nullable();
+            $table->string('slug')->unique()->default('');
             $table->string('title');
             $table->text('body');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
