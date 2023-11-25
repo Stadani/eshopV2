@@ -19,28 +19,35 @@
 @extends('components.navbar')
 
 @section('content')
-    <div class="containerGeneral postNameAndTags">
-        <div>
-            {{$post->title}}
-        </div>
 
-        <div class="postNameAndTags postTags">
+        <div class="postNameAndTags postNameAndTags">
             <ul>
-                <li>{{ $post->user->name }}</li>
-                <li><time> {{ $post->created_at }} </time></li>
+                <li>{{$post->title}}</li>
+                <li><i class="fa-solid fa-user"></i> {{ $post->user->name }}</li>
+                <li><time><i class="fa-solid fa-clock"></i> {{ $post->created_at }} </time></li>
                 <li>
                     <dl>
                         <dd>
                             <i class="fa-solid fa-tags"></i>
                             @foreach($post->tag as $tag)
-                                <a href="/forum?tag%5B%5D={{ $tag->slug }}">{{$tag->name}}</a>
+                                <a href="/forum?tag%5B%5D={{ $tag->slug }}" >{{$tag->name}}</a>
                             @endforeach
                         </dd>
                     </dl>
                 </li>
             </ul>
         </div>
-    </div>
+
+        @if(auth()->user() && auth()->user()->id === $post->user->id)
+            <div class="postNameAndTags eanddbuttons">
+                <form action="{{ route('destroy.post', $post) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button title="Delete"><i class="fa-solid fa-trash-can"></i>  </button>
+                </form>
+                <a href="{{ route('posts.edit', $post) }}"><button title="Edit"><i class="fa-solid fa-file-pen"></i></button></a>
+            </div>
+        @endif
 
     <div class="containerGeneral">
         <div class="postUser">

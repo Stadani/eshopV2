@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>EShop | Discussion</title>
+    <title>EShop | Form</title>
 
     <!-- Add these lines in your HTML -->
 
@@ -24,17 +24,20 @@
     @section('content')
 
         <div class="containerGeneral">
-            <form action="{{ route('store.post') }}" method="POST">
+            <form action="{{ isset($post) ? route('update.post', $post) : route('store.post') }}" method="POST">
                 @csrf
+                @if(isset($post))
+                    @method('PATCH')
+                @endif
                 <div>
                     Title
-                    <input type="text" class="searchbar" name="title">
+                    <input type="text" class="searchbar" name="title" value="{{ isset($post) ? $post->title : '' }}">
                 </div>
                 <div>
                     tags
                     <select name="tags[]" id="tags" class="asd" multiple>
                         @foreach($tags as $tag)
-                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                            <option value="{{ $tag->id }}" {{ in_array($tag->id, $post->tag->pluck('id')->toArray()) ? 'selected' : '' }}>{{ $tag->name }}</option>
                         @endforeach
                     </select>
 
@@ -43,7 +46,7 @@
                     </script>
                 </div>
                 <div>
-                    <textarea rows="5" cols="30" placeholder="Content of your post..." class="searchbar text" name="body"></textarea>
+                    <textarea rows="5" cols="30" placeholder="Content of your post..." class="searchbar text" name="body" >{{ isset($post) ? $post->body : '' }}</textarea>
                 </div>
                 <div>
                     <button type="submit">Post</button>

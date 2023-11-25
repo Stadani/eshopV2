@@ -46,6 +46,11 @@ Route::get('/forum', [PostController::class, 'index']);
 Route::get('/postForm', [PostController::class, 'create']) ->name('create.post');
 Route::post('/postForm', [PostController::class, 'store'])->name('store.post');
 
+Route::get('/postForm/{post}', [PostController::class, 'edit'])->name('posts.edit');
+Route::patch('/postForm/{post}', [PostController::class, 'update'])->name('update.post');
+Route::delete('/post/{post:slug}', [PostController::class, 'destroy'])->name('destroy.post');
+
+
 //auth
 Route::get('/dashboard', function () {
     return view('dashboard');

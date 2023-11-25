@@ -16,11 +16,15 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->create();
         Tag::factory()->create();
-        // \App\Models\User::factory(10)->create();
+        $tags = ['Guide', 'Help', 'Walkthrough', 'Art', 'Meme'];
+        $slug = ['guide', 'help', 'walkthrough', 'art', 'meme'];
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($tags as $tagName) {
+            Tag::factory()->create(['name' => $tagName]);
+        }
+        foreach ($slug as $slugName) {
+            Tag::factory()->create(['slug' => $slugName]);
+        }
+
     }
 }
