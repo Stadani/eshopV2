@@ -9,19 +9,36 @@
     flex-direction: row-reverse;
     /*border-radius: 10px;*/
 }
+.button_bar{
+    margin-right: 5px;
+}
+.tagLink{
+    display: inline-block;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 10px;
+}
+
+.tagLink a {
+    text-decoration: none;
+    color: #EEEEEE;
+}
+
 .postUser{
     background-color: inherit;
     border-right: 1px solid rgba(255,255,255,0.12);
-    width: 170px;
+    width: 200px;
     align-items: center;
     text-align: center;
     flex-direction: column;
     padding: 10px;
 }
 
-.postUser img{
-
-    /*width: 120px;*/
+.postUser img {
+    width: 100px;
+    height: auto;
 }
 
 .postContent{
@@ -30,9 +47,23 @@
     text-align: center;
     width: 100%;
 }
-
+.postContent time{
+    display: block;
+    text-align: left;
+    color: #222222;
+}
+.postContent textarea {
+    width: 100%;
+}
+.postContent button {
+    display: block;
+    margin-top: 10px;
+}
 @media (max-width: 768px) {
-    .containerGeneral {
-        flex-wrap: wrap;
-    }
+    /*.containerGeneral {*/
+    /*    flex-wrap: wrap;*/
+    /*}*/
+    /*.postUser{*/
+    /*    display: none;*/
+    /*}*/
 }

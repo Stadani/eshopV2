@@ -28,7 +28,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-
+        $post->increment('views');
         return view('post', [
             'post' => $post
         ]);
@@ -41,85 +41,65 @@ class PostController extends Controller
     }
     public function store(Request $request)
     {
-        // Validate the form data
         $request->validate([
             'title' => 'required|string|max:255',
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
             'body' => 'required|string',
         ]);
-
-
         $slug = Str::slug($request->title);
-//        dd($slug);
-        // Create a new post
         $post = auth()->user()->posts()->create([
             'title' => $request->title,
             'body' => $request->body,
             'slug' => $slug,
         ]);
-
-        // Attach tags to the post
         $post->tag()->sync($request->tags);
-
-        // Redirect to the post or forum page
         return redirect('/forum');
     }
 
     public function edit(Post $post)
     {
-        $tags = Tag::all(); // Assuming you have a Tag model
-
-        // Check if the authenticated user is the author
+        $tags = Tag::all();
         if (auth()->user() && auth()->user()->id === $post->user->id) {
             return view('postForm', [
                 'post' => $post,
                 'tags' => $tags
             ]);
         }
-
-        // If not the author redirect back
         return redirect()->back();
     }
 
 
     public function update(Request $request, Post $post)
     {
-        // Validate the form data
         $request->validate([
             'title' => 'required|string|max:255',
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
             'body' => 'required|string',
         ]);
-
-        // Update the existing post
         $post->update([
             'title' => $request->title,
             'body' => $request->body,
             'slug' => Str::slug($request->title),
         ]);
-
-        // Sync the tags
         $post->tag()->sync($request->tags);
-
-        // Redirect to the post or forum page
         return redirect('/forum');
     }
 
     public function destroy(Post $post)
     {
-        // Check if the authenticated user is the author
         if (auth()->user() && auth()->user()->id === $post->user->id) {
-            // Delete the post
             $post->delete();
-
-            // Redirect to the forum or any other page you want
             return redirect('/forum');
         }
-
-        // If not the author, redirect back
         return redirect()->back();
     }
 
+    public function like(Post $post)
+    {
+        $post->toggleLike(auth()->user());
+
+        return back();
+    }
 }

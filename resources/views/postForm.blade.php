@@ -24,34 +24,52 @@
     @section('content')
 
         <div class="containerGeneral">
-            <form action="{{ isset($post) ? route('update.post', $post) : route('store.post') }}" method="POST">
-                @csrf
-                @if(isset($post))
-                    @method('PATCH')
-                @endif
-                <div>
-                    Title
-                    <input type="text" class="searchbar" name="title" value="{{ isset($post) ? $post->title : '' }}">
-                </div>
-                <div>
-                    tags
-                    <select name="tags[]" id="tags" class="asd" multiple>
-                        @foreach($tags as $tag)
-                            <option value="{{ $tag->id }}" {{ in_array($tag->id, $post->tag->pluck('id')->toArray()) ? 'selected' : '' }}>{{ $tag->name }}</option>
-                        @endforeach
-                    </select>
+            <div class="leftHalf">
+                <p>Title</p>
+                <p>Tags</p>
+                <p>Body</p>
+            </div>
 
-                    <script>
-                        new MultiSelectTag('tags')  // id
-                    </script>
-                </div>
-                <div>
-                    <textarea rows="5" cols="30" placeholder="Content of your post..." class="searchbar text" name="body" >{{ isset($post) ? $post->body : '' }}</textarea>
-                </div>
-                <div>
-                    <button type="submit">Post</button>
-                </div>
-            </form>
+            <div class="rightHalf">
+                <form action="{{ isset($post) ? route('update.post', $post) : route('store.post') }}" method="POST">
+                    @csrf
+                    @if(isset($post))
+                        @method('PATCH')
+                    @endif
+                    <div>
+
+                        <input type="text" class="searchbar" name="title" value="{{ old('title', isset($post) ? $post->title : '') }}" placeholder="Title...">
+
+                    </div>
+                    <div>
+
+                        <select name="tags[]" id="tags" multiple>
+                            @foreach($tags as $tag)
+                                <option value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', isset($post) ? $post->tag->pluck('id')->toArray() : [])) ? 'selected' : '' }}>{{ $tag->name }}</option>
+                            @endforeach
+                        </select>
+
+                        <script>
+                            new MultiSelectTag('tags')  // id
+                        </script>
+                    </div>
+                    <div>
+                        <textarea rows="5" cols="30" placeholder="Content of your post..." class="searchbar text" name="body" >{{ old('body', isset($post) ? $post->body : '') }}</textarea>
+                    </div>
+                    @error('title')
+                        <li class="error-message">{{ $message }}</li>
+                    @enderror
+                    @error('tags')
+                        <li class="error-message">{{ $message }}</li>
+                    @enderror
+                    @error('body')
+                        <li class="error-message">{{ $message }}</li>
+                    @enderror
+                    <div>
+                        <button type="submit" class="button_bar">Post</button>
+                    </div>
+                </form>
+            </div>
 
         </div>
 

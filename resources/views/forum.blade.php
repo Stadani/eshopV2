@@ -17,8 +17,10 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+
 </head>
 <body>
+@extends('components.forumItem')
 
 @extends('components.navbar')
 @section('content')
@@ -26,13 +28,18 @@
     <div class="container bar">
         @auth()
         <div>
-            <button type="button" class="button_bar">
-                <a href="/postForm">
+            <a href="/postForm">
+                <button type="button" class="button_bar">
                 <i class="fa-solid fa-pencil"></i> Post Thread
-                </a>
-            </button>
+                </button>
+            </a>
         </div>
         @endauth
+        @guest()
+            <div>
+                You are not logged in. Please <a href="{{ route('login') }}">log in</a> or <a href="{{ route('register') }}">register</a> to post on the forum.
+            </div>
+        @endguest
         <div class="container arrow_bar">
             <div class="navbar_main">
                 {{ $forum->links() }}
@@ -83,74 +90,12 @@
 
     <!--TABLE-->
 
-    @foreach($forum as $post)
-        <div>
-            <div class="container">
-                <div class="table_item">
-                    <div class="table_cell table_cell_icon">
-                        <div class="table_cell_icon_cont">
-                            <img src="https://i.pravatar.cc/100?u={{ $post->id }}" alt="profile">
-                        </div>
-                    </div>
-                    <div class="table_cell table_cell_main">
-                        <div>
-                            <div class="table_cell_title">
-                                <a href="/post/{{ $post->slug }}">
-                                    {{$post->title}}
-                                </a>
-                            </div>
-                            <div class="table_cell_info">
-                                <a href="">{{ $post->user->name }}</a>
-                            </div>
-                        </div>
-                    </div>
+    @section('table')
+        <script src="{{ asset('js/dropdownSubmit.js') }}"></script>
+    @endsection
 
-                    <div class="table_cell table_cell_middle table_cell_info">
-                        <div class="table_cell_stats">
-                            <div>
-                                Views
-                            </div>
-                            <div>
-                                Replies
-                            </div>
-                        </div>
-                        <div class="table_cell_stats table_cell_stats_right">
-                            <div>
-                                123
-                            </div>
-                            <div>
-                                1233
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="table_cell table_cell_side">
-                        <div>
-                            <div class="table_cell_info">
-                                1 min ago
-                            </div>
-                            <div class="table_cell_info ">
-                                <a href="">Username</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table_cell table_cell_icon">
-                        <div class="table_cell_icon_cont">
-                            <img src="https://i.pravatar.cc/100?id={{ $post->user->id }}" alt="profile">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endforeach
 
-            @endsection
+@endsection
 
-        </div>
-        <script>
-            $(document).ready(function() {
-                $('input[type=checkbox]').on('change', function() {
-                    $('#filterForm').submit();
-                });
-            });
-        </script>
 </body>

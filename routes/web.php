@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Tag;
@@ -50,6 +51,8 @@ Route::get('/postForm/{post}', [PostController::class, 'edit'])->name('posts.edi
 Route::patch('/postForm/{post}', [PostController::class, 'update'])->name('update.post');
 Route::delete('/post/{post:slug}', [PostController::class, 'destroy'])->name('destroy.post');
 
+Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment');
+Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
 
 //auth
 Route::get('/dashboard', function () {

@@ -14,16 +14,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create();
-        Tag::factory()->create();
-        $tags = ['Guide', 'Help', 'Walkthrough', 'Art', 'Meme'];
-        $slug = ['guide', 'help', 'walkthrough', 'art', 'meme'];
 
-        foreach ($tags as $tagName) {
-            Tag::factory()->create(['name' => $tagName]);
-        }
-        foreach ($slug as $slugName) {
-            Tag::factory()->create(['slug' => $slugName]);
+        $tags = [
+            ['name' => 'Guide', 'slug' => 'guide'],
+            ['name' => 'Help', 'slug' => 'help'],
+            ['name' => 'Walkthrough', 'slug' => 'walkthrough'],
+            ['name' => 'Art', 'slug' => 'art'],
+            ['name' => 'Meme', 'slug' => 'meme'],
+        ];
+
+        foreach ($tags as $tagData) {
+            Tag::factory()->create($tagData);
         }
 
     }
