@@ -54,6 +54,12 @@ Route::delete('/post/{post:slug}', [PostController::class, 'destroy'])->name('de
 Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment');
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
 
+
+Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
+
+
 //auth
 Route::get('/dashboard', function () {
     return view('dashboard');

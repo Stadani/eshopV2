@@ -9,6 +9,11 @@
     flex-direction: row-reverse;
     /*border-radius: 10px;*/
 }
+.postNameAndTags.eanddbuttons.comment{
+    flex-direction: row;
+    justify-content: center;
+}
+
 .button_bar{
     margin-right: 5px;
 }
@@ -59,6 +64,7 @@
     display: block;
     margin-top: 10px;
 }
+
 @media (max-width: 768px) {
     /*.containerGeneral {*/
     /*    flex-wrap: wrap;*/

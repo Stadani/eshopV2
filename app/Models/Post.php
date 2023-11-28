@@ -83,6 +83,7 @@ class Post extends Model
 
     public function toggleLike(User $user)
     {
+        //if a like already exists for the given user on the post
         if ($this->likes()->where('user_id', $user->id)->exists()) {
             $this->likes()->where('user_id', $user->id)->delete();
         } else {

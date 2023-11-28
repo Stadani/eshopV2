@@ -20,7 +20,7 @@ class PostController extends Controller
 
 
         return view('forum', [
-           'forum' =>$forum,
+            'forum' =>$forum,
             'tags' => $tags,
             'showSearch' => request('search')
         ]);
