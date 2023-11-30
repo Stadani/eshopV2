@@ -42,7 +42,7 @@
 
     @if(auth()->user() && auth()->user()->id === $post->user->id)
         <div class="postNameAndTags eanddbuttons">
-            <form action="{{ route('destroy.post', $post) }}" method="POST">
+            <form action="{{ route('delete.post', $post) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button title="Delete" class="button_bar"><i class="fa-solid fa-trash-can"></i>  </button>
@@ -77,7 +77,7 @@
     </div>
 
     @guest()
-        <div>
+        <div class="container bar">
             You are not logged in. Please <a href="{{ route('login') }}">log in</a> or <a href="{{ route('register') }}">register</a> to comment on the post.
         </div>
     @endguest

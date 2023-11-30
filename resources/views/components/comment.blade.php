@@ -38,12 +38,7 @@
 
     {{ $comment-> body }}
 </div>
+<script src="/js/toggleEditComment.js"></script>
 
 
 
-<script>
-    function toggleEditForm(commentId) {
-        const editForm = document.getElementById(`editForm${commentId}`);
-        editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
-    }
-</script>

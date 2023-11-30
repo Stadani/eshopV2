@@ -39,6 +39,19 @@ class PostController extends Controller
         $tags = Tag::all();
         return view('postForm', ['tags' => $tags]);
     }
+
+    protected function makeUniqueSlug($slug)
+    {
+        $count = 1;
+        $originalSlug = $slug;
+
+        while (Post::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . $count;
+            $count++;
+        }
+
+        return $slug;
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -48,10 +61,12 @@ class PostController extends Controller
             'body' => 'required|string',
         ]);
         $slug = Str::slug($request->title);
+        $uSlug = $this->makeUniqueSlug($slug);
+
         $post = auth()->user()->posts()->create([
             'title' => $request->title,
             'body' => $request->body,
-            'slug' => $slug,
+            'slug' => $uSlug,
         ]);
         $post->tag()->sync($request->tags);
         return redirect('/forum');
@@ -78,16 +93,19 @@ class PostController extends Controller
             'tags.*' => 'exists:tags,id',
             'body' => 'required|string',
         ]);
+        $slug = Str::slug($request->title);
+        $uSlug = $this->makeUniqueSlug($slug);
+
         $post->update([
             'title' => $request->title,
             'body' => $request->body,
-            'slug' => Str::slug($request->title),
+            'slug' => $uSlug,
         ]);
         $post->tag()->sync($request->tags);
         return redirect('/forum');
     }
 
-    public function destroy(Post $post)
+    public function delete(Post $post)
     {
         if (auth()->user() && auth()->user()->id === $post->user->id) {
             $post->delete();

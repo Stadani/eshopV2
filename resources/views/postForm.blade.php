@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.0/dist/js/multi-select-tag.js"></script>
 
+
 </head>
 <body>
     @extends('components.navbar')
@@ -38,7 +39,7 @@
                     @endif
                     <div>
 
-                        <input type="text" class="searchbar" name="title" value="{{ old('title', isset($post) ? $post->title : '') }}" placeholder="Title...">
+                        <input type="text" id="title" class="searchbar" name="title" value="{{ old('title', isset($post) ? $post->title : '') }}" placeholder="Title...">
 
                     </div>
                     <div>
@@ -54,7 +55,7 @@
                         </script>
                     </div>
                     <div>
-                        <textarea rows="5" cols="30" placeholder="Content of your post..." class="searchbar text" name="body" >{{ old('body', isset($post) ? $post->body : '') }}</textarea>
+                        <textarea id="body" rows="5" cols="30" placeholder="Content of your post..." class="searchbar text" name="body" >{{ old('body', isset($post) ? $post->body : '') }}</textarea>
                     </div>
                     @error('title')
                         <li class="error-message">{{ $message }}</li>
@@ -65,13 +66,19 @@
                     @error('body')
                         <li class="error-message">{{ $message }}</li>
                     @enderror
+                        <div id="titleErr"></div>
+                        <div id="bodyErr"></div>
                     <div>
                         <button type="submit" class="button_bar">Post</button>
                     </div>
                 </form>
+                <script src="/js/postFormError.js"></script>
+
             </div>
 
         </div>
 
+
     @endsection
+
 </body>

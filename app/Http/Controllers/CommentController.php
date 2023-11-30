@@ -18,19 +18,16 @@ class CommentController extends Controller
             'user_id' => auth()->id(),
             'body' => request('body')
         ]);
-
         return back();
     }
 
     public function edit(Comment $comment)
     {
-        // Check if the authenticated user is authorized to edit the comment
         if (auth()->user()->id === $comment->user_id) {
             return view('edit-comment', ['comment' => $comment]);
         }
 
-        // If the user is not authorized, you might want to handle this case appropriately
-        abort(403, 'Unauthorized action');
+        return back();
     }
 
     public function update(Request $request, Comment $comment)
@@ -46,21 +43,17 @@ class CommentController extends Controller
 
             return redirect()->back();
         }
-
-        // If the user is not authorized, you might want to handle this case appropriately
-        abort(403, 'Unauthorized action');
-
+        return back();
     }
 
 
     public function delete(Comment $comment)
     {
-        // Check if the authenticated user is authorized to delete the comment
         if (auth()->user()->id === $comment->user_id) {
             $comment->delete();
             return back();
         }
-        abort(403, 'Unauthorized action');
+        return back();
     }
 
 }

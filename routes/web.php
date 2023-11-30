@@ -49,7 +49,8 @@ Route::post('/postForm', [PostController::class, 'store'])->name('store.post');
 
 Route::get('/postForm/{post}', [PostController::class, 'edit'])->name('posts.edit');
 Route::patch('/postForm/{post}', [PostController::class, 'update'])->name('update.post');
-Route::delete('/post/{post:slug}', [PostController::class, 'destroy'])->name('destroy.post');
+Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('delete.post');
+
 
 Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment');
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
