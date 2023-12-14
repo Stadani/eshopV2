@@ -63,7 +63,7 @@
                 @auth()
                     <form method="POST" action="{{ route('posts.like', $post) }}">
                         @csrf
-                        <button type="submit"  >
+                        <button type="submit"  class="button_bar">
                             {{ $post->likes()->where('user_id', auth()->id())->exists() ? 'Unlike' : 'Like' }}
                         </button>
                     </form>

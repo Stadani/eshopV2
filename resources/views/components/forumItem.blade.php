@@ -31,10 +31,10 @@
                     </div>
                     <div class="table_cell_stats table_cell_stats_right">
                         <div>
-                            123
+                            {{ $post->views }}
                         </div>
                         <div>
-                            1233
+                             {{ $post->comment_count }} {{--comment_count is automatically generated attribute --}}
                         </div>
                     </div>
                 </div>

@@ -22,6 +22,12 @@
 input[type=text] {
     margin: 10px;
 }
+.gamePanel{
+    /*width: 100%;*/
+}
+.filters{
+    width: 40%;
+}
 @media (min-width: 960px) {
     .card {
         width: 300px;

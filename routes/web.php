@@ -31,7 +31,6 @@ Route::get('/game', function () {
 
 //forum is list of posts
 Route::get('/forum', [PostController::class, 'index']);
-//        //'forum' => Post::with('tag')->get()   menej queries pre posty ktore vypisuju tagy
 
 
 Route::get('post/{post:slug}', [PostController::class, 'show']);
@@ -54,7 +53,6 @@ Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('del
 
 Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment');
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
-
 
 Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
 Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');

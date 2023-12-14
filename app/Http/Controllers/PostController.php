@@ -11,18 +11,17 @@ class PostController extends Controller
 {
     /*
      * show posts in forum that are in accordance with search query
-     * filter() is scopeFilter in Post.php
+     * filter passes request params to the scopeFilter
      * */
     public function index()
     {
         $tags = Tag::all();
-        $forum = Post::latest()->filter(request(['search', 'tag']))->paginate(6)->withQueryString();
-
+        $forum = Post::withCount('comment')->latest()->filter(request(['search', 'tag']))->paginate(6)->withQueryString();
 
         return view('forum', [
             'forum' =>$forum,
             'tags' => $tags,
-            'showSearch' => request('search')
+            'showSearch' => request('search'),
         ]);
     }
 
@@ -93,8 +92,14 @@ class PostController extends Controller
             'tags.*' => 'exists:tags,id',
             'body' => 'required|string',
         ]);
-        $slug = Str::slug($request->title);
-        $uSlug = $this->makeUniqueSlug($slug);
+
+        //keep slug if didnt change title
+        if ($request->title !== $post->title) {
+            $slug = Str::slug($request->title);
+            $uSlug = $this->makeUniqueSlug($slug);
+        } else {
+            $uSlug = $post->slug;
+        }
 
         $post->update([
             'title' => $request->title,
@@ -102,8 +107,9 @@ class PostController extends Controller
             'slug' => $uSlug,
         ]);
         $post->tag()->sync($request->tags);
-        return redirect('/forum');
+        return redirect(url('/post/' . $post->slug));
     }
+
 
     public function delete(Post $post)
     {
@@ -118,6 +124,12 @@ class PostController extends Controller
     {
         $post->toggleLike(auth()->user());
 
-        return back();
+        return redirect()->back();
+    }
+
+    public function countComment(Post $post)
+    {
+
+
     }
 }
