@@ -2,7 +2,7 @@ body{
     background: #222222 ;
     font-family: sans-serif, Verdana;
     font-size: 1.3rem ;
-    color: #EEEEEE ;
+    color: #EEEEEE;
 }
 p {
     font-weight: bold;
@@ -17,13 +17,14 @@ img {
     height: auto;
 }
 .containerGeneral{
+    display: flex;
     margin-top: 20px;
     background: #333333;
     max-width: 1400px;
-    display: flex;
     margin-right: auto;
     margin-left: auto;
     padding: 0;
+
 }
 
 .head {

@@ -1,0 +1,23 @@
+.text{
+    font-family: sans-serif, Verdana;
+    font-size: 1.3rem ;
+    color: #EEEEEE;
+    margin: 0;
+}
+.nav_button:hover{
+    background-color: #222222;
+}
+
+h2{
+    font-weight: bold;
+}
+p{
+    font-weight: normal;
+}
+.profileCont{
+    padding: 10px;
+}
+.dropdown{
+    border-color: #4E31AA;
+    border-radius: 10px;
+}

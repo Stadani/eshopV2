@@ -4,10 +4,12 @@
     padding-right: 10px;
     border-right: 1px solid rgba(255,255,255,0.12);
     margin-right: 10px;
-}
-.rightHalf{
 
 }
+.rightHalf{
+    width: 600px;
+}
+
 .button_bar{
     padding: 5px;
 }

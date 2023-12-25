@@ -5,11 +5,52 @@
     padding: 10px;
 }
 
+.containerGame{
+    background-color: inherit;
+}
+.tags{
+    flex-wrap: wrap;
+}
+.tag{
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    padding-right: 5px;
+    padding-left: 5px;
+    border-radius: 10px;
+}
+
 .sidePanel{
     display: flex;
     width: 30%;
     align-items: flex-start;
     padding: 10px;
+    margin-left: 10px;
     flex-direction: column;
     flex-wrap: wrap;
+}
+.info{
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+}
+.leftHalf{
+    /*width: 45%;*/
+    margin-right: 10px;
+
+}
+.rightHalf{
+    /*width: 70%;*/
+
+
+}
+
+.leftHalf, .rightHalf {
+    flex: 1;
+
+}
+.multiline-ellipsis {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Number of lines you want */
+    -webkit-box-orient: vertical;
 }

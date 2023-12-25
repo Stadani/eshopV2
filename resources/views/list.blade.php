@@ -26,31 +26,48 @@
         </div>
 
         <div class="sidenav">
-            <button class="button_bar"><i class="fa-solid fa-filter"></i></button>
+            <button class="button_bar" onclick="toggleFilters()"><i class="fa-solid fa-filter"></i></button>
         </div>
 
     </div>
 
-    <div class="container page_content">
-        <div class="gamePanel">
-            <div class="row row-cols-2 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="card">
-                        <img src="/images/Background18.jpg">
-                        <div class="card-body ">
-                            <h5 class="card-title">Game 1</h5>
-                        </div>
-                    </div>
-                </div>
+    <div class=" container page_content">
+        <div class="container gamePanel">
+            <x-gameCard :games="$games">
+
+            </x-gameCard>
+        </div>
+        <div id="filter" class="container filters hidden">
+            <div class="slider-container">
+                <label for="gameSlider">Games per Page:</label>
+                <span>1</span>
+                <input type="range" id="gameSlider" min="1" max="50" value="{{ $page_size }}" oninput="fetchGames(value)">
+                <span id="sliderValue">{{ $page_size }}</span>
             </div>
         </div>
-
-        <div class="filters">
-            asd
-        </div>
     </div>
+
+
+
 @endsection
 
+<script src="{{ asset('js/toggleFilters.js') }}"></script>
+<script>
 
+    async function fetchGames(pageSize) {
+        try {
+            document.getElementById('sliderValue').innerText = pageSize;
+            const response = await fetch(`/list?page_size=${pageSize}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest', //assures it works with laravel
+                }
+            });
+            const html = await response.text();
+            document.querySelector('.gamePanel').innerHTML = html;
+        } catch (error) {
+            console.error('Error fetching games:', error);
+        }
+    }
+</script>
 </body>
 </html>

@@ -21,6 +21,7 @@
     display: flex;
     gap: 10px;
     padding-left: 10px;
+    padding-right: 10px;
     margin-left: auto;
 }
 .navbar a.active {

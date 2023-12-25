@@ -10,54 +10,121 @@
     height: auto;
 }
 .page_content{
-    margin-top: 10px;
-    justify-content: space-evenly;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: #222222;
 }
-.card img {
-    /*margin-top: 5px;*/
-    max-height: 150px;
-}
+
 input[type=text] {
     margin: 10px;
 }
 .gamePanel{
-    /*width: 100%;*/
+    width: 100%;
+    margin: 0;
+    background-color: #222222;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 .filters{
     width: 40%;
-}
-@media (min-width: 960px) {
-    .card {
-        width: 300px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-@media (max-width: 768px) {
-    .card {
-        max-width: 400px;
+    margin: 0;
+    margin-left: 20px;
 
-        margin-left: auto;
-        margin-right: auto;
-    }
 }
-@media (min-width: 1366px) {
-    .card {
-        width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+.hidden {
+    display: none;
 }
-.card-group{
-    display: flex;
-    flex-wrap: wrap;
-
+.filters.hidden{
+    margin-left: 0;
 }
 .card{
-    background-color: #222222;
+    background-color: #333333;
     color: #EEEEEE;
     text-align: center;
-    vertical-align: center;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    /*max-width: 100%;*/
+    width: 300px;
+    flex: 1 1 30%;
 }
+
+
+.card_text_container .card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 5px;
+
+}
+
+.card:hover .card-text {
+    text-overflow: clip;
+    white-space: normal;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+    z-index: 1000;
+}
+.game-tags{
+    background-color: #333333;
+    display: none;
+    position: absolute;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: 100%;
+}
+.card:hover .game-tags {
+    display: flex;
+}
+
+.tag {
+    background-color: #4E31AA;
+    padding: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    /*font-weight: bold;*/
+}
+@media (max-width: 480px) {
+    .card {
+        width: 100%;
+
+    }
+}
+@media (max-width: 960px) {
+    .page_content {
+        flex-direction: column;
+    }
+    .filters {
+        order: -1;
+    }
+    .filters, .gamePanel {
+        width: 100%; /* Take full width */
+    }
+}
+/*@media (min-width: 768px) {*/
+/*    .card {*/
+/*        max-width: 400px;*/
+/*        !*flex: 0 0 48%;*!*/
+/*        font-size: 0.7rem;*/
+/*        flex: 1 1 45%;*/
+/*    }*/
+/*}*/
+/*@media (min-width: 1366px) {*/
+/*    .card {*/
+/*        width: 400px;*/
+/*        margin-left: auto;*/
+/*        margin-right: auto;*/
+/*    }*/
+/*}*/
+
+

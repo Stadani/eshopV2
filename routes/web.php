@@ -3,6 +3,8 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GameController;
+
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +30,8 @@ Route::get('/list', function () {
 Route::get('/game', function () {
     return view('game');
 });
+Route::get('/list', [GameController::class, 'index']);
+Route::get('/game/{id}', [GameController::class, 'show'])->name('game.show');
 
 //forum is list of posts
 Route::get('/forum', [PostController::class, 'index']);
@@ -63,6 +67,8 @@ Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

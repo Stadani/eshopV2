@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/responsiveNavbar.css">
 <link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/profileStyle.css">
+
+
 <script src="/js/navbarScript.js"></script>
 
 @yield('listcss')

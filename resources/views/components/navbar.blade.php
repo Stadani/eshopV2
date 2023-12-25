@@ -14,6 +14,9 @@
             <a href="/register" class="nav_button"><i class="fa-solid fa-pencil"></i> Sign In</a>
             @endguest
             @auth()
+                    <a class="nav_button" href="/profile"><i class="fa-solid fa-user"></i>
+                        Profile
+                    </a>
                     <a href="{{ route('logout') }}" class="nav_button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
                     </a>
