@@ -81,7 +81,7 @@
                             <div class="search-icon">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </div>
-                            <input type="text" class="searchbar" name="search" value="{{ isset($showSearch) ? $showSearch : '' }}" placeholder=" ..." class="searchbar"> {{--    placeholder="{{ isset($showSearch) ? $showSearch : '' }}"--}}
+                            <input type="text" class="searchbar" name="search" value="{{ isset($showSearch) ? $showSearch : '' }}" placeholder=" ...">
                         </div>
                 </form>
             </div>

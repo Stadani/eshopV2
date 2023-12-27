@@ -7,6 +7,9 @@
 
 .containerGame{
     background-color: inherit;
+    display: flex;
+
+    flex-direction: row;
 }
 .tags{
     flex-wrap: wrap;
@@ -33,24 +36,98 @@
     margin-right: 0;
     width: 100%;
 }
+.info table {
+    width: 100%;
+}
 .leftHalf{
     /*width: 45%;*/
     margin-right: 10px;
-
 }
 .rightHalf{
     /*width: 70%;*/
-
-
 }
 
 .leftHalf, .rightHalf {
     flex: 1;
 
 }
-.multiline-ellipsis {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1; /* Number of lines you want */
-    -webkit-box-orient: vertical;
+
+.leftColumn{
+    vertical-align: top;
+    white-space: nowrap;
+    width: 30%;
+}
+.rightColumn{
+    text-align: right;
+    width: 70%;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #222222;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+    color: #4E31AA;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.screenshotContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.selectedImage img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+.thumbnails {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+}
+.thumbnail {
+    cursor: pointer;
+    max-height: 100px;
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .sidePanel, .videoPanel {
+        width: 100%;
+    }
+    .sidePanel{
+        order: -1;
+        margin-left: 0;
+    }
+
+    .containerGame{
+        flex-wrap: wrap;
+    }
+    .modal-content {
+        width: 90%; /* Adjust the modal width on smaller screens */
+    }
+
+
 }

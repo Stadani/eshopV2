@@ -30,7 +30,29 @@ class RawgService
         return $response->json();
     }
 
+    public function getScreenshots($id)
+    {
+        $response = Http::get($this->baseUrl . 'games/' . $id . '/screenshots', ['key' => $this->apiKey]);
+        return $response->json();
 
+    }
 
+    public function getTags()
+    {
+        $response = Http::get($this->baseUrl . 'tags' , ['key' => $this->apiKey]);
+        return $response->json();
+    }
+
+    public function getGenres()
+    {
+        $response = Http::get($this->baseUrl . 'genres' , ['key' => $this->apiKey]);
+        return $response->json();
+    }
+
+    public function getPlatforms()
+    {
+        $response = Http::get($this->baseUrl . 'platforms' , ['key' => $this->apiKey]);
+        return $response->json();
+    }
 
 }

@@ -4,7 +4,7 @@
     background: #333333;
     max-width: 1400px;
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     margin-left: auto;
     margin-right: auto;
     height: auto;
@@ -31,7 +31,8 @@ input[type=text] {
     width: 40%;
     margin: 0;
     margin-left: 20px;
-
+    flex-direction: column;
+    /*align-items: start;*/
 }
 .hidden {
     display: none;
@@ -53,7 +54,7 @@ input[type=text] {
 }
 
 
-.card_text_container .card-text {
+.cardTextContainer .cardText {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -61,7 +62,7 @@ input[type=text] {
 
 }
 
-.card:hover .card-text {
+.card:hover .cardText {
     text-overflow: clip;
     white-space: normal;
 }
@@ -71,7 +72,7 @@ input[type=text] {
     cursor: pointer;
     z-index: 1000;
 }
-.game-tags{
+.gameTags{
     background-color: #333333;
     display: none;
     position: absolute;
@@ -82,18 +83,25 @@ input[type=text] {
     border-bottom-right-radius: 5px;
     width: 100%;
 }
-.card:hover .game-tags {
+.card:hover .gameTags {
     display: flex;
 }
-
+a {
+    text-decoration: none;
+}
 .tag {
     background-color: #4E31AA;
     padding: 5px;
     margin-right: 5px;
     border-radius: 5px;
     font-size: 0.7rem;
-    /*font-weight: bold;*/
+    white-space: nowrap;
+    /*display: inline-block;*/
 }
+.tag.genre{
+    background-color: purple;
+}
+
 @media (max-width: 480px) {
     .card {
         width: 100%;
