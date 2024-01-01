@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
+Route::get('/', [GameController::class, 'carouselItems'])->name('index');
 
 //list is list of games
 Route::get('/list', function () {

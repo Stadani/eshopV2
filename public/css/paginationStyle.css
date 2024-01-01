@@ -19,3 +19,9 @@
     font-weight: bold;
 }
 
+
+@media (max-width: 575px) {
+    .pagination.bigButtons li {
+        display: none; /* hides all pagination links */
+    }
+}

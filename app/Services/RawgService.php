@@ -30,6 +30,7 @@ class RawgService
         return $response->json();
     }
 
+
     public function getScreenshots($id)
     {
         $response = Http::get($this->baseUrl . 'games/' . $id . '/screenshots', ['key' => $this->apiKey]);
@@ -52,6 +53,22 @@ class RawgService
     public function getPlatforms()
     {
         $response = Http::get($this->baseUrl . 'platforms' , ['key' => $this->apiKey]);
+        return $response->json();
+    }
+
+    public function getTrailers($id)
+    {
+        $response = Http::get($this->baseUrl . 'games/' . $id . '/movies' , ['key' => $this->apiKey]);
+        return $response->json();
+    }
+    public function getDLCs($id)
+    {
+        $response = Http::get($this->baseUrl . 'games/' . $id . '/additions' , ['key' => $this->apiKey]);
+        return $response->json();
+    }
+    public function getSameSeries($id)
+    {
+        $response = Http::get($this->baseUrl . 'games/' . $id . '/game-series' , ['key' => $this->apiKey]);
         return $response->json();
     }
 

@@ -1,3 +1,4 @@
+@extends('components/layout')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
     <title>EShop | Main Page</title>
 
 
-    @extends('components/layout')
+
 
 </head>
 
@@ -57,9 +58,10 @@
 
         </x-dropdownNavbar>
     </header>
-
+{{--{{dd($games)}}--}}
 <!--CAROUSEL-->
-<x-carousel>
+<x-carousel :games="$games">
+
 
 </x-carousel>
 
@@ -79,9 +81,9 @@
            <p><i class="fa-regular fa-envelope"></i> Contact</p>
             E-mail: stadani2@stud.uniza.sk
        </div>
-       <div class="footer_content_block">
-           <p><i class="fa-solid fa-chart-line"></i> Statistics</p>
-       </div>
+{{--       <div class="footer_content_block">--}}
+{{--           <p><i class="fa-solid fa-chart-line"></i> Statistics</p>--}}
+{{--       </div>--}}
     </footer>
 
 </body>

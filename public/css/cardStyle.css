@@ -1,0 +1,74 @@
+.card{
+    background-color: #333333;
+    color: #EEEEEE;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    /*max-width: 100%;*/
+    width: 300px;
+    flex: 1 1 30%;
+}
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+
+.cardTextContainer .cardText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 5px;
+
+}
+
+.card:hover .cardText {
+    text-overflow: clip;
+    white-space: normal;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    /*cursor: pointer;*/
+    z-index: 1000;
+}
+.card:hover .gameTags {
+    display: flex;
+}
+.tag {
+    background-color: #4E31AA;
+    padding: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    /*display: inline-block;*/
+}
+.tag.genre{
+    background-color: purple;
+}
+.gameTags{
+    background-color: #333333;
+    display: none;
+    position: absolute;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: 100%;
+}
+a {
+    text-decoration: none;
+    color: #EEEEEE;
+}
+
+
+@media (max-width: 480px) {
+    .card img {
+        height: 150px;
+    }
+}

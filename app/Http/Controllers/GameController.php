@@ -29,7 +29,7 @@
             $gamePlatforms = $this->rawgApiService->getPlatforms();
             $gameTags = $this->rawgApiService->getTags();
             $gameGenres = $this->rawgApiService->getGenres();
-            $pageSize = $request->input('page_size', 10);
+            $pageSize = $request->input('page_size', 24);
             $currentPage = $request->input('page', 1);
 
             $selectedGenres = $request->input('genres', []);
@@ -60,17 +60,6 @@
             $games = collect($response['results'] ?? []);
             $totalGames = $response['count'] ?? 0;
 
-
-    //        $gameIds = $games->pluck('id')->all(); // Assuming these IDs are Steam IDs
-    //        $steamPrices = $this->steamApiService->getSteamPrices($gameIds);
-    //
-    //        // Combine game data with prices
-    //        $games->transform(function ($game) use ($steamPrices) {
-    //            $game['price'] = $steamPrices[$game['id']] ?? null;
-    //            return $game;
-    //        });
-
-
             $paginatedGames = new LengthAwarePaginator(
                 $games,
                 $totalGames,
@@ -78,14 +67,12 @@
                 $currentPage,
                 ['path' => $request->url(), 'query' => $request->query()]
             );
-    //        dd($paginatedGames);
-    //        dd($gameGenres);
-    //        dd($genreString);
-    //        dd($response);
-    //        dd($search);
-    //        if ($request->ajax()) {
-    //            return view('components.gameCard', ['games' => $paginatedGames]);
-    //        }
+
+            if ($request->ajax() || $request->input('ajax')) {
+                return view('components.gameCard', ['games' => $paginatedGames])->render();
+            }
+
+
             return view('/list', ['games' => $paginatedGames,
                 'page_size' => $pageSize,
                 'gameTags'=> $gameTags,
@@ -100,6 +87,9 @@
 
             $gameDetails = $this->rawgApiService->getGameDetails($id);
             $gameScreenshots = $this->rawgApiService->getScreenshots($id);
+            $gameTrailers = $this->rawgApiService->getTrailers($id);
+            $gameDLCs = $this->rawgApiService->getDLCs($id);
+            $gameSeries = $this->rawgApiService->getSameSeries($id);
 
             $fullDescription = $gameDetails['description'] ?? '';
             $descriptions = explode('<p>Español<br />', $fullDescription);
@@ -109,7 +99,22 @@
             return view('/game', ['gameDetails' => $gameDetails,
                                         'englishDescription' => $englishDescription,
                                         'gameScreenshots' => $gameScreenshots,
+                                        'gameTrailers' => $gameTrailers,
+                                        'gameDLCs' => $gameDLCs,
+                                        'gameSeries' => $gameSeries,
                                        ]);
+        }
+
+        public function carouselItems()
+        {
+            $sortedGames = $this->rawgApiService->getGames(['ordering' => '-metacritic', 'page_size' => 100]);
+            $gamesList = $sortedGames['results'] ?? [];
+
+            shuffle($gamesList);
+            $randomGames = array_slice($gamesList, 0, 10);
+
+            return view('index', ['games' => $randomGames]);
+
         }
 
     }

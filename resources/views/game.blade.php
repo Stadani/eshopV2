@@ -9,8 +9,10 @@
 
     @extends('components/layout')
     @section('listcss')
-        <link rel="stylesheet" href="/css/gamePageStyle.css">
+
         <link rel="stylesheet" href="/css/forumStyle.css">
+        <link rel="stylesheet" href="/css/cardStyle.css">
+        <link rel="stylesheet" href="/css/gamePageStyle.css">
     @endsection
 </head>
 <body>
@@ -18,6 +20,7 @@
 @extends('components.navbar')
 
 @section('content')
+{{--    {{dd($gameSeries)}}--}}
     <div class="containerGeneral containerGame">
         <h1>{{$gameDetails['name']}}</h1>
     </div>
@@ -28,29 +31,68 @@
     </div>
     <div class="containerGeneral containerGame">
         <div class="containerGeneral videoPanel">
-{{--            @if(isset($gameDetails['clip']))--}}
-{{--                <iframe width="560" height="315" src="{{ $gameDetails['clip']['video'] }}" frameborder="0" allowfullscreen></iframe>--}}
-{{--            @else--}}
-{{--                <p>Trailer not available.</p>--}}
-{{--            @endif--}}
-            <div class="screenshotContainer">
-                <div class="selectedImage">
-                    <img id="mainImage" src={{ $gameScreenshots['results'][0]['image'] ?? '' }} alt="selectedImage">
+            <div>
+                <!-- Tab Buttons -->
+                <div class="tab">
+                    <button class="tablinks button_bar" onclick="openMedia(event, 'Trailers')">Trailers</button>
+                    <button class="tablinks button_bar" onclick="openMedia(event, 'Screenshots')">Screenshots</button>
                 </div>
-                <div class="thumbnails">
-                    @foreach($gameScreenshots['results'] as $screenshot)
-                        <img class="thumbnail" src="{{ $screenshot['image'] }}" alt="thumbnail" onclick="showImage('{{ $screenshot['image'] }}')">
-                    @endforeach
+
+{{--                {{dd($gameTrailers)}}--}}
+                <!-- Trailers Tab -->
+                <div id="Trailers" class="tabcontent">
+                    <div class="mediaContainer">
+                        <div class="selectedTrailer">
+                            @if(!empty($gameTrailers['results']))
+                                <video id="mainTrailer" controls>
+                                    @if(($gameTrailers['results']) > 0)
+                                        <source src="{{ $gameTrailers['results'][0]['data']['480'] }}" type="video/mp4">
+                                    @endif
+
+                                </video>
+                            @else
+                                No available trailers
+                            @endif
+                        </div>
+                        <div class="thumbnails">
+                            @foreach($gameTrailers['results'] as $trailer)
+                                <img class="thumbnail" src="{{ $trailer['preview'] }}" alt="trailerThumbnail" onclick="showTrailer('{{ $trailer['data']['480'] }}')">
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshots Tab -->
+                <div id="Screenshots" class="tabcontent">
+                    <div class="mediaContainer">
+                        <div class="selectedImage">
+                            @if(!empty($gameScreenshots['results']))
+                                <img id="mainImage" src={{ $gameScreenshots['results'][0]['image'] }} alt="selectedImage">
+                            @else
+                                No available screenshots
+                            @endif
+
+                        </div>
+                        <div class="thumbnails">
+                            @foreach($gameScreenshots['results'] as $screenshot)
+                                <img class="thumbnail" src="{{ $screenshot['image'] }}" alt="thumbnail" onclick="showImage('{{ $screenshot['image'] }}')">
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+
         <div class="containerGeneral sidePanel">
-            <div>
+            <div class="sidePanelImage">
                 <img src="{{$gameDetails['background_image']}}" alt="{{$gameDetails['id']}}">
             </div>
             <div>
                 <div>
-                    {{ Str::limit(strip_tags($englishDescription), 200) }}
+                    {{ Str::limit(strip_tags(html_entity_decode($englishDescription)), 200) }}
+
+
                 </div>
                 <div id="description-modal" class="modal">
                     <div class="modal-content">
@@ -101,9 +143,41 @@
         </div>
     </div>
 
-    <div class="containerGeneral">
-        content panel
+    <div class="containerGeneral contentCont px-4 py-4">
+        <h2> Additional content</h2>
+        <table>
+            @foreach($gameDLCs['results'] as $dlc)
+                <tr>
+                    <td>
+                        @if(empty($dlc['background_image']))
+                            <img class="dlcImage" src="{{ $gameDetails['background_image'] }}" alt="dlcImage" >
+                        @else
+                            <img class="dlcImage" src="{{ $dlc['background_image'] }}" alt="dlcImage" >
+                        @endif
+                    </td>
+                    <td>
+                        {{ $dlc['name'] }}
+                    </td>
+                </tr>
+            @endforeach
+        </table>
     </div>
+    <div class="containerGeneral contentCont px-4 py-4">
+        <h2> Games of same series</h2>
+
+        <div class="container gamePanel">
+            <x-gameCardSeries :gameSeries="$gameSeries">
+
+            </x-gameCardSeries>
+
+        </div>
+        <div>
+            <button id="showMore" class="button_bar">Show More</button>
+            <button id="showLess" class="button_bar" style="display: none">Show Less</button>
+        </div>
+
+    </div>
+
     <script>
         var modal = document.getElementById('description-modal');
         var btn = document.getElementById('read-more-btn');
@@ -131,6 +205,59 @@
             document.getElementById('mainImage').src = src;
         }
     </script>
+    <script>
+        function showTrailer(url) {
+            document.getElementById('mainTrailer').src = url;
+        }
+    </script>
+    <script>
+        function openMedia(evt, mediaName) {
+            var i, tabcontent, tablinks;
+            //hides all content
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            //removes active
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            //clicked element gets displayed
+            document.getElementById(mediaName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var selectedTrailer = document.querySelector('.selectedTrailer');
+            if (selectedTrailer.textContent.includes('No available trailers')) {
+                var screenshotsTab = document.querySelector("button[onclick*='Screenshots']");
+                    screenshotsTab.click();
+            } else {
+                document.querySelector('.tablinks').click();
+            }
+        });
+    </script>
+<script>
+    document.getElementById('showMore').addEventListener('click', function() {
+        var hiddenElements = document.querySelectorAll('.gameContainer .hidden');
+        hiddenElements.forEach(function(el) {
+            el.classList.replace('hidden', 'shown');
+        });
+        this.style.display = 'none';
+        document.getElementById('showLess').style.display = 'block';
+    });
+    document.getElementById('showLess').addEventListener('click', function() {
+        var hiddenElements = document.querySelectorAll('.gameContainer .shown');
+        hiddenElements.forEach(function(el) {
+            el.classList.replace('shown', 'hidden');
+        });
+        this.style.display = 'none';
+        document.getElementById('showMore').style.display = 'block';
+    });
+</script>
+
 @endsection
 
 </body>
