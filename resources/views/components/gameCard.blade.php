@@ -7,6 +7,10 @@
                     <a href="{{ route('game.show', ['id' => $game['id']]) }}">
                         <img src="{{ $game['background_image'] }}" alt="{{ $game['name'] }}">
                     </a>
+                @else
+                    <a href="{{ route('game.show', ['id' => $game['id']]) }}">
+                        <img src="{{ asset('images/Background14.jpg') }}" alt="{{ $game['name'] }}">
+                    </a>
                 @endif
                 <div class="">
                     <div class="cardTextContainer">
@@ -28,11 +32,13 @@
                             @endforeach
                         </p>
                         <p>
+                            @if(isset($game['platforms']))
                             @foreach($game['platforms'] as $platform)
                                 <a href="{{ url('/list') . '?platforms%5B%5D=' . $platform['platform']['id'] }}">
                                     <span class="tag mt-1">{{ $platform['platform']['name'] }}</span>
                                 </a>
                             @endforeach
+                            @endif
                         </p>
 {{--                        <p>--}}
 {{--                            @foreach ($game['tags'] as $index => $tag)--}}

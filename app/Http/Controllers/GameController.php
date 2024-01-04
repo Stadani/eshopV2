@@ -26,25 +26,37 @@
 
         public function index(Request $request)
         {
-            $gamePlatforms = $this->rawgApiService->getPlatforms();
+
             $gameTags = $this->rawgApiService->getTags();
-            $gameGenres = $this->rawgApiService->getGenres();
+
             $pageSize = $request->input('page_size', 24);
             $currentPage = $request->input('page', 1);
+            $search = $request->input('search', '');
+            $ordering = $request->input('ordering', '');
 
+            $gameGenres = $this->rawgApiService->getGenres();
             $selectedGenres = $request->input('genres', []);
             $genreString = implode(',', $selectedGenres);
 
-            $search = $request->input('search', '');
 
+
+            $gamePlatforms = $this->rawgApiService->getPlatforms();
             $selectedPlatforms = $request->input('platforms', []);
             $platformString = implode(',', $selectedPlatforms);
 
+            $gameDevelopers = $this->rawgApiService->getDevelopers();
+            $selectedDevelopers = $request->input('developers', []);
+            $developersString = implode(',', $selectedDevelopers);
+
+            $gamePublishers = $this->rawgApiService->getPublishers();
+            $selectedPublishers = $request->input('publishers', []);
+            $publishersString = implode(',', $selectedPublishers);
 
             $queryParameters = [
                     'page_size' => $pageSize,
                     'page' => $currentPage,
                     'search' => $search,
+                    'ordering' => $ordering,
             ];
 
             if (!empty($genreString)) {
@@ -53,12 +65,20 @@
             if (!empty($platformString)) {
                 $queryParameters['platforms'] = $platformString;
             }
+            if (!empty($developersString)) {
+                $queryParameters['developers'] = $developersString;
+            }
+            if (!empty($publishersString)) {
+                $queryParameters['publishers'] = $publishersString;
+            }
 
 
             $response = $this->rawgApiService->getGames($queryParameters);
 
             $games = collect($response['results'] ?? []);
             $totalGames = $response['count'] ?? 0;
+
+
 
             $paginatedGames = new LengthAwarePaginator(
                 $games,
@@ -68,9 +88,6 @@
                 ['path' => $request->url(), 'query' => $request->query()]
             );
 
-            if ($request->ajax() || $request->input('ajax')) {
-                return view('components.gameCard', ['games' => $paginatedGames])->render();
-            }
 
 
             return view('/list', ['games' => $paginatedGames,
@@ -79,6 +96,8 @@
                 'gameGenres' => $gameGenres,
                 'search' => request('search'),
                 'gamePlatforms' => $gamePlatforms,
+                'gameDevelopers' => $gameDevelopers,
+                'gamePublishers' => $gamePublishers,
                 ]);
         }
 

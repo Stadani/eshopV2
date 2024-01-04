@@ -63,8 +63,9 @@ input[type=text] {
 .gameDesc td{
     width: 50%;
 }
-
-
+.filterFont{
+    font-weight: bold;
+}
 
 .content{
     display: flex;

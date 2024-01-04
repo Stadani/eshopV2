@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,6 +38,19 @@
                             <input type="hidden" name="platforms[]" value="{{ $selectedPlatforms }}">
                         @endforeach
                     @endif
+                    @if(request('developers'))
+                        @foreach(request('developers') as $selectedDevelopers)
+                            <input type="hidden" name="developers[]" value="{{ $selectedDevelopers }}">
+                        @endforeach
+                    @endif
+                    @if(request('publishers'))
+                        @foreach(request('publishers') as $selectedPublishers)
+                            <input type="hidden" name="developers[]" value="{{ $selectedPublishers }}">
+                        @endforeach
+                    @endif
+                    @if(request('ordering'))
+                        <input type="hidden" name="ordering" value="{{ request('ordering') }}">
+                    @endif
                 <div class="search-container">
                     <div class="search-icon">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -63,15 +78,25 @@
         </div>
 
         <div id="filter" class="container filters hidden ">
-
-            <div id="pageSizeSliderContainer">
-                <input type="range" id="pageSizeSlider" min="10" max="50" step="10" value="{{ $page_size }}">
-                <span id="pageSizeDisplay">{{ $page_size }}</span> per page
-            </div>
-
                 <form action="/list" method="get">
+                    <div>
+                        <label for="ordering">Sort By:</label>
+                        <select name="ordering" id="ordering" onchange="handleSortChange(this.value)">
+                            <option value="" {{ request('ordering') == '' ? 'selected' : '' }}>Relevance</option>
+                            <option value="-name" {{ request('ordering') == '-name' ? 'selected' : '' }}>Name Desc</option>
+                            <option value="name" {{ request('ordering') == 'name' ? 'selected' : '' }}>Name Asc</option>
+                            <option value="-released" {{ request('ordering') == '-released' ? 'selected' : '' }}>Released Desc</option>
+                            <option value="released" {{ request('ordering') == 'released' ? 'selected' : '' }}>Released Asc</option>
+                            <option value="-rating" {{ request('ordering') == '-rating' ? 'selected' : '' }}>Rating Desc</option>
+                            <option value="rating" {{ request('ordering') == 'rating' ? 'selected' : '' }}>Rating Asc</option>
+                            <option value="-metacritic" {{ request('ordering') == '-metacritic' ? 'selected' : '' }}>Metacritic Desc</option>
+                            <option value="metacritic" {{ request('ordering') == 'metacritic' ? 'selected' : '' }}>Metacritic Asc</option>
+                        </select>
+
+                    </div>
                     <div >
-                        <div class="scrollForm ">
+                        <div class="scrollForm mt-4">
+                           <span class="filterFont">GENRES</span>
                             @foreach($gameGenres['results'] as $index => $genre)
                                 <div class="{{ $index >= 5 ? 'additionalGenres' : '' }}" style="{{ $index >= 5 ? 'display: none;' : '' }}">
                                     <input type="checkbox" id="genre{{ $genre['id'] }}" name="genres[]" value="{{ $genre['id'] }}"
@@ -79,7 +104,6 @@
                                     <label for="genre{{ $genre['id'] }}">{{ $genre['name'] }}</label>
                                 </div>
                             @endforeach
-
                         </div>
                         @if(count($gameGenres['results']) > 5)
                             <button type="button" id="showAllGenres" class="button_bar" >Show All</button>
@@ -88,6 +112,7 @@
                     </div>
                     <div>
                         <div class="scrollForm mt-4">
+                           <span class="filterFont">PLATFORMS</span>
                             @foreach($gamePlatforms['results'] as $index => $platform)
                                 <div class="{{ $index >= 5 ? 'additionalPlatforms' : '' }}" style="{{ $index >= 5 ? 'display: none;' : '' }}">
                                     <input type="checkbox" id="platform{{ $platform['id'] }}" name="platforms[]" value="{{ $platform['id'] }}"
@@ -101,12 +126,46 @@
                         @endif
                         <button type="button" id="showLessPlatforms" class="button_bar" style="display: none;">Show Less</button>
                     </div>
+                    <div>
+                        <div class="scrollForm mt-4">
+                            <span class="filterFont">DEVELOPERS</span>
+                            @foreach($gameDevelopers['results'] as $index => $developer)
+                                <div class="{{ $index >= 5 ? 'additionalDevelopers' : '' }}" style="{{ $index >= 5 ? 'display: none;' : '' }}">
+                                    <input type="checkbox" id="developer{{ $developer['id'] }}" name="developers[]" value="{{ $developer['id'] }}"
+                                        {{ in_array($developer['id'], request('developers', [])) ? 'checked' : '' }}>
+                                    <label for="developer{{ $developer['id'] }}">{{ $developer['name'] }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+                        @if(count($gameDevelopers['results']) > 5)
+                            <button type="button" id="showAllDevelopers" class="button_bar" >Show All</button>
+                        @endif
+                        <button type="button" id="showLessDevelopers" class="button_bar" style="display: none;">Show Less</button>
+                    </div>
+                    <div>
+                        <div class="scrollForm mt-4">
+                            <span class="filterFont">PUBLISHERS</span>
+                            @foreach($gamePublishers['results'] as $index => $publisher)
+                                <div class="{{ $index >= 5 ? 'additionalPublishers' : '' }}" style="{{ $index >= 5 ? 'display: none;' : '' }}">
+                                    <input type="checkbox" id="publisher{{ $publisher['id'] }}" name="publishers[]" value="{{ $publisher['id'] }}"
+                                        {{ in_array($publisher['id'], request('publishers', [])) ? 'checked' : '' }}>
+                                    <label for="publisher{{ $publisher['id'] }}">{{ $publisher['name'] }}</label>
+
+                                </div>
+                            @endforeach
+                        </div>
+                        @if(count($gamePublishers['results']) > 5)
+                            <button type="button" id="showAllPublishers" class="button_bar" >Show All</button>
+                        @endif
+                        <button type="button" id="showLessPublishers" class="button_bar" style="display: none;">Show Less</button>
+                    </div>
 
                     @if(request('search'))
                         <input type="hidden" name="search" value="{{ request('search') }}">
                     @endif
 
                     <button type="submit" class="button_bar mt-4">Filter</button>
+                    <button type="button" id="resetFilters" class="button_bar mt-4">Reset Filters</button>
                 </form>
 
         </div>
@@ -119,54 +178,11 @@
 
 <script src="{{ asset('js/toggleFilters.js') }}"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var showAllButton = document.getElementById('showAllPlatforms');
-        var showLessButton = document.getElementById('showLessPlatforms');
-
-        showAllButton.addEventListener('click', function() {
-            var additionalPlatforms = document.querySelectorAll('.additionalPlatforms');
-            additionalPlatforms.forEach(function(platform) {
-                platform.style.display = 'block';
-            });
-            this.style.display = 'none';
-            showLessButton.style.display = 'block';
-        });
-
-        showLessButton.addEventListener('click', function() {
-            var additionalPlatforms = document.querySelectorAll('.additionalPlatforms');
-            additionalPlatforms.forEach(function(platform) {
-                platform.style.display = 'none';
-            });
-            this.style.display = 'none';
-            showAllButton.style.display = 'block';
-        });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var showAllGenresButton = document.getElementById('showAllGenres');
-        var showLessGenresButton = document.getElementById('showLessGenres');
-
-        showAllGenresButton.addEventListener('click', function() {
-            var additionalGenres = document.querySelectorAll('.additionalGenres');
-            additionalGenres.forEach(function(genre) {
-                genre.style.display = 'block';
-            });
-            this.style.display = 'none';
-            showLessGenresButton.style.display = 'block';
-        });
-
-        showLessGenresButton.addEventListener('click', function() {
-            var additionalGenres = document.querySelectorAll('.additionalGenres');
-            additionalGenres.forEach(function(genre) {
-                genre.style.display = 'none';
-            });
-            this.style.display = 'none';
-            showAllGenresButton.style.display = 'block';
-        });
-    });
-</script>
+<script src="{{ asset('js/platformButtons.js') }}"></script>
+<script src="{{ asset('js/genreButtons.js') }}"></script>
+<script src="{{ asset('js/developerButtons.js') }}"></script>
+<script src="{{ asset('js/publisherButtons.js') }}"></script>
+<script src="{{ asset('js/resetFilters.js') }}"></script>
 
 </body>
 </html>

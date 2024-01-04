@@ -71,5 +71,14 @@ class RawgService
         $response = Http::get($this->baseUrl . 'games/' . $id . '/game-series' , ['key' => $this->apiKey]);
         return $response->json();
     }
-
+    public function getDevelopers()
+    {
+        $response = Http::get($this->baseUrl . 'developers' , ['key' => $this->apiKey]);
+        return $response->json();
+    }
+    public function getPublishers()
+    {
+        $response = Http::get($this->baseUrl . 'publishers' , ['key' => $this->apiKey]);
+        return $response->json();
+    }
 }
