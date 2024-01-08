@@ -13,27 +13,27 @@
 .button_bar{
     padding: 5px;
 }
-.searchbar.text{
-    border-color: #222222;
+.searchbarPostForm{
+    padding-left: 30px;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    border-color: #333333;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
-.input-container{
-    background-color: #333333;
-    color: #222222;
+/*.input-container{*/
+/*    background-color: #333333;*/
+/*    color: #222222;*/
 
-}
+/*}*/
 
 
 /*dropdown*/
 .mult-select-tag .body {
     border-color: #222222;
 }
-
-.mult-select-tag .btn-container  {
-    border-color: #222222;
-    background-color: #333333;
-}
-.btn-container{
-    background-color: #333333;
+.mult-select-tag .item-container {
+    color: #222222;
 }
 .mult-select-tag .drawer ul li {
     color: #333333;

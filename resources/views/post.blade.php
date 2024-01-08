@@ -15,7 +15,7 @@
 
 </head>
 <body>
-
+{{--{{dd($post->user->profile_picture)}}--}}
 @extends('components.navbar')
 
 @section('content')
@@ -53,7 +53,7 @@
 
     <div class="containerGeneral">
         <div class="postUser">
-            <img src="https://i.pravatar.cc/100?u={{ $post->id }}" alt="profile">
+            <img src="{{ $post->user->profilePictureUrl }}" alt="profile">
             <h5 class="username">{{ $post->user->name }}</h5>
             <div>
                 <i class="fa-solid fa-eye" title="Views"></i> {{ $post->views }}
@@ -86,7 +86,7 @@
             @csrf
             <div class="containerGeneral">
                 <div class="postUser">
-                    <img src="https://i.pravatar.cc/100?u={{ auth()->id() }}" alt="">
+                    <img src="{{Auth::user()->profile_picture_url }}" alt="">
                 </div>
                 <div class="postContent">
                     <textarea name="body" placeholder="Comment on post!"></textarea>

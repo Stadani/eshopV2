@@ -117,14 +117,21 @@
 }
 
 .table_cell.table_cell_icon {
-    width: 56px;
+    width: 70px;
+    /*height: 56px;*/
     position: relative;
 }
+.table_cell.table_cell_icon img{
+    max-width: 100%;
+    width: 70px;
+    height: 50px;
 
+}
 .table_cell_info{
     vertical-align: top;
     font-size: 1.2rem;
     color: #9398a0;
+    text-align: right;
 }
 .table_cell_middle {
     border-left:1px solid rgba(255,255,255,0.12);

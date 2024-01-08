@@ -127,9 +127,17 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function countComment(Post $post)
+    public function updatePostPerPage(Request $request)
     {
+        $perPage = $request->input('perPage', 6); // Default to 6 if not provided
+        $tags = Tag::all();
+        $forum = Post::withCount('comment')->latest()->filter(request(['search', 'tag']))->paginate($perPage)->withQueryString();
 
-
+        return view('forum', [
+            'forum' => $forum,
+            'tags' => $tags,
+            'showSearch' => request('search'),
+        ])->render();
     }
+
 }

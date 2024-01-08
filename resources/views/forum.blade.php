@@ -20,7 +20,8 @@
 
 </head>
 <body>
-@extends('components.forumItem')
+
+
 
 @extends('components.navbar')
 @section('content')
@@ -88,14 +89,52 @@
         </div>
     </div>
 
-    <!--TABLE-->
+    <select id="postsPerPageDropdown" onchange="updatePostsPerPage(this.value)">
+        <option value="6">6 per page</option>
+        <option value="12">12 per page</option>
 
-    @section('table')
+    </select>
+
+
+
+
+
+
         <script src="{{ asset('js/dropdownSubmit.js') }}"></script>
-    @endsection
 
+    <div id="forum-container">
+        <x-forumItem :forum="$forum">
+
+        </x-forumItem>
+    </div>
 
 
 @endsection
 
+
+<script>
+    $(document).ready(function () {
+        function updatePostsPerPage(perPage) {
+            console.log('Updating posts per page:', perPage);
+            $.ajax({
+                type: 'GET',
+                url: '/forum',
+                data: {perPage: perPage},
+                success: function (response) {
+                    console.log('Success:', response);
+                    // Update the HTML content with the new posts
+                    $('body').html(response);
+                },
+                error: function (error) {
+                    console.error('Error updating posts per page:', error);
+                }
+            });
+        }
+
+        // Handle the onchange event of the select element
+        $('#postsPerPageDropdown').on('change', function () {
+            updatePostsPerPage($(this).val());
+        });
+    });
+</script>
 </body>

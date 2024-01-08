@@ -26,9 +26,9 @@
 
         <div class="containerGeneral">
             <div class="leftHalf">
-                <p>Title</p>
-                <p>Tags</p>
-                <p>Body</p>
+                <p class="mt-2">Title</p>
+                <p class="mt-2">Tags</p>
+                <p class="mt-2">Body</p>
             </div>
 
             <div class="rightHalf">
@@ -39,7 +39,7 @@
                     @endif
                     <div>
 
-                        <input type="text" id="title" class="searchbar" name="title" value="{{ old('title', isset($post) ? $post->title : '') }}" placeholder="Title...">
+                        <input type="text" id="title" class="searchbarPostForm"  name="title" value="{{ old('title', isset($post) ? $post->title : '') }}" placeholder="Title...">
 
                     </div>
                     <div>
@@ -55,19 +55,19 @@
                         </script>
                     </div>
                     <div>
-                        <textarea id="body" rows="5" cols="30" placeholder="Content of your post..." class="searchbar text" name="body" >{{ old('body', isset($post) ? $post->body : '') }}</textarea>
+                        <textarea id="body" rows="5" cols="30" placeholder="Content of your post..." class="searchbarPostForm" name="body" >{{ old('body', isset($post) ? $post->body : '') }}</textarea>
                     </div>
                     @error('title')
-                        <li class="error-message">{{ $message }}</li>
+                        <li class="error-message alert alert-danger">{{ $message }}</li>
                     @enderror
                     @error('tags')
-                        <li class="error-message">{{ $message }}</li>
+                        <li class="error-message alert alert-danger">{{ $message }}</li>
                     @enderror
                     @error('body')
-                        <li class="error-message">{{ $message }}</li>
+                        <li class="error-message alert alert-danger">{{ $message }}</li>
                     @enderror
-                        <div id="titleErr"></div>
-                        <div id="bodyErr"></div>
+                        <div id="titleErr" class="alert alert-danger" style="display: none"></div>
+                        <div id="bodyErr" class="alert alert-danger" style="display: none"></div>
                     <div>
                         <button type="submit" class="button_bar">Post</button>
                     </div>

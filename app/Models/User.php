@@ -13,7 +13,6 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
 
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -38,8 +37,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
-//    public function likes()
-//    {
-//        return $this->belongsToMany(Post::class, 'likes');
-//    }
+
+    public function getProfilePictureUrlAttribute()
+    {
+        return $this->profile_picture ? asset('storage/' . $this->profile_picture) : asset('profile_pictures/albertwhisker.png');
+    }
+
+
 }
+

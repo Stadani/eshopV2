@@ -87,3 +87,10 @@ footer{
     color: #EEEEEE;
     -webkit-text-stroke: medium #222222;
 }
+.profilePicture{
+    width: 35px;
+    height: 35px;
+
+    object-fit: contain;
+
+}

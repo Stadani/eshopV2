@@ -34,8 +34,7 @@ Route::get('/game', function () {
 Route::get('/list', [GameController::class, 'index']);
 Route::get('/game/{id}', [GameController::class, 'show'])->name('game.show');
 
-//forum is list of posts
-Route::get('/forum', [PostController::class, 'index']);
+
 
 
 Route::get('post/{post:slug}', [PostController::class, 'show']);
@@ -47,6 +46,8 @@ Route::get('tags/{tag:slug}', function (Tag $tag) {
 });
 
 Route::get('/forum', [PostController::class, 'index']);
+Route::get('/forum', [PostController::class, 'updatePostPerPage']);
+
 
 Route::get('/postForm', [PostController::class, 'create']) ->name('create.post');
 Route::post('/postForm', [PostController::class, 'store'])->name('store.post');
@@ -59,6 +60,7 @@ Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('del
 Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment');
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
 
+
 Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
 Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
@@ -69,7 +71,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
+Route::put('/profile', [ProfileController::class, 'updateProfile'])
+    ->middleware(['auth', 'verified'])->name('user-profile-picture.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

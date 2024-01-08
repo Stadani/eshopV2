@@ -25,6 +25,8 @@
 } else {
     document.getElementById('bodyErr').innerText = '';
 }
+        titleErr.style.display = title === '' ? 'block' : 'none';
+        bodyErr.style.display = body === '' ? 'block' : 'none';
 
     return isValid;
 }

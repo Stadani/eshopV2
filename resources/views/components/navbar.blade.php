@@ -14,7 +14,7 @@
             <a href="/register" class="nav_button"><i class="fa-solid fa-pencil"></i> Sign In</a>
             @endguest
             @auth()
-                    <a class="nav_button" href="/profile"><i class="fa-solid fa-user"></i>
+                    <a class="nav_button" href="/profile"><img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
                         Profile
                     </a>
                     <a href="{{ route('logout') }}" class="nav_button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

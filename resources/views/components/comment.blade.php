@@ -1,7 +1,7 @@
 @props(['comment'])
 <div class="postUser">
 
-    <img src="https://i.pravatar.cc/100?u={{ $comment->user->id }}" alt="profile">
+    <img src="{{ $comment->user->ProfilePictureURL }}" alt="profile">
     <h5 class="username">{{ $comment->user->name }}</h5>
     @if(auth()->user() && auth()->user()->id === $comment->user->id)
         <div class="postNameAndTags eanddbuttons comment">
