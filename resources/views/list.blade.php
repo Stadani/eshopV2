@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,10 +21,10 @@
 @extends('components.navbar')
 
 @section('content')
-    <!--PAGE CONTENT-->
+    <!--HEADER-->
     <div class="container centring">
+{{--        SEARCHBAR--}}
         <div class="navbar_main centring">
-
             <form method="get" action="/list">
                 @if(request('genres'))
                     @foreach(request('genres') as $selectedGenre)
@@ -58,27 +56,30 @@
                     <input type="text" class="searchbar" name="search" value="{{ $search ?? '' }}" placeholder=" ..."> {{--    placeholder="{{ isset($showSearch) ? $showSearch : '' }}"--}}
                 </div>
             </form>
+
+{{--            SHOW FILTERS BUTTON--}}
                 <div>
                     <button class="button_bar" onclick="toggleFilters()"><i class="fa-solid fa-filter"></i></button>
                 </div>
         </div>
-
+{{--PAGINATION--}}
         <div class="sidenav centring">
             {{$games->links()}}
-{{--            <button class="button_bar" onclick="toggleFilters()"><i class="fa-solid fa-filter"></i></button>--}}
         </div>
     </div>
+
+{{--GAME CARDS--}}
     <div class="container content mt-4 ">
-
-
         <div class="container gamePanel">
             <x-gameCard :games="$games">
 
             </x-gameCard>
         </div>
 
+{{--FILTER PANEL--}}
         <div id="filter" class="container filters hidden ">
                 <form action="/list" method="get">
+{{--                    SORTING--}}
                     <div>
                         <label for="ordering">Sort By:</label>
                         <select name="ordering" id="ordering" onchange="handleSortChange(this.value)">
@@ -92,8 +93,8 @@
                             <option value="-metacritic" {{ request('ordering') == '-metacritic' ? 'selected' : '' }}>Metacritic Desc</option>
                             <option value="metacritic" {{ request('ordering') == 'metacritic' ? 'selected' : '' }}>Metacritic Asc</option>
                         </select>
-
                     </div>
+{{--                    GENRES--}}
                     <div >
                         <div class="scrollForm mt-4">
                            <span class="filterFont">GENRES</span>
@@ -110,6 +111,7 @@
                         @endif
                         <button type="button" id="showLessGenres" class="button_bar" style="display: none;">Show Less</button>
                     </div>
+{{--                    PLATFORMS--}}
                     <div>
                         <div class="scrollForm mt-4">
                            <span class="filterFont">PLATFORMS</span>
@@ -126,6 +128,7 @@
                         @endif
                         <button type="button" id="showLessPlatforms" class="button_bar" style="display: none;">Show Less</button>
                     </div>
+{{--                    DEVELOPERS--}}
                     <div>
                         <div class="scrollForm mt-4">
                             <span class="filterFont">DEVELOPERS</span>
@@ -142,6 +145,7 @@
                         @endif
                         <button type="button" id="showLessDevelopers" class="button_bar" style="display: none;">Show Less</button>
                     </div>
+{{--                    PUBLISHERS--}}
                     <div>
                         <div class="scrollForm mt-4">
                             <span class="filterFont">PUBLISHERS</span>
@@ -159,7 +163,6 @@
                         @endif
                         <button type="button" id="showLessPublishers" class="button_bar" style="display: none;">Show Less</button>
                     </div>
-
                     @if(request('search'))
                         <input type="hidden" name="search" value="{{ request('search') }}">
                     @endif
@@ -167,9 +170,7 @@
                     <button type="submit" class="button_bar mt-4">Filter</button>
                     <button type="button" id="resetFilters" class="button_bar mt-4">Reset Filters</button>
                 </form>
-
         </div>
-
     </div>
 
 

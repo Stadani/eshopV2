@@ -12,15 +12,16 @@
     @endsection
     {{--    had to link like this because after opening post it doesnt work--}}
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon-32x32.png') }}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 </head>
 <body>
-{{--{{dd($post->user->profile_picture)}}--}}
 @extends('components.navbar')
-
 @section('content')
 
+{{--    HEADER--}}
     <div class="postNameAndTags postNameAndTags">
+{{--        {{dd($post->comment)}}--}}
         <ul>
             <li><h1>{{$post->title}}</h1></li>
             <li><i class="fa-solid fa-user"></i> {{ $post->user->name }}</li>
@@ -40,6 +41,7 @@
         </ul>
     </div>
 
+{{--EDIT AND DELETE BUTTONS--}}
     @if(auth()->user() && auth()->user()->id === $post->user->id)
         <div class="postNameAndTags eanddbuttons">
             <form action="{{ route('delete.post', $post) }}" method="POST">
@@ -51,7 +53,9 @@
         </div>
     @endif
 
+{{--POST ITSELF--}}
     <div class="containerGeneral">
+{{--        USER INFO PANEL--}}
         <div class="postUser">
             <img src="{{ $post->user->profilePictureUrl }}" alt="profile">
             <h5 class="username">{{ $post->user->name }}</h5>
@@ -70,12 +74,13 @@
                 @endauth
             </div>
         </div>
-
+{{--CONTENT OF POST PANEL--}}
         <div class="postContent">
             {{$post->body}}
         </div>
     </div>
 
+{{--COMMENTS--}}
     @guest()
         <div class="container bar">
             You are not logged in. Please <a href="{{ route('login') }}">log in</a> or <a href="{{ route('register') }}">register</a> to comment on the post.
@@ -98,15 +103,25 @@
         </form>
     @endauth
 
+{{--DISPLAY COMMENTS--}}
+<div id="paginationContainer">
+    {{ $comments->links() }}
+</div>
 
-    @foreach($post-> comment as $comment)
-        <div class="containerGeneral">
-            <x-comment :comment="$comment"/>
-        </div>
-    @endforeach
+<select id="commentsPerPageDropdown" onchange="updateCommentsPerPage(this.value)">
+    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 per page</option>
+    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 per page</option>
+    <option value="15" {{ $perPage == 15 ? 'selected' : '' }}>15 per page</option>
+    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 per page</option>
+</select>
 
-
-
+@foreach ($comments as $comment)
+    <div id="commentContainer" class="containerGeneral">
+        <x-comment :comment="$comment"/>
+    </div>
+@endforeach
 @endsection
+
+<script src="{{ asset('js/postAjax.js') }}"></script>
 </body>
 </html>

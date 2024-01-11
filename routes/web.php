@@ -46,7 +46,6 @@ Route::get('tags/{tag:slug}', function (Tag $tag) {
 });
 
 Route::get('/forum', [PostController::class, 'index']);
-Route::get('/forum', [PostController::class, 'updatePostPerPage']);
 
 
 Route::get('/postForm', [PostController::class, 'create']) ->name('create.post');
@@ -58,6 +57,7 @@ Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('del
 
 
 Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment');
+Route::get('/post/{post:slug}', [CommentController::class, 'index'])->name('index.comment');
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
 
 

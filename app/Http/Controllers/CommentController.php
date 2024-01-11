@@ -8,6 +8,24 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function index(Post $post, Request $request)
+    {
+        $perPage = $request->input('perPage', 5);
+        $comments = $post->comment()->paginate($perPage);
+
+        if ($request->ajax()) {
+            $forumItemsView = view('components.comment', ['comments' => $comments])->render();
+            $paginationView = $comments->links()->render();
+
+            return response()->json([
+                'forumItemsHTML' => $forumItemsView,
+                'paginationHTML' => $paginationView,
+            ]);
+        } else {
+            return view('/post', compact('post', 'comments', 'perPage'));
+        }
+    }
+
     public function store(Post $post)
     {
         request()->validate([
@@ -18,7 +36,9 @@ class CommentController extends Controller
             'user_id' => auth()->id(),
             'body' => request('body')
         ]);
+
         return back();
+
     }
 
     public function edit(Comment $comment)

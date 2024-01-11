@@ -5,10 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EShop | Main Page</title>
-
-
-
-
 </head>
 
 <body>
@@ -58,7 +54,7 @@
 
         </x-dropdownNavbar>
     </header>
-{{--{{dd($games)}}--}}
+
 <!--CAROUSEL-->
 <x-carousel :games="$games">
 
@@ -67,7 +63,9 @@
 
 <!--MAIN-->
     <div class="main_content">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur facilisis molestie elit, a luctus mi. Nunc tempor ornare fringilla. Sed sit amet tellus sed sapien pretium varius. Integer non tempor massa. Suspendisse egestas auctor turpis. Curabitur pulvinar consequat fringilla. Maecenas faucibus tincidunt erat, non condimentum turpis mattis sit amet. Curabitur nibh mauris, tincidunt ut volutpat quis, tristique nec nulla. Pellentesque vulputate ultrices facilisis. Quisque pretium leo sed purus ultricies, vitae pretium lacus finibus. Sed elementum mi nibh, ac dictum arcu sagittis a. Donec iaculis maximus eros. Suspendisse potenti. In vulputate libero sit amet tortor egestas, eu maximus lectus dapibus.
+        Welcome to GameShop – Your Ultimate Gaming Hub!
+        Discover the latest video game releases, connect with fellow gamers in our vibrant forum, and embark on a journey into the world of gaming excellence.
+        Start exploring now!
     </div>
 
 <!--FOOTER-->

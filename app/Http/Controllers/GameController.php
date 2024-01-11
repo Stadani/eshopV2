@@ -14,12 +14,11 @@
 
 
         protected $rawgApiService;
-        protected $steamApiService;
 
-        public function __construct(RawgService $rawgApiService, SteamService $steamService)
+        public function __construct(RawgService $rawgApiService)
         {
             $this->rawgApiService = $rawgApiService;
-            $this->steamApiService = $steamService;
+
         }
 
 

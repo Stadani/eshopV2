@@ -13,16 +13,29 @@ class PostController extends Controller
      * show posts in forum that are in accordance with search query
      * filter passes request params to the scopeFilter
      * */
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->input('perPage', 15);
         $tags = Tag::all();
-        $forum = Post::withCount('comment')->latest()->filter(request(['search', 'tag']))->paginate(6)->withQueryString();
+        $forum = Post::withCount('comment')->latest()->filter(request(['search', 'tag']))->paginate($perPage)->withQueryString();
 
-        return view('forum', [
-            'forum' =>$forum,
-            'tags' => $tags,
-            'showSearch' => request('search'),
-        ]);
+        if ($request->ajax()) {
+            $forumItemsView = view('components.forumItem', ['forum' => $forum])->render();
+            $paginationView = $forum->links()->render();
+
+            return response()->json([
+                'forumItemsHTML' => $forumItemsView,
+                'paginationHTML' => $paginationView,
+
+            ]);
+        } else {
+            return view('forum', [
+                'forum' => $forum,
+                'tags' => $tags,
+                'perPage' => $perPage,
+                'showSearch' => request('search'),
+            ]);
+        }
     }
 
     public function show(Post $post)
@@ -125,19 +138,6 @@ class PostController extends Controller
         $post->toggleLike(auth()->user());
 
         return redirect()->back();
-    }
-
-    public function updatePostPerPage(Request $request)
-    {
-        $perPage = $request->input('perPage', 6); // Default to 6 if not provided
-        $tags = Tag::all();
-        $forum = Post::withCount('comment')->latest()->filter(request(['search', 'tag']))->paginate($perPage)->withQueryString();
-
-        return view('forum', [
-            'forum' => $forum,
-            'tags' => $tags,
-            'showSearch' => request('search'),
-        ])->render();
     }
 
 }
