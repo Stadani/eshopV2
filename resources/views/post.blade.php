@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>Post</title>
+    <title>Post | {{$post->title}}</title>
 
 
     @extends('components/layout')
@@ -21,7 +22,6 @@
 
 {{--    HEADER--}}
     <div class="postNameAndTags postNameAndTags">
-{{--        {{dd($post->comment)}}--}}
         <ul>
             <li><h1>{{$post->title}}</h1></li>
             <li><i class="fa-solid fa-user"></i> {{ $post->user->name }}</li>
@@ -37,6 +37,20 @@
                         @endforeach
                     </dd>
                 </dl>
+            </li>
+            <li class="hiddenName">
+                <i class="fa-solid fa-eye" title="Views"></i> {{ $post->views }}
+            </li>
+            <li class="hiddenName">
+                <i class="fa-solid fa-thumbs-up" title="Likes"></i> {{ $post->likes()->count() }}
+                @auth()
+                    <form method="POST" action="{{ route('posts.like', $post) }}">
+                        @csrf
+                        <button type="submit"  class="button_bar">
+                            {{ $post->likes()->where('user_id', auth()->id())->exists() ? 'Unlike' : 'Like' }}
+                        </button>
+                    </form>
+                @endauth
             </li>
         </ul>
     </div>
@@ -104,24 +118,31 @@
     @endauth
 
 {{--DISPLAY COMMENTS--}}
-<div id="paginationContainer">
-    {{ $comments->links() }}
+<div class="container arrow_bar just">
+    <div id="paginationContainer" class="navbar_main px-2">
+        {{ $comments->links() }}
+    </div>
+    <div class="sidenav py-3">
+    <select id="commentsPerPageDropdown"  onchange="updateCommentsPerPage(this.value)">
+        <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 per page</option>
+        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 per page</option>
+        <option value="15" {{ $perPage == 15 ? 'selected' : '' }}>15 per page</option>
+        <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 per page</option>
+    </select>
+    </div>
 </div>
 
-<select id="commentsPerPageDropdown" onchange="updateCommentsPerPage(this.value)">
-    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 per page</option>
-    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 per page</option>
-    <option value="15" {{ $perPage == 15 ? 'selected' : '' }}>15 per page</option>
-    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 per page</option>
-</select>
+    <div id="commentContainer">
+        <x-comment :comments="$comments">
 
-@foreach ($comments as $comment)
-    <div id="commentContainer" class="containerGeneral">
-        <x-comment :comment="$comment"/>
+        </x-comment>
     </div>
-@endforeach
-@endsection
 
+@endsection
+<script src="/js/toggleEditComment.js"></script>
 <script src="{{ asset('js/postAjax.js') }}"></script>
+<script>
+    var postSlug = "{{ $post->slug }}";
+</script>
 </body>
 </html>

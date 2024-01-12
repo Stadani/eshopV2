@@ -10,8 +10,8 @@ class CommentController extends Controller
 {
     public function index(Post $post, Request $request)
     {
-        $perPage = $request->input('perPage', 5);
-        $comments = $post->comment()->paginate($perPage);
+        $perPage = $request->input('perPage', 20);
+        $comments = $post->comment()->paginate($perPage)->withQueryString();
 
         if ($request->ajax()) {
             $forumItemsView = view('components.comment', ['comments' => $comments])->render();
@@ -22,7 +22,7 @@ class CommentController extends Controller
                 'paginationHTML' => $paginationView,
             ]);
         } else {
-            return view('/post', compact('post', 'comments', 'perPage'));
+            return view('post', compact('post', 'comments', 'perPage'));
         }
     }
 

@@ -65,12 +65,17 @@
     display: block;
     margin-top: 10px;
 }
+.hiddenName{
+    display: none;
+}
 
 @media (max-width: 768px) {
-    /*.containerGeneral {*/
-    /*    flex-wrap: wrap;*/
-    /*}*/
-    /*.postUser{*/
-    /*    display: none;*/
-    /*}*/
+    .postUser{
+        display: none;
+    }
+    .hiddenName{
+        display: flex;
+        align-items: center;
+
+    }
 }

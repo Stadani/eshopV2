@@ -3,7 +3,7 @@ function updateCommentsPerPage(perPage) {
     console.log('Updating comments per page:', perPage);
     $.ajax({
         type: 'GET',
-        url: '/post/profile',
+        url: '/post/' + postSlug,
         data: {perPage: perPage},
         success: function (response) {
             console.log('Success');
