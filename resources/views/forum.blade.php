@@ -114,7 +114,7 @@
 
 @endsection
 
-<script src="{{ asset('js/dropdownSubmit.js') }}"></script>
+{{--<script src="{{ asset('js/dropdownSubmit.js') }}"></script>--}}
 <script src="{{ asset('js/forumAjax.js') }}"></script>
 
 

@@ -1,22 +1,37 @@
+var currentPerPage;
+var currentPage;
 
+$(document).ready(function() {
+    // Tag filtering
+    $('.form-check-input').change(function() {
+        var selectedTags = [];
+        $('.form-check-input:checked').each(function() {
+            selectedTags.push($(this).val());
+        });
 
-function updatePostsPerPage(perPage) {
-    console.log('Updating posts per page:', perPage);
-    $.ajax({
-        type: 'GET',
-        url: '/forum',
-        data: {perPage: perPage},
-        success: function (response) {
-            console.log('Success', response);
-            $('#forumContainer').html(response.forumItemsHTML);
-            $('#paginationContainer').html(response.paginationHTML);
-        }
+        updateContent(selectedTags, currentPerPage, currentPage);
     });
-}
 
-$(document).ready(function () {
+    // Posts per page
     $('#postsPerPageDropdown').on('change', function () {
-        updatePostsPerPage($(this).val());
+        currentPerPage = $(this).val();
+        updateContent([], currentPerPage, currentPage);
     });
-});
 
+    // Function to update content
+    function updateContent(tags, perPage, page) {
+        $.ajax({
+            url: '/forum',
+            type: 'GET',
+            data: {
+                tag: tags,
+                perPage: perPage,
+                page: page
+            },
+            success: function (response) {
+                $('#forumContainer').html(response.forumItemsHTML);
+                $('#paginationContainer').html(response.paginationHTML);
+            }
+        });
+    }
+});
