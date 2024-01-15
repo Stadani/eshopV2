@@ -16,7 +16,6 @@ protected $guarded = [];
     //looks for search query in url if there is any it shows them
     public function scopeFilter($query, array $filters)
     {
-
         if ($filters['search'] ?? false) {
             $query
                 ->where('title', 'like', '%' . request('search') . '%');

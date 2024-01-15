@@ -56,7 +56,7 @@
     </div>
 
 {{--EDIT AND DELETE BUTTONS--}}
-    @if(auth()->user() && auth()->user()->id === $post->user->id)
+    @if(auth()->user() && (auth()->user()->id === $post->user->id || auth()->user()->is_admin == 1))
         <div class="postNameAndTags eanddbuttons">
             <form action="{{ route('delete.post', $post) }}" method="POST">
                 @csrf

@@ -126,7 +126,7 @@ class PostController extends Controller
 
     public function delete(Post $post)
     {
-        if (auth()->user() && auth()->user()->id === $post->user->id) {
+        if (auth()->user() && (auth()->user()->id === $post->user->id || auth()->user()->is_admin == 1)) {
             $post->delete();
             return redirect('/forum');
         }
