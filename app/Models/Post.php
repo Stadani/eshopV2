@@ -14,6 +14,7 @@ class Post extends Model
 protected $guarded = [];
 
     //looks for search query in url if there is any it shows them
+    //https://laracasts.com/series/laravel-8-from-scratch/episodes/38
     public function scopeFilter($query, array $filters)
     {
         if ($filters['search'] ?? false) {

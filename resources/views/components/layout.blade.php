@@ -6,7 +6,8 @@
 
 
 
-<link rel="icon" type="image/x-icon" href="/images/favicon-32x32.png">
+{{--<link rel="icon" type="image/x-icon" href="/images/favicon-32x32.png">--}}
+<link rel="icon" type="image/x-icon" href="{{asset("/images/favicon-32x32.png")}}">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/responsiveNavbar.css">
 <link rel="stylesheet" href="/css/navbar.css">

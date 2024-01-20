@@ -37,8 +37,6 @@
             $selectedGenres = $request->input('genres', []);
             $genreString = implode(',', $selectedGenres);
 
-
-
             $gamePlatforms = $this->rawgApiService->getPlatforms();
             $selectedPlatforms = $request->input('platforms', []);
             $platformString = implode(',', $selectedPlatforms);

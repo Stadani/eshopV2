@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EShop | Main Page</title>
+    <title>PixelNexus | Main Page</title>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
         <div class="head">
             <div class="header_content">
                 <img src="/images/bruh.png" alt="logo">
-                GAMESHOP
+                PixelNexus
             </div>
         </div>
 

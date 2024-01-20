@@ -3,9 +3,10 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>EShop | Games</title>
+    <title>PixelNexus | Games</title>
 
-    <link rel="stylesheet" href="/css/listStyle.css">
+
+    <link rel="icon" type="image/x-icon" href="{{asset("/images/favicon-32x32.png")}}">
 
     @extends('components/layout')
 
@@ -53,7 +54,7 @@
                     <div class="search-icon">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
-                    <input type="text" class="searchbar" name="search" value="{{ $search ?? '' }}" placeholder=" ..."> {{--    placeholder="{{ isset($showSearch) ? $showSearch : '' }}"--}}
+                    <input type="text" class="searchbar" name="search" value="{{ $search ?? '' }}" placeholder=" ...">
                 </div>
             </form>
 
