@@ -17,6 +17,9 @@
                     <a class="nav_button" href="/profile"><img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
                         Profile
                     </a>
+                    <a class="nav_button" href="{{route('cart')}}">
+                        <i class="fa-solid fa-cart-shopping"></i> Cart <span class="badge bg-danger cartCount">{{ count(session('cart', [])) }}</span>
+                    </a>
                     <a href="{{ route('logout') }}" class="nav_button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
                     </a>
@@ -37,5 +40,9 @@
 <x-dropdownNavbar>
 
 </x-dropdownNavbar>
+
+
+
+
 
 @yield('content')

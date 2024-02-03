@@ -133,4 +133,56 @@
 
         }
 
+        public function cart()
+        {
+            return view('cart');
+        }
+
+        public function addToCart($id, $platform)
+        {
+            $cartItemId = $id . '-' . $platform;
+
+            $gameDetails = $this->rawgApiService->getGameDetails($id);
+            $cart = session()->get('cart', []);
+
+            if (isset($cart[$cartItemId])) {
+                $cart[$cartItemId]['quantity']++;
+            } else {
+                $cart[$cartItemId] = [
+                    "product_name" => $gameDetails['name'],
+                    "platform" => $platform,
+                    "thumbnail" => $gameDetails['background_image'],
+                    "price" => 59.99,
+                    "quantity" => 1
+                ];
+            }
+
+            session()->put('cart', $cart);
+            return response()->json([
+                'cartCount' => count($cart),
+            ]);
+        }
+
+        public function removeFromCart(Request $request)
+        {
+            if ($request->id) {
+                $cart = session()->get('cart');
+                if (isset($cart[$request->id])) {
+                    unset($cart[$request->id]);
+                    session()->put('cart', $cart);
+                }
+                session()->flash('success', 'Item removed from cart!');
+            }
+        }
+
+        public function updateCart(Request $request)
+        {
+            if ($request->id && $request->quantity) {
+                $cart = session()->get('cart');
+                $cart[$request->id]['quantity'] = $request->quantity;
+                session()->put('cart', $cart);
+            }
+        }
+
+
     }

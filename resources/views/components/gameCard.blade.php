@@ -18,7 +18,7 @@
                         <table class="gameDesc">
                             <tr>
                                 <td><i class="fa-solid fa-star"></i> {{$game['metacritic']}}</td>
-                                <td>cena</td>
+                                <td>59.99$</td>
                             </tr>
                         </table>
                     </div>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{{--{{dd($gameDetails)}}--}}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,12 +15,23 @@
         <link rel="stylesheet" href="/css/cardStyle.css">
         <link rel="stylesheet" href="/css/gamePageStyle.css">
     @endsection
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 <body>
 
 @extends('components.navbar')
 
 @section('content')
+
+{{--    @if(session('success'))--}}
+{{--        <div class="alert alert-success">--}}
+{{--            {{ session('success') }}--}}
+{{--        </div>--}}
+{{--    @endif--}}
+
+<div id="buy-message-container"></div>
 
     {{--HEADER--}}
     <div class="containerGeneral containerGame">
@@ -147,6 +159,31 @@
         </div>
     </div>
 
+    {{--BUY SECTION--}}
+    <div class="containerGeneral contentCont px-4 py-4">
+        <h2>BUY A GAME</h2>
+        <table>
+        @foreach($gameDetails['platforms'] as $gameBuy)
+            <div>
+                <tr>
+                    <td>
+                        <h3> {{  $gameBuy['platform']['name']}}</h3>
+                    </td>
+                    <td>
+                        <div class="buttonContainer">
+                            <button class="button_bar buyButton" data-id="{{ $gameDetails['id'] }}" data-platform="{{ $gameBuy['platform']['name'] }}">
+                                BUY
+                                <span class="buttonPrice">59.99$</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+        @endforeach
+        </table>
+
+    </div>
+
     {{--DLCS--}}
     <div class="containerGeneral contentCont px-4 py-4">
         <h2> Additional content</h2>
@@ -191,4 +228,36 @@
 @endsection
 
 </body>
+
+<script>
+    $(document).ready(function() {
+        $(".buyButton").click(function (e) {
+            e.preventDefault();
+
+            var element = $(this);
+            var gameId = element.data("id");
+            var platform = element.data("platform");
+
+            $.ajax({
+                url: '{{ route('addToCart', ['id' => ':gameId', 'platform' => ':platform']) }}'.replace(':gameId', gameId).replace(':platform', platform),
+                method: "POST",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: gameId,
+                    platform: platform
+                },
+                success: function (response) {
+                    var message = "Item added to cart!";
+                    $("#buy-message-container").html('<div class="alert alert-success">' + message + '</div>');
+
+                    $('.cartCount').text(response.cartCount);
+                    setTimeout(function() {
+                        $("#buy-message-container").html('');
+                    }, 5000);
+                }
+            });
+        });
+    });
+</script>
+
 </html>

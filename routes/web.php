@@ -33,6 +33,12 @@ Route::get('/game', function () {
 });
 Route::get('/list', [GameController::class, 'index']);
 Route::get('/game/{id}', [GameController::class, 'show'])->name('game.show');
+Route::post('/cart/{id}/{platform}', [GameController::class, 'addToCart'])->name('addToCart');
+Route::delete('removeFromCart', [GameController::class, 'removeFromCart'])->name('removeFromCart');
+Route::patch('updateCart', [GameController::class, 'updateCart'])->name('updateCart');
+
+Route::get('/cart', [GameController::class, 'cart'])->name('cart');
+
 
 
 

@@ -8,6 +8,12 @@
             <li> <a href="/register" class="nav_button"><i class="fa-solid fa-pencil"></i> Sign In</a></li>
         @endguest
         @auth()
+            <li><a class="nav_button" href="/profile">
+                Profile
+            </a></li>
+            <li><a class="nav_button" href="/cart">
+                </i> Cart <span class="badge bg-danger">0</span>
+            </a></li>
             <li><a href="{{ route('logout') }}" class="nav_button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 Log Out
             </a></li>

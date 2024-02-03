@@ -31,12 +31,15 @@
                         <a href="/register" class="nav_button"><i class="fa-solid fa-pencil"></i> Sign In</a>
                     @endguest
                     @auth()
-                         <li><a class="nav_button" href="/profile"><img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
+                         <a class="nav_button" href="/profile"><img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
                                  Profile
-                             </a></li>
-                            <li><a href="{{ route('logout') }}" class="nav_button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                             </a>
+                            <a class="nav_button" href="/cart">
+                                <i class="fa-solid fa-cart-shopping"></i> Cart <span class="badge bg-danger">0</span>
+                            </a>
+                            <a href="{{ route('logout') }}" class="nav_button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
-                            </a></li>
+                            </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
