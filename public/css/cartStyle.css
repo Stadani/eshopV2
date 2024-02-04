@@ -1,0 +1,29 @@
+table img {
+    width: 150px;
+    height: 100px;
+    object-fit: fill;
+
+}
+table {
+    width: 100%;
+
+}
+td, th{
+    padding: 10px;
+}
+
+tfoot td {
+    text-align: right;
+}
+
+
+.productDetails {
+    display: flex;
+    align-items: center;
+}
+@media (max-width: 768px) {
+    table img{
+        display: none;
+    }
+}
+

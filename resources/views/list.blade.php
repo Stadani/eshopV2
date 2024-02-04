@@ -17,11 +17,13 @@
     @endsection
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.0/dist/js/multi-select-tag.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
 @extends('components.navbar')
 
 @section('content')
+
     <!--HEADER-->
     <div class="container centring">
 {{--        SEARCHBAR--}}

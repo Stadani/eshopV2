@@ -158,6 +158,7 @@
             }
 
             session()->put('cart', $cart);
+            session()->now('success', 'Item added to cart!');
             return response()->json([
                 'cartCount' => count($cart),
             ]);

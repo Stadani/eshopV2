@@ -5,9 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PixelNexus | Main Page</title>
+
+    @extends('components/layout')
+    @section('listcss')
+    @endsection
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 
 <body>
+@if(session('success'))
+    <div id="successMessage" class="alert alert-success messageBL">
+        {{ session('success') }}
+    </div>
+@endif
+
 <!--HEADER & NAVBAR-->
     <header>
         <div class="head">
@@ -35,7 +46,7 @@
                                  Profile
                              </a>
                             <a class="nav_button" href="/cart">
-                                <i class="fa-solid fa-cart-shopping"></i> Cart <span class="badge bg-danger">0</span>
+                                <i class="fa-solid fa-cart-shopping"></i> Cart <span class="badge bg-danger">{{ count(session('cart', [])) }}</span>
                             </a>
                             <a href="{{ route('logout') }}" class="nav_button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out

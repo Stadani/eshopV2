@@ -22,7 +22,6 @@
 
 @section('content')
 
-
     <!--BUTTON TO POST POSTS-->
     <div class="container bar">
         @auth()

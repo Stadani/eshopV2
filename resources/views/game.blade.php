@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{$gameDetails['name']}}</title>
-
+    <link rel="icon" type="image/x-icon" href="{{asset("/images/favicon-32x32.png")}}">
 
     @extends('components/layout')
     @section('listcss')
@@ -25,13 +25,8 @@
 
 @section('content')
 
-{{--    @if(session('success'))--}}
-{{--        <div class="alert alert-success">--}}
-{{--            {{ session('success') }}--}}
-{{--        </div>--}}
-{{--    @endif--}}
 
-<div id="buy-message-container"></div>
+<div id="buyMessage" class="messageBL"></div>
 
     {{--HEADER--}}
     <div class="containerGeneral containerGame">
@@ -198,7 +193,9 @@
                         @endif
                     </td>
                     <td>
-                        {{ $dlc['name'] }}
+                        <div class="buttonContainer">
+                            {{ $dlc['name'] }}
+                        </div>
                     </td>
                 </tr>
             @endforeach
@@ -237,6 +234,8 @@
             var element = $(this);
             var gameId = element.data("id");
             var platform = element.data("platform");
+            console.log('Game ID:', gameId);
+            console.log('Platform:', platform);
 
             $.ajax({
                 url: '{{ route('addToCart', ['id' => ':gameId', 'platform' => ':platform']) }}'.replace(':gameId', gameId).replace(':platform', platform),
@@ -248,12 +247,12 @@
                 },
                 success: function (response) {
                     var message = "Item added to cart!";
-                    $("#buy-message-container").html('<div class="alert alert-success">' + message + '</div>');
+                    $("#buyMessage").html('<div class="alert alert-success">' + message + '</div>');
 
                     $('.cartCount').text(response.cartCount);
                     setTimeout(function() {
-                        $("#buy-message-container").html('');
-                    }, 5000);
+                        $("#buyMessage").html('');
+                    }, 2000);
                 }
             });
         });

@@ -12,7 +12,7 @@
                 Profile
             </a></li>
             <li><a class="nav_button" href="/cart">
-                </i> Cart <span class="badge bg-danger">0</span>
+                </i> Cart <span class="badge bg-danger">{{ count(session('cart', [])) }}</span>
             </a></li>
             <li><a href="{{ route('logout') }}" class="nav_button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 Log Out

@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="/css/profileStyle.css">
 
 
+<script src="{{ asset('js/fadeOutSuccessMessage.js') }}"></script>
 <script src="/js/navbarScript.js"></script>
 
 

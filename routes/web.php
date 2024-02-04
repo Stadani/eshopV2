@@ -33,14 +33,13 @@ Route::get('/game', function () {
 });
 Route::get('/list', [GameController::class, 'index']);
 Route::get('/game/{id}', [GameController::class, 'show'])->name('game.show');
+
+Route::middleware('auth')->group(function () {
 Route::post('/cart/{id}/{platform}', [GameController::class, 'addToCart'])->name('addToCart');
 Route::delete('removeFromCart', [GameController::class, 'removeFromCart'])->name('removeFromCart');
 Route::patch('updateCart', [GameController::class, 'updateCart'])->name('updateCart');
-
 Route::get('/cart', [GameController::class, 'cart'])->name('cart');
-
-
-
+});
 
 
 Route::get('post/{post:slug}', [PostController::class, 'show']);
@@ -53,7 +52,7 @@ Route::get('tags/{tag:slug}', function (Tag $tag) {
 
 Route::get('/forum', [PostController::class, 'index']);
 
-
+Route::middleware('auth')->group(function () {
 Route::get('/postForm', [PostController::class, 'create']) ->name('create.post');
 Route::post('/postForm', [PostController::class, 'store'])->name('store.post');
 
@@ -70,7 +69,7 @@ Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.
 Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
 Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
-
+});
 
 //auth
 Route::get('/dashboard', function () {

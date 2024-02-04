@@ -94,3 +94,9 @@ footer{
     object-fit: contain;
 
 }
+.messageBL{
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 1000; /* Adjust this value if needed */
+}

@@ -41,6 +41,11 @@
 
 </x-dropdownNavbar>
 
+@if(session()->has('success'))
+    <div id="successMessage" class="alert alert-success messageBL">
+        {{ session('success') }}
+    </div>
+@endif
 
 
 

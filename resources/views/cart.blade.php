@@ -11,8 +11,6 @@
     @extends('components/layout')
     @section('listcss')
         <link rel="stylesheet" href="/css/cartStyle.css">
-
-
     @endsection
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
@@ -20,14 +18,12 @@
 @extends('components.navbar')
 
 @section('content')
-    @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    <div class="containerGeneral" >
 
-        <table id="cart" >
+
+
+    <div class="containerGeneral" >
+        <div class="table-responsive">
+            <table id="cart" >
             <thead>
             <tr>
                 <th scope="col" style="width: 50%;">Product</th>
@@ -82,54 +78,21 @@
                 </td>
             </tr>
             </tfoot>
-
         </table>
+        </div>
     </div>
 @endsection
 <script>
-    $(document).ready(function() {
-        $(".cartRemove").click(function (e) {
-            e.preventDefault();
+    var removeFromCartRoute = '{{ route('removeFromCart') }}';
+    var CSRF_TOKEN = '{{ csrf_token() }}';
+    var updateCartRoute = '{{ route('updateCart') }}';
 
-            var element = $(this);
-            var productId = element.parents("tr").attr("data-id");
-
-            $.ajax({
-                url: '{{ route('removeFromCart') }}',
-                method: "DELETE",
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    id: productId
-                },
-                success: function (response) {
-                    window.location.reload();
-                }
-            });
-        });
-    });
 </script>
-<script>
-    $(document).ready(function() {
-        $(".cartUpdate").change(function (e) {
-            e.preventDefault();
 
-            var element = $(this);
-            var productId = element.parents("tr").attr("data-id");
-            var productQuantity = element.parents("tr").find(".quantity").val();
+<script src="{{ asset('js/cartRemove.js') }}"></script>
+<script src="{{ asset('js/cartUpdate.js') }}"></script>
 
-            $.ajax({
-                url: '{{ route('updateCart') }}',
-                method: "patch",
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    id: productId,
-                    quantity: productQuantity,
-                },
-                success: function (response) {
-                    window.location.reload();
-                }
-            });
-        });
-    });
-</script>
+
+
+
 

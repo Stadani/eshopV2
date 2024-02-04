@@ -22,16 +22,20 @@
         @extends('components/layout')
         @section('listcss')
         @endsection
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
 
     <body>
     <x-navbarIndex>
     </x-navbarIndex>
 
-{{--        <div class="containerGeneral justify-items-center">--}}
-{{--            <div class="containerGeneral w-full py-4 ">--}}
-                {{ $slot }}
-            </div>
+    @if(session('error'))
+        <div id="successMessage" class="alert alert-danger messageBL">
+            {{ session('error') }}
         </div>
+    @endif
+
+                {{ $slot }}
+
     </body>
 </html>
