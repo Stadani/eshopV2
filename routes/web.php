@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
 
+use App\Http\Controllers\StripeController;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
 
@@ -70,6 +71,10 @@ Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name
 Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
 });
+
+Route::post('/session', [StripeController::class, 'session'])->name('session');
+Route::get('/success', [StripeController::class, 'success'])->name('success');
+Route::get('/cancel', [StripeController::class, 'cancel'])->name('cancel');
 
 //auth
 Route::get('/dashboard', function () {

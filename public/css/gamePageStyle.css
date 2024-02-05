@@ -1,8 +1,12 @@
 .videoPanel{
     display: flex;
     width: 70%;
-    align-items: center;
+    align-items: flex-start;
     padding: 10px;
+    flex-direction: column;
+}
+.tab{
+    margin-bottom: 10px;
 }
 
 .containerGame{
@@ -129,8 +133,10 @@
 
 .contentCont{
     display: flex;
+    margin-top: 20px;
+    background: #333333;
+    max-width: 1400px;
     flex-direction: column;
-
 }
 .dlcImage{
     width: 10rem;
@@ -138,12 +144,12 @@
     margin-top: 10px;
 }
 
-.gamePanel{
+.gameSeriesCards{
+    padding: 10px;
     display: flex;
-    width: 100%;
-    margin: 0;
+    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: center;
     background-color: #222222;
 }
 .hidden {
@@ -181,13 +187,10 @@
         order: -1;
         margin-left: 0;
     }
-
     .containerGame{
         flex-wrap: wrap;
     }
     .modal-content {
-        width: 90%; /* Adjust the modal width on smaller screens */
+        width: 90%;
     }
-
-
 }

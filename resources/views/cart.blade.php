@@ -19,11 +19,9 @@
 
 @section('content')
 
+    <div class="containerGeneral table-responsive">
 
-
-    <div class="containerGeneral" >
-        <div class="table-responsive">
-            <table id="cart" >
+        <table id="cart">
             <thead>
             <tr>
                 <th scope="col" style="width: 50%;">Product</th>
@@ -40,28 +38,29 @@
                 @foreach(session('cart') as $id => $details)
 {{--                    {{dd($details)}}--}}
                     @php $total += $details['price'] * $details['quantity'] @endphp
-                        <tr data-id="{{$id}}">
-                            <td>
-                                <div class="row productDetails">
-                                    <div class="col-auto">
-                                        <img src="{{$details['thumbnail']}}" alt="product_img">
-                                    </div>
-                                    <div class="col">
-                                        <h4>{{$details['product_name']}}</h4>
-                                    </div>
-
+                    <tr data-id="{{$id}}">
+                        <td>
+                            <div class="row productDetails">
+                                <div class="col-auto">
+                                    <img src="{{$details['thumbnail']}}" alt="product_img">
                                 </div>
-                            </td>
-                            <td>{{ $details['platform']}}</td>
-                            <td>{{$details['price']}}$</td>
-                            <td >
-                                <input type="number" value="{{$details['quantity']}}" class="form-control cartUpdate quantity" min="1">
-                            </td>
-                            <td>{{$details['price'] * $details['quantity'] }}$ </td>
-                            <td>
-                                <button class="btn btn-danger cartRemove"><i class="fa-solid fa-trash-can"></i></button>
-                            </td>
-                        </tr>
+                                <div class="col">
+                                    <h4>{{$details['product_name']}}</h4>
+                                </div>
+
+                            </div>
+                        </td>
+                        <td>{{ $details['platform']}}</td>
+                        <td>{{$details['price']}}$</td>
+                        <td>
+                            <input type="number" value="{{$details['quantity']}}"
+                                   class="form-control cartUpdate quantity" min="1">
+                        </td>
+                        <td>{{$details['price'] * $details['quantity'] }}$</td>
+                        <td>
+                            <button class="btn btn-danger cartRemove"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
                 @endforeach
             @endif
             </tbody>
@@ -72,14 +71,16 @@
             <tr>
                 <td colspan="6">
                     <div class="text-right">
-                        <a href="/list" class="btn btn-danger">Continue shopping</a>
-                        <button type="submit" class="btn btn-success">Checkout</button>
+                        <form action="/session" method="POST">
+                            <a href="/list" class="btn btn-danger">Continue shopping</a>
+                            <input type="hidden" name="_token" value="{{csrf_token()}}">
+                            <button type="submit" class="btn btn-success">Checkout</button>
+                        </form>
                     </div>
                 </td>
             </tr>
             </tfoot>
         </table>
-        </div>
     </div>
 @endsection
 <script>

@@ -1,7 +1,6 @@
 
 @foreach ($gameSeries['results'] as $index =>$game)
-    <div class="gameContainer">
-        {{--        {{ dd($game) }}--}}
+    <div>
         <a href="{{ route('game.show', ['id' => $game['id']]) }}">
             <div class="card mb-4 shadow-smd {{ $index >= 4 ? 'hidden' : '' }}">
 

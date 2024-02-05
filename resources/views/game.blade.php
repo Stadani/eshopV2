@@ -41,13 +41,12 @@
     {{--MAIN PANEL--}}
     <div class="containerGeneral containerGame">
         <div class="containerGeneral videoPanel">
+            <!-- Tab Buttons -->
+            <div class="tab">
+                <button class="tablinks button_bar" onclick="openMedia(event, 'Trailers')">Trailers</button>
+                <button class="tablinks button_bar" onclick="openMedia(event, 'Screenshots')">Screenshots</button>
+            </div>
             <div>
-                <!-- Tab Buttons -->
-                <div class="tab">
-                    <button class="tablinks button_bar" onclick="openMedia(event, 'Trailers')">Trailers</button>
-                    <button class="tablinks button_bar" onclick="openMedia(event, 'Screenshots')">Screenshots</button>
-                </div>
-
 
                 <!-- Trailers Tab -->
                 <div id="Trailers" class="tabcontent">
@@ -123,7 +122,7 @@
                         <td class="leftColumn">Developer:</td>
                         <td class="rightColumn">
                             @foreach($gameDetails['developers'] as $developer)
-                                <span>{{$developer['name']}}</span>{{ $loop->last ? '' : ',' }}
+                                <a href="/list?developers%5B%5D={{$developer['id']}}">{{$developer['name']}}</a>{{ $loop->last ? '' : ',' }}
                             @endforeach
                         </td>
                     </tr>
@@ -131,7 +130,7 @@
                         <td class="leftColumn">Publisher:</td>
                         <td class="rightColumn">
                             @foreach($gameDetails['publishers'] as $publisher)
-                                <span>{{$publisher['name']}}</span>{{ $loop->last ? '' : ',' }}
+                                <a href="/list?publishers%5B%5D={{$publisher['id']}}">{{$publisher['name']}}</a>{{ $loop->last ? '' : ',' }}
                             @endforeach
                         </td>
                     </tr>
@@ -139,7 +138,7 @@
                         <td class="leftColumn">Genres:</td>
                         <td class="rightColumn">
                             @foreach($gameDetails['genres'] as $genres)
-                                <span>{{$genres['name']}}</span>{{ $loop->last ? '' : ',' }}
+                                <a href="/list?genres%5B%5D={{$genres['id']}}">{{$genres['name']}}</a>{{ $loop->last ? '' : ',' }}
                             @endforeach
 
                         </td>
@@ -203,9 +202,9 @@
     </div>
 
     {{--GAME SERIES--}}
-    <div class="containerGeneral contentCont px-4 py-4">
+    <div class="contentCont px-4 py-4">
         <h2> Games of same series</h2>
-        <div class="container gamePanel">
+        <div class="gameSeriesCards">
             <x-gameCardSeries :gameSeries="$gameSeries">
 
             </x-gameCardSeries>

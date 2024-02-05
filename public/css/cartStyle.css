@@ -2,11 +2,9 @@ table img {
     width: 150px;
     height: 100px;
     object-fit: fill;
-
 }
 table {
     width: 100%;
-
 }
 td, th{
     padding: 10px;
