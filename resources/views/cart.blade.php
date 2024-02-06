@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{{--{{dd(session('cart'))}}--}}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,6 +18,12 @@
 @extends('components.navbar')
 
 @section('content')
+
+    @if(Session::has('error'))
+        <div id="errorMessage" class="alert alert-danger messageBL">
+            {{ Session::get('error') }}
+        </div>
+    @endif
 
     <div class="containerGeneral table-responsive">
 

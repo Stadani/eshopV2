@@ -40,4 +40,8 @@ return [
         'key' => env('STEAM_KEY'),
         'api_url' => 'http://api.steampowered.com/',
     ],
+
+    'mailchimp' => [
+        'key' => env('MAILCHIMP_KEY'),
+    ],
 ];

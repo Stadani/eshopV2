@@ -97,5 +97,38 @@ footer{
     position: fixed;
     bottom: 10px;
     left: 10px;
-    z-index: 1000; /* Adjust this value if needed */
+    z-index: 1000;
 }
+
+
+::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+::-webkit-scrollbar-thumb {
+    background: #4E31AA;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #DDDDDD;
+}
+::-webkit-scrollbar-thumb:active {
+    background: purple;
+}
+
+::-webkit-scrollbar-track {
+    background: #222222;
+    border: 0px none #EEEEEE;
+    border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+    background: #222222;
+}
+::-webkit-scrollbar-track:active {
+    background: #333333;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+

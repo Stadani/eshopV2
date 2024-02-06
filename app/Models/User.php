@@ -38,6 +38,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function games()
+    {
+        return $this->hasMany(InventoryGame::class);
+    }
+
     public function getProfilePictureUrlAttribute()
     {
         return $this->profile_picture ? asset('storage/' . $this->profile_picture) : asset('profile_pictures/albertwhisker.png');

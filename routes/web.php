@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
 
+use App\Http\Controllers\PurchaseHistoryController;
 use App\Http\Controllers\StripeController;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
 
 Route::get('/', function () {
     return view('index');
@@ -40,6 +43,9 @@ Route::post('/cart/{id}/{platform}', [GameController::class, 'addToCart'])->name
 Route::delete('removeFromCart', [GameController::class, 'removeFromCart'])->name('removeFromCart');
 Route::patch('updateCart', [GameController::class, 'updateCart'])->name('updateCart');
 Route::get('/cart', [GameController::class, 'cart'])->name('cart');
+Route::post('/session', [StripeController::class, 'session'])->name('session');
+Route::get('/success', [StripeController::class, 'success'])->name('success');
+Route::get('/cancel', [StripeController::class, 'cancel'])->name('cancel');
 });
 
 
@@ -72,9 +78,8 @@ Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('c
 Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
 });
 
-Route::post('/session', [StripeController::class, 'session'])->name('session');
-Route::get('/success', [StripeController::class, 'success'])->name('success');
-Route::get('/cancel', [StripeController::class, 'cancel'])->name('cancel');
+
+
 
 //auth
 Route::get('/dashboard', function () {
@@ -88,6 +93,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/inventory', [PurchaseHistoryController::class, 'index'])->name('profile.inventory');
 });
 
 require __DIR__.'/auth.php';

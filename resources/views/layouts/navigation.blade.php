@@ -17,6 +17,7 @@
                     </x-nav-link>
                     <a href="list" class="nav_button">Games</a>
                     <a href="forum" class="nav_button">Discussion</a>
+                    <a href="{{route('profile.inventory')}}" class="nav_button">Inventory</a>
 
                 </div>
             </div>
@@ -26,6 +27,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="nav_button text inline-flex items-center  transition ease-in-out duration-150">
+                            <img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div>
@@ -39,6 +41,10 @@
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('cart')">
+                            {{ __('Cart') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->

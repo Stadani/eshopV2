@@ -11,23 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('purchase_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('slug')->unique()->default('');
-            $table->string('title', 50);
-            $table->text('body');
-            $table->unsignedInteger('views')->default(0);
+            $table->integer('idGame');
+            $table->string('platform');
+            $table->string('key')->default('');
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('purchase_history');
     }
 };

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Stripe\Stripe;
+use Illuminate\Support\Facades\Session;
+use App\Models\InventoryGame;
 
 class StripeController extends Controller
 {
@@ -19,7 +21,7 @@ class StripeController extends Controller
             $total = $details['price'];
             $quantity = $details['quantity'];
 
-
+            $unit_amount = intval($total * 100);
 
             $product[] = [
                 'price_data' => [
@@ -27,7 +29,7 @@ class StripeController extends Controller
                         'name' => $productName,
                     ],
                     'currency' => 'USD',
-                    'unit_amount' => $total,
+                    'unit_amount' => $unit_amount,
                 ],
                 'quantity' =>$quantity
             ];
@@ -48,10 +50,44 @@ class StripeController extends Controller
 
     public function success()
     {
+
+        $user = auth()->user();
+        $cart = session('cart');
+
+        foreach ($cart as $details) {
+            $gameId = $details['id'];
+            $platform = $details['platform'];
+            $quantity = $details['quantity'];
+
+            for ($i = 0; $i < $quantity; $i++) {
+                $key = $this->generateRandomKey();
+                InventoryGame::create([
+                    'user_id' => $user->id,
+                    'idGame' => $gameId,
+                    'platform' => $platform,
+                    'key' => $key,
+                ]);
+            }
+        }
+
+        Session::forget('cart');
         return "Thank you for you purchase. \n You will find your key(s) in your e-mail inbox.";
     }
+
+    private function generateRandomKey()
+    {
+        $key = '';
+        for ($i = 0; $i < 4; $i++) {
+            $key .= uniqid() . '-';
+        }
+
+        return rtrim($key, '-');
+    }
+
     public function cancel()
     {
-        return "cancel";
+        Session::flash('error', 'Payment was canceled.');
+        return redirect('cart');
     }
+
 }

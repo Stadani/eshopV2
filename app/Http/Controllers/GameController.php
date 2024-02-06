@@ -149,6 +149,7 @@
                 $cart[$cartItemId]['quantity']++;
             } else {
                 $cart[$cartItemId] = [
+                    "id" => $id,
                     "product_name" => $gameDetails['name'],
                     "platform" => $platform,
                     "thumbnail" => $gameDetails['background_image'],

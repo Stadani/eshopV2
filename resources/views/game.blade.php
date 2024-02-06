@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{{--{{dd($gameDetails)}}--}}
+{{--{{dd($gameDLCs)}}--}}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -192,9 +192,11 @@
                         @endif
                     </td>
                     <td>
-                        <div class="buttonContainer">
-                            {{ $dlc['name'] }}
-                        </div>
+                        <a href="/game/{{$dlc['id']}}">
+                            <div class="buttonContainer">
+                                {{ $dlc['name'] }}
+                            </div>
+                        </a>
                     </td>
                 </tr>
             @endforeach
