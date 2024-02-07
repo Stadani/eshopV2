@@ -50,6 +50,13 @@ img {
     margin-right: auto;
     padding-top: 20px;
 }
+.paragraphs {
+    margin-top: 20px;
+    display: block;
+    padding: 1rem;
+}
+
+
 footer{
     display: flex;
     flex-direction: column;

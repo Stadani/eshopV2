@@ -8,6 +8,7 @@
 
     @extends('components/layout')
     @section('listcss')
+        <link rel="stylesheet" href="/css/forumStyle.css">
     @endsection
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
@@ -75,27 +76,50 @@
 
 </x-carousel>
 
+
 <!--MAIN-->
-    <div class="main_content">
-        Welcome to GameShop – Your Ultimate Gaming Hub!
-        Discover the latest video game releases, connect with fellow gamers in our vibrant forum, and embark on a journey into the world of gaming excellence.
-        Start exploring now!
+    <div class="containerGeneral paragraphs">
+        <p> Welcome to PixelNexus – Your Ultimate Gaming Hub!
+            At PixelNexus, we're passionate about all things gaming, and we've created a vibrant community where gamers like you can come together to explore, connect, and experience the excitement of gaming like never before.
+        </p>
+        <p>Discover the latest video game releases: Stay up-to-date with the hottest new releases across all gaming platforms. From AAA titles to indie gems.</p>
+        <p>Connect with fellow gamers in our vibrant forum: Join the conversation with a community of like-minded gamers who share your passion. Discuss your favorite games, share tips, strategies and opinions with players from around the world.</p>
     </div>
 
+{{--NEWSLETTER--}}
+<div class="containerGeneral paragraphs">
+    <p>Are you a gaming enthusiast always on the lookout for the latest updates, releases, and insights about your favorite games? Look no further! Our newsletter is tailored just for you.</p>
+    <p>By subscribing to our newsletter, you'll get exclusive access to:</p>
+    <p>📰 Breaking News: Be the first to know about game releases, updates, and industry news.</p>
+    <p>🎉 Special Offers: Get notified about exclusive deals, discounts, and promotions on popular games and gaming accessories.</p>
+    <p>📅 Event Reminders: Never miss out on important gaming events, tournaments, and conventions happening in your area or online.></p>
+    <p>🎁 Giveaways and Contests: Stand a chance to win exciting prizes, game keys, merchandise, and more through our regular giveaways and contests.</p>
+
+    <form action="/newsletter" method="POST">
+        @csrf
+        <div>
+            <input type="text" name="email" placeholder="Your email address...">
+            @error('email')
+                <div id="errorMessage" class="alert alert-danger messageBL"> {{$message}}</div>
+            @enderror
+        </div>
+        <button type="submit" class="button_bar mt-1">SUBSCRIBE</button>
+
+
+    </form>
+</div>
 <!--FOOTER-->
     <footer>
        <div class="footer_content_block">
            <p><i class="fa-regular fa-clipboard"></i> About Us</p>
-           Gameshop is shop and forum at the same time.
-           Users can buy, rate, comment and discuss videogames.
+           PixelNexus is shop and forum at the same time.
+           Users can buy, rate, comment and discuss video games.
        </div>
        <div class="footer_content_block">
            <p><i class="fa-regular fa-envelope"></i> Contact</p>
             E-mail: stadani2@stud.uniza.sk
        </div>
-{{--       <div class="footer_content_block">--}}
-{{--           <p><i class="fa-solid fa-chart-line"></i> Statistics</p>--}}
-{{--       </div>--}}
+
     </footer>
 
 </body>

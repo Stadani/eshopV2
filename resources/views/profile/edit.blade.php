@@ -11,7 +11,19 @@
         </div>
     @endif
     <div class="containerGeneral profileCont">
-        <img src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
+        <div>
+            <img src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture" width="100">
+        </div>
+        <div class="ml-3">
+            <p> Username: {{$user->name }}</p>
+            <p> Joined: {{$user->created_at->format('Y-m-d') }}</p>
+            <p> Role: @if($user->is_admin === 1)
+                    Admin
+                @else
+                    User
+                @endif
+            </p>
+        </div>
     </div>
             <div class="containerGeneral profileCont">
                 <form method="POST" action="{{ route('user-profile-picture.update') }}" enctype="multipart/form-data">

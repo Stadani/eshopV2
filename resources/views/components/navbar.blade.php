@@ -46,6 +46,11 @@
         {{ session('success') }}
     </div>
 @endif
+@if(session()->has('error'))
+    <div id="errorMessage" class="alert alert-danger messageBL">
+        {{ session('error') }}
+    </div>
+@endif
 
 
 

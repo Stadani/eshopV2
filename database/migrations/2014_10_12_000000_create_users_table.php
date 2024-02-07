@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('profile_picture')->nullable()->default('profile_pictures/albertwhisker.png');
             $table->boolean('is_admin')->default(false);
+            $table->boolean('is_suspended')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

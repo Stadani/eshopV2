@@ -1,0 +1,18 @@
+.paddingContainer {
+    padding: 1rem;
+}
+.linkText{
+    color: #EEEEEE;
+}
+.buttons{
+    display: flex;
+    flex-direction: row;
+
+}
+.button_bar{
+    background-color: #4E31AA;
+    color:#EEEEEE;
+    border-radius:10px;
+    border:1px solid #4E31AA;
+    padding: 5px;
+}

@@ -15,7 +15,7 @@
                             </a>
                         </div>
                         <div class="table_cell_info">
-                            <a href="">{{ $post->user->name }}</a>
+                            <a href="/profile/{{$post->user_id}}">{{ $post->user->name }}</a>
                         </div>
                     </div>
                 </div>

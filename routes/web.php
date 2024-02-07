@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
 
 use App\Http\Controllers\PurchaseHistoryController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\UserProfileController;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::post('newsletter', NewsletterController::class);
 
 Route::get('/', function () {
     return view('index');
@@ -60,22 +62,26 @@ Route::get('tags/{tag:slug}', function (Tag $tag) {
 Route::get('/forum', [PostController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
-Route::get('/postForm', [PostController::class, 'create']) ->name('create.post');
-Route::post('/postForm', [PostController::class, 'store'])->name('store.post');
+Route::get('/postForm', [PostController::class, 'create']) ->name('create.post')->middleware('check.suspension');
+Route::post('/postForm', [PostController::class, 'store'])->name('store.post')->middleware('check.suspension');
 
-Route::get('/postForm/{post}', [PostController::class, 'edit'])->name('posts.edit');
-Route::patch('/postForm/{post}', [PostController::class, 'update'])->name('update.post');
-Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('delete.post');
+Route::get('/postForm/{post}', [PostController::class, 'edit'])->name('posts.edit')->middleware('check.suspension');
+Route::patch('/postForm/{post}', [PostController::class, 'update'])->name('update.post')->middleware('check.suspension');
+Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('delete.post')->middleware('check.suspension');
 
 
-Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment');
+Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment')->middleware('check.suspension');
 Route::get('/post/{post:slug}', [CommentController::class, 'index'])->name('index.comment');
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
 
 
-Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
-Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
-Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
+Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit')->middleware('check.suspension');
+Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('check.suspension');
+Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete')->middleware('check.suspension');
+
+Route::get('/profile/{id}', [UserProfileController::class, 'show'])->name('profile.show');
+Route::post('/profile/{user}/suspend', [UserProfileController::class, 'suspendUser'])->name('profile.suspend');
+Route::delete('/profile/{user}', [UserProfileController::class, 'deleteUser'])->name('profile.delete');
 });
 
 
