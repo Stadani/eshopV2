@@ -44,9 +44,10 @@ class RawgService
         return $response->json();
     }
 
-    public function getGenres()
+    public function getGenres($parameters = [])
     {
-        $response = Http::get($this->baseUrl . 'genres' , ['key' => $this->apiKey]);
+        $parameters = array_merge(['key' => $this->apiKey], $parameters);
+        $response = Http::get($this->baseUrl . 'genres' , $parameters);
         return $response->json();
     }
 
@@ -71,14 +72,17 @@ class RawgService
         $response = Http::get($this->baseUrl . 'games/' . $id . '/game-series' , ['key' => $this->apiKey]);
         return $response->json();
     }
-    public function getDevelopers()
+    public function getDevelopers($parameters = [])
     {
-        $response = Http::get($this->baseUrl . 'developers' , ['key' => $this->apiKey]);
+        $parameters = array_merge(['key' => $this->apiKey], $parameters);
+        $response = Http::get($this->baseUrl . 'developers', $parameters);
+
         return $response->json();
     }
-    public function getPublishers()
+    public function getPublishers($parameters = [])
     {
-        $response = Http::get($this->baseUrl . 'publishers' , ['key' => $this->apiKey]);
+        $parameters = array_merge(['key' => $this->apiKey], $parameters);
+        $response = Http::get($this->baseUrl . 'publishers' , $parameters);
         return $response->json();
     }
 }
