@@ -13,6 +13,7 @@ class GamePlatform extends Model
 
     protected $fillable = [
         'name',
+        'price',
     ];
 
     public function game()

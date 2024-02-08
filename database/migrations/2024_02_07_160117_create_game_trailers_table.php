@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('game_trailers', function (Blueprint $table) {
             $table->foreignId('game_id')->constrained('games')->cascadeOnDelete();
             $table->string('trailer')->nullable();
+            $table->string('preview')->nullable();
             $table->timestamps();
             $table->unique(['game_id', 'trailer']);
         });

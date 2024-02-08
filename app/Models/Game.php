@@ -22,7 +22,7 @@ class Game extends Model
     }
     public function platform()
     {
-        return $this->belongsToMany(GamePlatform::class, 'game_and_platform', 'game_id', 'platform_id');
+        return $this->belongsToMany(GamePlatform::class, 'game_and_platform', 'game_id', 'platform_id')->withPivot('price');;
     }
     public function trailer()
     {

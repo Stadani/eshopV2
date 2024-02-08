@@ -304,9 +304,9 @@
 //            } while ($currentPage <= $totalPages);
 
 //GAME TRAILERS
-
+//
 //            $currentPage = 1;
-//            $totalPages = 50;
+//            $totalPages = 1;
 //
 //            do {
 //                $request->merge(['page' => $currentPage]);
@@ -326,11 +326,15 @@
 //
 //                    $trailersResponse = $this->rawgApiService->getTrailers($gameData['id']);
 //                    $trailersData = $trailersResponse['results'] ?? [];
+//
 //                    foreach ($trailersData as $trailer) {
+//
 //                        GameTrailer::updateOrCreate(
 //                            ['game_id' => $game->id, 'trailer' => $trailer['data']['max']],
-//                            ['game_id' => $game->id, 'trailer' => $trailer['data']['max']]
-//                        );
+//                            ['game_id' => $game->id,
+//                                'trailer' => $trailer['data']['max'],
+//
+//                            ]);
 //                    }
 //                }
 //                $currentPage++;
@@ -486,41 +490,41 @@
 
 //GAME AND PUBLISHER PIVOT
 
-            $currentPage = 48;
-            $totalPages = 50;
-
-            do {
-                $request->merge(['page' => $currentPage]);
-                $response = $this->rawgApiService->getGames($request->all());
-                $gamesData = $response['results'] ?? [];
-
-                foreach ($gamesData as $gameData) {
-                    $game = Game::updateOrCreate(
-                        ['name' => $gameData['name']],
-                        [
-                            'name' => $gameData['name'],
-                            'game_picture' => $gameData['background_image'],
-                            'release_date' => $gameData['released'],
-                            'rating' => $gameData['rating'],
-                        ]
-                    );
-
-                    $publishersResponse = $this->rawgApiService->getGameDetails($gameData['id']);
-                    $publishersData = $publishersResponse['publishers'] ?? [];
-
-                    foreach ($publishersData as $publisherData) {
-                        $publisherName = $publisherData['name'] ?? null;
-                        if ($publisherName) {
-                            $publisher = GamePublisher::where('name', $publisherName)->first();
-                            if ($publisher) {
-                                $game->publisher()->syncWithoutDetaching([$publisher->id]);
-                            }
-                        }
-                    }
-                }
-
-                $currentPage++;
-            } while ($currentPage <= $totalPages);
+//            $currentPage = 48;
+//            $totalPages = 50;
+//
+//            do {
+//                $request->merge(['page' => $currentPage]);
+//                $response = $this->rawgApiService->getGames($request->all());
+//                $gamesData = $response['results'] ?? [];
+//
+//                foreach ($gamesData as $gameData) {
+//                    $game = Game::updateOrCreate(
+//                        ['name' => $gameData['name']],
+//                        [
+//                            'name' => $gameData['name'],
+//                            'game_picture' => $gameData['background_image'],
+//                            'release_date' => $gameData['released'],
+//                            'rating' => $gameData['rating'],
+//                        ]
+//                    );
+//
+//                    $publishersResponse = $this->rawgApiService->getGameDetails($gameData['id']);
+//                    $publishersData = $publishersResponse['publishers'] ?? [];
+//
+//                    foreach ($publishersData as $publisherData) {
+//                        $publisherName = $publisherData['name'] ?? null;
+//                        if ($publisherName) {
+//                            $publisher = GamePublisher::where('name', $publisherName)->first();
+//                            if ($publisher) {
+//                                $game->publisher()->syncWithoutDetaching([$publisher->id]);
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                $currentPage++;
+//            } while ($currentPage <= $totalPages);
 
 
 
@@ -557,7 +561,7 @@
 //                                        'gameSeries' => $gameSeries,
 //                                       ]);
 
-            $game = Game::with('category')->find($id);
+            $game = Game::with('category', 'trailer', 'screenshot', 'developer', 'publisher', 'platform', 'gameDLCs', 'gameSeries')->find($id);
             return view('/game', ['game' => $game]);
 
         }
