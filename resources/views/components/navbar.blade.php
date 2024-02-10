@@ -15,7 +15,7 @@
             @endguest
             @auth()
                     <a class="nav_button" href="/profile"><img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
-                        Profile
+                        {{Auth::user()->name}}
                     </a>
                     <a class="nav_button" href="{{route('cart')}}">
                         <i class="fa-solid fa-cart-shopping"></i> Cart <span class="badge bg-danger cartCount">{{ count(session('cart', [])) }}</span>

@@ -11,15 +11,15 @@
         @foreach ($games as $index => $game)
 
             <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                @if(!empty($game['background_image']))
-                    <img src="{{ $game['background_image']}}" alt="{{ $game['name'] }}">
+                @if(!empty($game->game_picture))
+                    <img src="{{ $game->game_picture}}" alt="{{ $game->name }}" style="object-fit: fill">
                 @else
-                    <img src="{{ asset('images/Background13.png') }}" alt="{{ $game['name'] }}">
+                    <img src="{{ asset('images/Background13.png') }}" alt="{{ $game->name }}">
                 @endif
                 <div class="container">
                     <div class="carousel-caption text-start">
-                        <a href="{{ route('game.show', ['id' => $game['id']]) }}" class="link">
-                            <h1>{{ $game['name'] }}</h1>
+                        <a href="{{ route('game.show', ['id' => $game->id]) }}" class="link">
+                            <h1>{{ $game->name }}</h1>
                         </a>
                         <p><a class="btn btn-lg btn-primary" href="/list">Browse games</a></p>
                     </div>

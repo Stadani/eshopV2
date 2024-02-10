@@ -42,7 +42,7 @@
             @php $total = 0 @endphp
             @if(session('cart'))
                 @foreach(session('cart') as $id => $details)
-{{--                    {{dd($details)}}--}}
+{{--                    {{dd(session('cart') )}}--}}
                     @php $total += $details['price'] * $details['quantity'] @endphp
                     <tr data-id="{{$id}}">
                         <td>

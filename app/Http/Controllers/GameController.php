@@ -1,98 +1,39 @@
 <?php
 
-    namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
-    use App\Models\Game;
-    use App\Models\GameCategory;
-    use App\Models\GameDeveloper;
-    use App\Models\GameDLC;
-    use App\Models\GamePlatform;
-    use App\Models\GamePublisher;
-    use App\Models\GameScreenshot;
-    use App\Models\GameTrailer;
-    use App\Models\SameSeriesGame;
-    use App\Services\SteamService;
-    use Illuminate\Http\Request;
-    use App\Services\RawgService;
-    use Illuminate\Pagination\LengthAwarePaginator;
-    use function Laravel\Prompts\search;
+use App\Models\Game;
+use App\Models\GameAndPlatform;
+use App\Models\GameCategory;
+use App\Models\GameDeveloper;
+use App\Models\GameDLC;
+use App\Models\GamePlatform;
+use App\Models\GamePublisher;
+use App\Models\GameScreenshot;
+use App\Models\GameTrailer;
+use App\Models\SameSeriesGame;
+use App\Services\SteamService;
+use Illuminate\Http\Request;
+use App\Services\RawgService;
+use Illuminate\Pagination\LengthAwarePaginator;
+use function Laravel\Prompts\search;
 
 
-    class GameController extends Controller
+class GameController extends Controller
+{
+
+
+    protected $rawgApiService;
+
+    public function __construct(RawgService $rawgApiService)
     {
+        $this->rawgApiService = $rawgApiService;
+
+    }
 
 
-        protected $rawgApiService;
-
-        public function __construct(RawgService $rawgApiService)
-        {
-            $this->rawgApiService = $rawgApiService;
-
-        }
-
-
-
-        public function index(Request $request)
-        {
-
-            $gameTags = $this->rawgApiService->getTags();
-
-            $pageSize = $request->input('page_size', 24);
-            $currentPage = $request->input('page', 1);
-            $search = $request->input('search', '');
-            $ordering = $request->input('ordering', '');
-
-            $gameGenres = $this->rawgApiService->getGenres();
-            $selectedGenres = $request->input('genres', []);
-            $genreString = implode(',', $selectedGenres);
-
-            $gamePlatforms = $this->rawgApiService->getPlatforms();
-            $selectedPlatforms = $request->input('platforms', []);
-            $platformString = implode(',', $selectedPlatforms);
-
-            $gameDevelopers = $this->rawgApiService->getDevelopers();
-            $selectedDevelopers = $request->input('developers', []);
-            $developersString = implode(',', $selectedDevelopers);
-
-            $gamePublishers = $this->rawgApiService->getPublishers();
-            $selectedPublishers = $request->input('publishers', []);
-            $publishersString = implode(',', $selectedPublishers);
-
-            $queryParameters = [
-                    'page_size' => $pageSize,
-                    'page' => $currentPage,
-                    'search' => $search,
-                    'ordering' => $ordering,
-            ];
-
-            if (!empty($genreString)) {
-                $queryParameters['genres'] = $genreString;
-            }
-            if (!empty($platformString)) {
-                $queryParameters['platforms'] = $platformString;
-            }
-            if (!empty($developersString)) {
-                $queryParameters['developers'] = $developersString;
-            }
-            if (!empty($publishersString)) {
-                $queryParameters['publishers'] = $publishersString;
-            }
-
-
-            $response = $this->rawgApiService->getGames($queryParameters);
-
-            $games = collect($response['results'] ?? []);
-            $totalGames = $response['count'] ?? 0;
-
-
-
-            $paginatedGames = new LengthAwarePaginator(
-                $games,
-                $totalGames,
-                $pageSize,
-                $currentPage,
-                ['path' => $request->url(), 'query' => $request->query()]
-            );
+    public function index(Request $request)
+    {
 
 
 //GAMES
@@ -527,109 +468,211 @@
 //            } while ($currentPage <= $totalPages);
 
 
+        $searchQuery = $request->input('search');
 
-            return view('/list', ['games' => $paginatedGames,
-                'page_size' => $pageSize,
-                'gameTags'=> $gameTags,
-                'gameGenres' => $gameGenres,
-                'search' => request('search'),
-                'gamePlatforms' => $gamePlatforms,
-                'gameDevelopers' => $gameDevelopers,
-                'gamePublishers' => $gamePublishers,
-                ]);
+        $gamesQuery = Game::query();
+
+        if ($searchQuery) {
+            $gamesQuery->where('name', 'like', '%' . $searchQuery . '%');
         }
 
-        public function show($id)
-        {
-
-//            $gameDetails = $this->rawgApiService->getGameDetails($id);
-//            $gameScreenshots = $this->rawgApiService->getScreenshots($id);
-//            $gameTrailers = $this->rawgApiService->getTrailers($id);
-//            $gameDLCs = $this->rawgApiService->getDLCs($id);
-//            $gameSeries = $this->rawgApiService->getSameSeries($id);
-//
-//            $fullDescription = $gameDetails['description'] ?? '';
-//            $descriptions = explode('<p>Español<br />', $fullDescription);
-//            $englishDescription = $descriptions[0] ?? '';
-//
-//
-//            return view('/game', ['gameDetails' => $gameDetails,
-//                                        'englishDescription' => $englishDescription,
-//                                        'gameScreenshots' => $gameScreenshots,
-//                                        'gameTrailers' => $gameTrailers,
-//                                        'gameDLCs' => $gameDLCs,
-//                                        'gameSeries' => $gameSeries,
-//                                       ]);
-
-            $game = Game::with('category', 'trailer', 'screenshot', 'developer', 'publisher', 'platform', 'gameDLCs', 'gameSeries')->find($id);
-            return view('/game', ['game' => $game]);
-
+        if ($request->has('genres')) {
+            $genres = $request->input('genres');
+            $gamesQuery->whereHas('category', function ($query) use ($genres) {
+                $query->whereIn('id', $genres);
+            });
         }
 
-        public function carouselItems()
-        {
-            $sortedGames = $this->rawgApiService->getGames(['ordering' => '-metacritic', 'page_size' => 100]);
-            $gamesList = $sortedGames['results'] ?? [];
-
-            shuffle($gamesList);
-            $randomGames = array_slice($gamesList, 0, 10);
-
-            return view('index', ['games' => $randomGames]);
-
+        if ($request->has('platforms')) {
+            $platforms = $request->input('platforms');
+            $gamesQuery->whereHas('platform', function ($query) use ($platforms) {
+                $query->whereIn('id', $platforms);
+            });
         }
 
-        public function cart()
-        {
-            return view('cart');
+        if ($request->has('developers')) {
+            $developers = $request->input('developers');
+            $gamesQuery->whereHas('developer', function ($query) use ($developers) {
+                $query->whereIn('id', $developers);
+            });
         }
 
-        public function addToCart($id, $platform)
-        {
-            $cartItemId = $id . '-' . $platform;
-
-            $gameDetails = $this->rawgApiService->getGameDetails($id);
-            $cart = session()->get('cart', []);
-
-            if (isset($cart[$cartItemId])) {
-                $cart[$cartItemId]['quantity']++;
-            } else {
-                $cart[$cartItemId] = [
-                    "id" => $id,
-                    "product_name" => $gameDetails['name'],
-                    "platform" => $platform,
-                    "thumbnail" => $gameDetails['background_image'],
-                    "price" => 59.99,
-                    "quantity" => 1
-                ];
-            }
-
-            session()->put('cart', $cart);
-            session()->now('success', 'Item added to cart!');
-            return response()->json([
-                'cartCount' => count($cart),
-            ]);
+        if ($request->has('publishers')) {
+            $publishers = $request->input('publishers');
+            $gamesQuery->whereHas('publisher', function ($query) use ($publishers) {
+                $query->whereIn('id', $publishers);
+            });
         }
 
-        public function removeFromCart(Request $request)
-        {
-            if ($request->id) {
-                $cart = session()->get('cart');
-                if (isset($cart[$request->id])) {
-                    unset($cart[$request->id]);
-                    session()->put('cart', $cart);
-                }
-                session()->flash('success', 'Item removed from cart!');
-            }
+        $ordering = $request->input('ordering');
+        switch ($ordering) {
+            case 'name':
+                $gamesQuery->orderBy('name');
+                break;
+            case '-name':
+                $gamesQuery->orderByDesc('name');
+                break;
+            case 'released':
+                $gamesQuery->orderBy('release_date');
+                break;
+            case '-released':
+                $gamesQuery->orderByDesc('release_date');
+                break;
+            case 'rating':
+                $gamesQuery->orderBy('rating');
+                break;
+            case '-rating':
+                $gamesQuery->orderByDesc('rating');
+                break;
         }
 
-        public function updateCart(Request $request)
-        {
-            if ($request->id && $request->quantity) {
-                $cart = session()->get('cart');
-                $cart[$request->id]['quantity'] = $request->quantity;
-                session()->put('cart', $cart);
-            }
-        }
+        $games = $gamesQuery->paginate(24);
+
+        $genres = GameCategory::all();
+        $platforms = GamePlatform::all();
+        $developers = GameDeveloper::all();
+        $publishers = GamePublisher::all();
+
+
+
+        return view('list', [
+            'game' => $games,
+            'genres' => $genres,
+            'platforms' => $platforms,
+            'developers' => $developers,
+            'publishers' => $publishers,
+            'search' => $searchQuery,
+        ]);
 
 
     }
+
+    public function show($id, Request $request)
+    {
+        $dlc = GameDLC::all();
+        $game = Game::with('category', 'trailer', 'screenshot', 'developer', 'publisher', 'platform', 'gameDLCs', 'gameSeries')->find($id);
+
+
+        $perPage = $request->input('perPage', 20);
+        $reviews = $game->review()->paginate($perPage)->withQueryString();
+
+//        dd($reviews);
+        if ($request->ajax()) {
+            $forumItemsView = view('components.userReview', ['reviews' => $reviews])->render();
+            $paginationView = $reviews->links()->render();
+
+            return response()->json([
+                'forumItemsHTML' => $forumItemsView,
+                'paginationHTML' => $paginationView,
+            ]);
+        } else {
+            return view('/game', ['game' => $game,
+                'dlc' => $dlc,
+                'reviews' => $reviews,
+                'perPage' => $perPage,
+            ]);
+        }
+    }
+
+    public function carouselItems()
+    {
+        $sortedGames = Game::orderByDesc('rating')
+            ->limit(100)
+            ->get();
+
+        $randomGames = $sortedGames->shuffle()->take(10);
+
+        return view('index', ['games' => $randomGames]);
+
+    }
+
+    public function cart()
+    {
+        return view('cart');
+    }
+
+    public function addToCart($id, $platform, $dlc)
+    {
+
+        $cartItemId = $id . '-' . $platform;
+        $cart = session()->get('cart', []);
+        $game = Game::findOrFail($id);
+
+        if ($dlc == "true") {
+            $dlcDetails = GameDLC::findOrFail($id);
+            if (isset($cart[$cartItemId])) {
+                $cart[$cartItemId]['quantity']++;
+            } else {
+                $gameId = GameDLC::where('id', $id)
+                    ->value('game_id');
+                $thumbnail = Game::where('id', $gameId)
+                    ->value('game_picture');
+                $cart[$cartItemId] = [
+                    "id" => $id,
+                    "product_name" => $dlcDetails->name,
+                    "platform" => $platform,
+                    "thumbnail" => $thumbnail,
+                    "price" => $dlcDetails->price,
+                    "quantity" => 1,
+                    "is_dlc" => 'true',
+                ];
+            }
+        } else {
+            $gamePrice = GameAndPlatform::where('game_id', $id)
+                ->where('platform_id', $platform)
+                ->value('price');
+
+            $platformName = GamePlatform::where('id', $platform)
+                ->value('name');
+
+            if ($gamePrice !== null) {
+                if (isset($cart[$cartItemId])) {
+                    $cart[$cartItemId]['quantity']++;
+                } else {
+                    $cart[$cartItemId] = [
+                        "id" => $id,
+                        "product_name" => $game->name,
+                        "platform" => $platformName,
+                        "thumbnail" => $game->game_picture,
+                        "price" => $gamePrice,
+                        "quantity" => 1,
+                        "is_dlc" => 'false',
+                    ];
+                }
+
+
+            }
+        }
+        session()->put('cart', $cart);
+        session()->now('success', 'Item added to cart!');
+        return response()->json([
+            'cartCount' => count($cart),
+        ]);
+    }
+
+
+    public function removeFromCart(Request $request)
+    {
+        if ($request->id) {
+            $cart = session()->get('cart');
+            if (isset($cart[$request->id])) {
+                unset($cart[$request->id]);
+                session()->put('cart', $cart);
+            }
+            session()->flash('success', 'Item removed from cart!');
+        }
+    }
+
+    public function updateCart(Request $request)
+    {
+        if ($request->id && $request->quantity) {
+            $cart = session()->get('cart');
+            $cart[$request->id]['quantity'] = $request->quantity;
+            session()->put('cart', $cart);
+        }
+    }
+
+
+
+
+}

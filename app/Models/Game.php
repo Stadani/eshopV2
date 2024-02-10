@@ -49,4 +49,12 @@ class Game extends Model
         return $this->belongsToMany(GamePublisher::class, 'games_and_publishers', 'game_id', 'publisher_id');
     }
 
+    public function review()
+    {
+        return $this->hasMany(UserReview::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

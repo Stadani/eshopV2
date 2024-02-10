@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('purchase_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->integer('idGame');
+            $table->foreignId('game_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('dlc_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('platform');
             $table->string('key')->default('');
             $table->timestamps();
+
         });
     }
 

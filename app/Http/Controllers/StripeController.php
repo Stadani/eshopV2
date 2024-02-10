@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\Session;
@@ -58,15 +59,28 @@ class StripeController extends Controller
             $gameId = $details['id'];
             $platform = $details['platform'];
             $quantity = $details['quantity'];
+            $isDlc = $details['is_dlc'];
+
+            $game = Game::findOrFail($gameId);
 
             for ($i = 0; $i < $quantity; $i++) {
                 $key = $this->generateRandomKey();
-                InventoryGame::create([
-                    'user_id' => $user->id,
-                    'idGame' => $gameId,
-                    'platform' => $platform,
-                    'key' => $key,
-                ]);
+
+                if ($isDlc == 'false') {
+                    InventoryGame::create([
+                        'user_id' => $user->id,
+                        'game_id' => $game->id,
+                        'platform' => $platform,
+                        'key' => $key,
+                    ]);
+                } else {
+                    InventoryGame::create([
+                        'user_id' => $user->id,
+                        'dlc_id' => $game->id,
+                        'platform' => $platform,
+                        'key' => $key,
+                    ]);
+                }
             }
         }
 

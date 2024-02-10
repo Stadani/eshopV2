@@ -14,7 +14,11 @@
     @endsection
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
-
+@if(session()->has('success'))
+    <div id="successMessage" class="alert alert-success messageBL">
+        {{ session('success') }}
+    </div>
+@endif
 <x-app-layout>
     <div class="containerGeneral paddingContainer" style="display: block">
         <p><img src="{{$user->profile_picture_url}}" alt="ProfilePicture" width="200"></p>
@@ -26,8 +30,14 @@
                 User
             @endif
         </p>
+        <p>Status: @if($user->is_suspended === 1)
+                Suspended
+            @else
+                Normal
+            @endif
+        </p>
 
-        @if(auth()->user()->is_admin == 1 && $user->id !== auth()->id())
+        @if(auth()->user()->is_admin == 1 && $user->email !== auth()->user()->email)
             <div class="buttons">
                 <form action="{{ route('profile.suspend', $user) }}" method="POST">
                     @csrf
@@ -45,11 +55,11 @@
     </div>
 
     <div class="containerGeneral paddingContainer" style="display: block">
-       <h3>Posts</h3>
+        <h3>Posts</h3>
         {{ $posts->links() }}
         @foreach ($posts as $post)
             <ul>
-              <li><a href="/post/{{ $post->slug }}" class="linkText"><h4>{{ $post->title }}</h4></a></li>
+                <li><a href="/post/{{ $post->slug }}" class="linkText"><h4>{{ $post->title }}</h4></a></li>
             </ul>
         @endforeach
     </div>

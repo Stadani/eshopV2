@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GamePlatform extends Model
+class GameAndPlatform extends Model
 {
     use HasFactory;
 
-    protected $table = 'platform';
+    protected $table = 'game_and_platform';
 
     protected $fillable = [
-        'name',
+        'game_id',
+        'platform_id',
+        'price',
     ];
 
-    public function game()
-    {
-        return $this->belongsToMany(Game::class);
-    }
+
+
 }

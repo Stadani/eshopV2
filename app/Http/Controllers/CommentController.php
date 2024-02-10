@@ -69,7 +69,7 @@ class CommentController extends Controller
 
     public function delete(Comment $comment)
     {
-        if (auth()->user()->id === $comment->user_id) {
+        if ((auth()->user()->id === $comment->user_id) || auth()->user()->is_admin == 1) {
             $comment->delete();
             return back();
         }

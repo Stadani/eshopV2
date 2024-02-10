@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dlcs', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('game_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->double('price')->default(9.99);

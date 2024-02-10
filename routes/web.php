@@ -9,6 +9,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\PurchaseHistoryController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\UserReviewController;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +42,7 @@ Route::get('/list', [GameController::class, 'index']);
 Route::get('/game/{id}', [GameController::class, 'show'])->name('game.show');
 
 Route::middleware('auth')->group(function () {
-Route::post('/cart/{id}/{platform}', [GameController::class, 'addToCart'])->name('addToCart');
+Route::post('/cart/{id}/{platform}/{dlc}', [GameController::class, 'addToCart'])->name('addToCart');
 Route::delete('removeFromCart', [GameController::class, 'removeFromCart'])->name('removeFromCart');
 Route::patch('updateCart', [GameController::class, 'updateCart'])->name('updateCart');
 Route::get('/cart', [GameController::class, 'cart'])->name('cart');
@@ -52,6 +53,7 @@ Route::get('/cancel', [StripeController::class, 'cancel'])->name('cancel');
 
 
 Route::get('post/{post:slug}', [PostController::class, 'show']);
+Route::get('/post/{post:slug}', [CommentController::class, 'index'])->name('index.comment');
 
 Route::get('tags/{tag:slug}', function (Tag $tag) {
     return view('forum', [
@@ -71,13 +73,19 @@ Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('del
 
 
 Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment')->middleware('check.suspension');
-Route::get('/post/{post:slug}', [CommentController::class, 'index'])->name('index.comment');
+
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
-
-
 Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit')->middleware('check.suspension');
 Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('check.suspension');
 Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete')->middleware('check.suspension');
+
+
+Route::post('/game/{game}', [UserReviewController::class, 'store'])->name('store.review')->middleware('check.suspension');
+Route::get('/game/{games}', [UserReviewController::class, 'index'])->name('index.review');
+Route::get('/reviews/{review}/edit', [UserReviewController::class, 'edit'])->name('reviews.edit')->middleware('check.suspension');
+Route::put('/reviews/{review}', [UserReviewController::class, 'update'])->name('reviews.update')->middleware('check.suspension');
+Route::delete('/reviews/{review}', [UserReviewController::class, 'delete'])->name('reviews.delete')->middleware('check.suspension');
+
 
 Route::get('/profile/{id}', [UserProfileController::class, 'show'])->name('profile.show');
 Route::post('/profile/{user}/suspend', [UserProfileController::class, 'suspendUser'])->name('profile.suspend');

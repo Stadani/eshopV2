@@ -26,21 +26,34 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($purchaseHistory as $purchase)
+            @foreach($purchaseHistory as $index => $purchase)
                 <tr>
                     <td>
                         <div class="row productDetails">
                             <div class="col-auto">
-                                <img src="{{ $gameDetails[$purchase->idGame]['background_image']}}" alt="product_img">
+                                @if ($purchase->dlc_id == null)
+                                    <img src="{{ $itemDetails[$index]->game_picture }}" alt="product_img">
+                                @else
+                                    <img src="{{ \App\Models\Game::find($itemDetails[$index]->game_id)->game_picture }}"
+                                         alt="dlc_img">
+                                @endif
                             </div>
                             <div class="col">
-                                <a href="/game/{{$purchase->idGame}}" style="text-decoration: none; color: #EEEEEE">
-                                    <h4>{{ $gameDetails[$purchase->idGame]['name'] }}</h4></a>
+                                @if ($purchase->dlc_id == null)
+                                    <a href="/game/{{ $itemDetails[$index]->id }}"
+                                       style="text-decoration: none; color: #EEEEEE">
+                                        <h4>{{ $itemDetails[$index]->name }}</h4>
+                                    </a>
+                                @else
+                                    <a href="/game/{{ $itemDetails[$index]->game_id }}"
+                                       style="text-decoration: none; color: #EEEEEE">
+                                        <h4>{{ $itemDetails[$index]->name }}</h4>
+                                @endif
                             </div>
                         </div>
                     </td>
                     <td>{{ $purchase->platform }}</td>
-                    <td >{{ $purchase->key }}</td>
+                    <td>{{ $purchase->key }}</td>
                 </tr>
             @endforeach
             </tbody>

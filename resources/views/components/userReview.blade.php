@@ -1,14 +1,14 @@
-@foreach ($comments as $comment)
+@foreach ($reviews as $review)
     <div class="containerGeneral">
-{{--        USER INFO--}}
+{{--                USER INFO--}}
         <div class="postUser">
-            <img src="{{ $comment->user->ProfilePictureURL }}" alt="profile">
-            <h5 class="username">{{ $comment->user->name }}</h5>
-            @if((auth()->user() && auth()->user()->id === $comment->user->id) || auth()->user()->is_admin == 1 )
+            <img src="{{ $review->user->ProfilePictureURL }}" alt="profile">
+            <h5 class="username">{{ $review->user->name }}</h5>
+            @if((auth()->user() && auth()->user()->id === $review->user->id) || auth()->user()->is_admin == 1 )
                 <div class="postNameAndTags eanddbuttons comment">
-                    <button title="Edit" class="button_bar" onclick="toggleEditForm({{ $comment->id }})"><i
+                    <button title="Edit" class="button_bar" onclick="toggleEditForm({{ $review->id }})"><i
                             class="fa-solid fa-file-pen"></i></button>
-                    <form id="deleteForm{{ $comment->id }}" action="{{ route('comments.delete', $comment) }}"
+                    <form id="deleteForm{{ $review->id }}" action="{{ route('reviews.delete', $review) }}"
                           method="POST">
                         @csrf
                         @method('DELETE')
@@ -18,16 +18,16 @@
                 </div>
             @endif
         </div>
-{{--CONTENT OF COMMENT--}}
+{{--        CONTENT OF COMMENT--}}
         <div class="postContent">
             <div class="hiddenName">
                 <div class="navbar_main">
-                    {{$comment->user->name}}
+                    {{$review->user->name}}
                 </div>
                 <div class="sidenav">
-                    <button title="Edit" class="button_bar" onclick="toggleEditForm({{ $comment->id }})"><i
+                    <button title="Edit" class="button_bar" onclick="toggleEditForm({{ $review->id }})"><i
                             class="fa-solid fa-file-pen"></i></button>
-                    <form id="deleteForm{{ $comment->id }}" action="{{ route('comments.delete', $comment) }}"
+                    <form id="deleteForm{{ $review->id }}" action="{{ route('reviews.delete', $review) }}"
                           method="POST">
                         @csrf
                         @method('DELETE')
@@ -36,24 +36,24 @@
                     </form>
                 </div>
             </div>
-            <time><i class="fa-solid fa-clock" title="Created"></i> {{ $comment->created_at }} </time>
+            <time><i class="fa-solid fa-clock" title="Created"></i> {{ $review->created_at }} </time>
             <div class="postNameAndTags eanddbuttons">
-                <form action="{{ route('comments.delete', $comment) }}" method="POST">
+                <form action="{{ route('reviews.delete', $review) }}" method="POST">
                     @csrf
                     @method('DELETE')
                 </form>
                 <div class="postContent">
-                    <div id="editForm{{ $comment->id }}" style="display: none;">
-                        <form action="{{ route('comments.update', $comment) }}" method="POST">
+                    <div id="editForm{{ $review->id }}" style="display: none;">
+                        <form action="{{ route('reviews.update', $review) }}" method="POST">
                             @csrf
                             @method('PUT')
-                            <textarea name="body" placeholder="Edit your comment">{{ $comment->body }}</textarea>
+                            <textarea name="body" placeholder="Edit your comment">{{ $review->body }}</textarea>
                             <button type="submit" class="button_bar">Save</button>
                         </form>
                     </div>
                 </div>
             </div>
-            {{ $comment-> body }}
+            {{ $review-> body }}
         </div>
     </div>
 @endforeach
