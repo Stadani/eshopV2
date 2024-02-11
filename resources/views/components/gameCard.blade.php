@@ -16,22 +16,23 @@
                     <table class="gameDesc">
                         <tr>
                             <td><i class="fa-solid fa-star"></i> {{$game->rating}}</td>
+                            <td><i class="fa-solid fa-user"></i><i class="fa-solid fa-star fa-2xs"></i> {{ number_format($game->average_rating, 2) }}</td>
                         </tr>
                     </table>
                 </div>
 
                 <div class="gameTags">
-                    <p>
+                    <p class="linkColor">
                         @foreach($game->category as $genre)
-                            <a href="{{ url('/list') . '?genres%5B%5D=' . $genre->id }}">
-                                <span class="tag genre mt-1">{{ $genre->category }}</span>
+                            <a href="{{ url('/list') . '?genres%5B%5D=' . $genre->id }}" class="linkColor">
+                                <span class="tag genre linkColor mt-1">{{ $genre->category }}</span>
                             </a>
                         @endforeach
                     </p>
-                    <p>
+                    <p class="linkColor" >
                         @foreach($game->platform as $platform)
-                            <a href="{{ url('/list') . '?platforms%5B%5D=' . $platform->id }}">
-                                <span class="tag mt-1">{{ $platform->name }}</span>
+                            <a href="{{ url('/list') . '?platforms%5B%5D=' . $platform->id }}" class="linkColor">
+                                <span class="tag  mt-1">{{ $platform->name }}</span>
                             </a>
                         @endforeach
                     </p>

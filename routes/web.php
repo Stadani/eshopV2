@@ -75,14 +75,13 @@ Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('del
 Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment')->middleware('check.suspension');
 
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
-Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit')->middleware('check.suspension');
+//Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit')->middleware('check.suspension');
 Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('check.suspension');
 Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete')->middleware('check.suspension');
 
 
 Route::post('/game/{game}', [UserReviewController::class, 'store'])->name('store.review')->middleware('check.suspension');
 Route::get('/game/{games}', [UserReviewController::class, 'index'])->name('index.review');
-Route::get('/reviews/{review}/edit', [UserReviewController::class, 'edit'])->name('reviews.edit')->middleware('check.suspension');
 Route::put('/reviews/{review}', [UserReviewController::class, 'update'])->name('reviews.update')->middleware('check.suspension');
 Route::delete('/reviews/{review}', [UserReviewController::class, 'delete'])->name('reviews.delete')->middleware('check.suspension');
 

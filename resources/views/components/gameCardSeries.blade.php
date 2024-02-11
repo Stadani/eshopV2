@@ -3,7 +3,7 @@
     @php
         $game = App\Models\Game::find($seriesGame->series_id);
     @endphp
-    <div>
+    <div class="linkColor">
         <a href="{{ route('game.show', ['id' => $game->id]) }}">
             <div class="card mb-4 shadow-smd {{ $index >= 4 ? 'hidden' : '' }}">
 

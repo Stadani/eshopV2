@@ -41,14 +41,14 @@ class CommentController extends Controller
 
     }
 
-    public function edit(Comment $comment)
-    {
-        if (auth()->user()->id === $comment->user_id) {
-            return view('edit-comment', ['comment' => $comment]);
-        }
-
-        return back();
-    }
+//    public function edit(Comment $comment)
+//    {
+//        if (auth()->user()->id === $comment->user_id) {
+//            return view('edit-comment', ['comment' => $comment]);
+//        }
+//
+//        return back();
+//    }
 
     public function update(Request $request, Comment $comment)
     {

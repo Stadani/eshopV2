@@ -4,7 +4,8 @@
         <div class="postUser">
             <img src="{{ $review->user->ProfilePictureURL }}" alt="profile">
             <h5 class="username">{{ $review->user->name }}</h5>
-            @if((auth()->user() && auth()->user()->id === $review->user->id) || auth()->user()->is_admin == 1 )
+            @if(auth()->user() != null)
+            @if((auth()->user() && auth()->user()->id === $review->user->id) || auth()->user()->is_admin == 1)
                 <div class="postNameAndTags eanddbuttons comment">
                     <button title="Edit" class="button_bar" onclick="toggleEditForm({{ $review->id }})"><i
                             class="fa-solid fa-file-pen"></i></button>
@@ -16,6 +17,7 @@
                         </button>
                     </form>
                 </div>
+            @endif
             @endif
         </div>
 {{--        CONTENT OF COMMENT--}}
@@ -36,7 +38,10 @@
                     </form>
                 </div>
             </div>
-            <time><i class="fa-solid fa-clock" title="Created"></i> {{ $review->created_at }} </time>
+            <time><i class="fa-solid fa-clock" title="Created"></i> {{ $review->created_at }}
+               <p> <i class="fa-solid fa-star"></i> {{$review->rating}}/5</p>
+            </time>
+
             <div class="postNameAndTags eanddbuttons">
                 <form action="{{ route('reviews.delete', $review) }}" method="POST">
                     @csrf
@@ -48,6 +53,7 @@
                             @csrf
                             @method('PUT')
                             <textarea name="body" placeholder="Edit your comment">{{ $review->body }}</textarea>
+
                             <button type="submit" class="button_bar">Save</button>
                         </form>
                     </div>

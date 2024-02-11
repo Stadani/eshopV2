@@ -533,7 +533,15 @@ class GameController extends Controller
         $developers = GameDeveloper::all();
         $publishers = GamePublisher::all();
 
+        foreach ($games as $game) {
+            $userRating = $game->review()->where('game_id', $game->id)
+                ->where('user_id', auth()->id())
+                ->value('rating');
+            $game->user_rating = $userRating;
 
+            $averageRating = $game->review()->where('game_id', $game->id)->avg('rating');
+            $game->average_rating = $averageRating;
+        }
 
         return view('list', [
             'game' => $games,
@@ -555,8 +563,10 @@ class GameController extends Controller
 
         $perPage = $request->input('perPage', 20);
         $reviews = $game->review()->paginate($perPage)->withQueryString();
+        $showUsersReview = $game->review()->where('user_id', auth()->id())->get();
+        $averageRating = $game->review()->where('game_id', $game->id)->avg('rating');
 
-//        dd($reviews);
+//        dd($showUsersReview);
         if ($request->ajax()) {
             $forumItemsView = view('components.userReview', ['reviews' => $reviews])->render();
             $paginationView = $reviews->links()->render();
@@ -570,6 +580,8 @@ class GameController extends Controller
                 'dlc' => $dlc,
                 'reviews' => $reviews,
                 'perPage' => $perPage,
+                'showUsersReview' => $showUsersReview,
+                'averageRating' => $averageRating,
             ]);
         }
     }

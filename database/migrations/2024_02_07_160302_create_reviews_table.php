@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('game_id')->constrained()->cascadeOnDelete();
             $table->string('body');
+            $table->integer('rating');
             $table->timestamps();
+            $table->unique(['user_id', 'game_id']);
         });
     }
 

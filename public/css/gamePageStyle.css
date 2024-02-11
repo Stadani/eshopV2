@@ -40,6 +40,9 @@
     margin-right: 0;
     width: 100%;
 }
+td>a {
+    color: #EEEEEE;
+}
 .info table {
     width: 100%;
 }
@@ -177,6 +180,29 @@
 .buttonContainer {
     display: flex;
     justify-content: flex-end;
+}
+
+.rating input {
+    display: none;
+}
+
+
+.rating label {
+    cursor: pointer;
+    font-size: 25px;
+    color: #ddd;
+}
+
+.selected + label {
+    color: #ffc107;
+}
+
+.rating label:hover {
+    color: #fdd835;
+}
+.star {
+    font-size: 10vh;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {

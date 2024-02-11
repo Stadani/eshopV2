@@ -105,7 +105,7 @@
                 </div>
                 <button id="read-more-btn" class="button_bar">Read More</button>
             </div>
-            <div class="containerGeneral info">
+            <div class="containerGeneral info ">
                 <table>
                     <tr>
                         <td class="leftColumn">Release Date:</td>
@@ -139,6 +139,10 @@
                     <tr>
                         <td class="leftColumn">Rating:</td>
                         <td class="rightColumn">{{$game->rating}}/5</td>
+                    </tr>
+                    <tr>
+                        <td class="leftColumn">User rating:</td>
+                        <td class="rightColumn">{{number_format($averageRating, 2)}}/5</td>
                     </tr>
                 </table>
 
@@ -184,7 +188,8 @@
                     </td>
                     <td>
                         <div class="buttonContainer">
-                            <button class="button_bar buyButton" data-id="{{ $dlc->id }}" data-platform="All" data-dlc="true">
+                            <button class="button_bar buyButton" data-id="{{ $dlc->id }}" data-platform="All"
+                                    data-dlc="true">
                                 BUY
                                 <span class="buttonPrice">{{$dlc->price}}$</span>
                             </button>
@@ -199,7 +204,7 @@
     <div class="containerGeneral contentCont px-4 py-4">
         <h2> Games of same series</h2>
         <div class="gameSeriesCards">
-            <x-gameCardSeries :game="$game" >
+            <x-gameCardSeries :game="$game">
 
             </x-gameCardSeries>
         </div>
@@ -210,36 +215,61 @@
         </div>
     </div>
 
-{{--    USER REVIEWS--}}
+    {{--    USER REVIEWS--}}
     <div class="containerGeneral contentCont px-4 py-4">
         <h2> User reviews</h2>
         @guest()
             <div class="container">
-                You are not logged in. Please <a href="{{ route('login') }}">log in</a> or <a href="{{ route('register') }}">register</a> to review a game.
+                You are not logged in. Please <a href="{{ route('login') }}">log in</a> or <a
+                    href="{{ route('register') }}">register</a> to review a game.
             </div>
         @endguest
         @auth()
-            <form method="POST" action="{{ route('store.review', $game) }}">
-                @csrf
-                <div class="containerGeneral">
-                    <div class="postUser">
-                        <img src="{{Auth::user()->profile_picture_url }}" alt="">
+            @if(!$game->review()->where('user_id', Auth::id())->first())
+                <form method="POST" action="{{ route('store.review', $game) }}">
+                    @csrf
+                    <div class="containerGeneral">
+                        <div class="postUser">
+                            <img src="{{Auth::user()->profile_picture_url }}" alt="">
+                        </div>
+                        <div class="postContent">
+                            <textarea id="textBody" name="body" placeholder="Review this game!"></textarea>
+                            <div class="rating">
+                                <input type="radio" id="star5" name="rating" value="1" class="star"
+                                       onclick="gfg(1)"/><label for="star5" title="1 star">★</label>
+                                <input type="radio" id="star4" name="rating" value="2" class="star"
+                                       onclick="gfg(2)"/><label for="star4" title="2 stars">★</label>
+                                <input type="radio" id="star3" name="rating" value="3" class="star"
+                                       onclick="gfg(3)"/><label for="star3" title="3 stars">★</label>
+                                <input type="radio" id="star2" name="rating" value="4" class="star"
+                                       onclick="gfg(4)"/><label for="star2" title="4 stars">★</label>
+                                <input type="radio" id="star1" name="rating" value="5" class="star"
+                                       onclick="gfg(5)"/><label for="star1" title="5 stars">★</label>
+                            </div>
+                            <h3 id="output">
+                                Rating is: 0/5
+                            </h3>
+                            <button id="submitButton" type="submit" class="button_bar">
+                                Post a review
+                            </button>
+                        </div>
                     </div>
-                    <div class="postContent">
-                        <textarea name="body" placeholder="Review this game!"></textarea>
-                        <button type="submit" class="button_bar">
-                            Post a review
-                        </button>
-                    </div>
+                </form>
+            @else
+                <div id="commentContainer">
+                <x-editUserReview :showUsersReview="$showUsersReview">
+
+                </x-editUserReview>
                 </div>
-            </form>
+            @endif
         @endauth
+    </div>
         <div class="container arrow_bar just">
             <div id="paginationContainer" class="navbar_main px-2">
                 {{ $reviews->links() }}
             </div>
             <div class="sidenav py-3">
-                <select id="commentsPerPageDropdown"  onchange="updateCommentsPerPage(this.value)">
+                <select id="commentsPerPageDropdown" onchange="updateCommentsPerPage(this.value)">
                     <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 per page</option>
                     <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 per page</option>
                     <option value="15" {{ $perPage == 15 ? 'selected' : '' }}>15 per page</option>
@@ -247,13 +277,13 @@
                 </select>
             </div>
         </div>
-{{--        @dd($reviews)--}}
+
         <div id="commentContainer">
             <x-userReview :reviews="$reviews">
 
             </x-userReview>
         </div>
-    </div>
+
 
 
 
@@ -262,6 +292,8 @@
     <script src="{{ asset('js/gameClic.js') }}"></script>
     <script src="{{ asset('js/gameSeriesExpand.js') }}"></script>
     <script src="{{ asset('js/gameAjax.js') }}"></script>
+    <script src="{{ asset('js/rating.js') }}"></script>
+    <script src="{{ asset('js/checkFields.js') }}"></script>
     <script src="/js/toggleEditComment.js"></script>
 
 @endsection
@@ -270,6 +302,9 @@
 <script>
     var gameId = "{{ $game->id }}";
 </script>
+
+
+
 <script>
     $(document).ready(function () {
         $(".buyButton").click(function (e) {

@@ -17,20 +17,12 @@ class UserReviewController extends Controller
 
         $game->review()->create([
             'user_id' => auth()->id(),
-            'body' => request('body')
+            'body' => request('body'),
+            'rating' => request('rating'),
         ]);
 
         return back();
 
-    }
-
-    public function edit(UserReview $review)
-    {
-        if (auth()->user()->id === $review->user_id) {
-            return view('edit-comment', ['review' => $review]);
-        }
-
-        return back();
     }
 
     public function update(Request $request, UserReview $review)
@@ -38,10 +30,12 @@ class UserReviewController extends Controller
         if (auth()->user()->id === $review->user_id) {
             $request->validate([
                 'body' => 'required|string',
+                'rating' => 'required|integer',
             ]);
 
             $review->update([
                 'body' => $request->body,
+                'rating' => $request->rating,
             ]);
 
             return redirect()->back();
