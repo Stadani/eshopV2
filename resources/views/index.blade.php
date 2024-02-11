@@ -98,7 +98,7 @@
     <form action="/newsletter" method="POST">
         @csrf
         <div>
-            <input type="text" name="email" placeholder="Your email address...">
+            <input type="text" name="email" placeholder="Subscribe to newsletter...">
             @error('email')
                 <div id="errorMessage" class="alert alert-danger messageBL"> {{$message}}</div>
             @enderror

@@ -28,7 +28,8 @@
                     <x-slot name="trigger">
                         <button class="nav_button text inline-flex items-center  transition ease-in-out duration-150">
                             <img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
-                            <div>{{ Auth::user()->name }}</div>
+                                {{ Auth::user()->name }}
+
 
                             <div>
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -44,7 +45,7 @@
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('cart')">
-                            {{ __('Cart') }}
+                            {{ __('Cart') }} <span class="badge bg-danger cartCount">{{ count(session('cart', [])) }}</span>
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -93,7 +94,17 @@
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
-                <!-- Authe`ntication -->
+                <p>
+                <x-responsive-nav-link :href="route('cart')">
+                    {{ __('Cart') }} <span class="badge bg-danger cartCount">{{ count(session('cart', [])) }}</span>
+                </x-responsive-nav-link>
+                </p>
+                <p>
+                    <x-responsive-nav-link :href="route('profile.inventory')">
+                        {{ __('Inventory') }}
+                    </x-responsive-nav-link>
+                </p>
+                <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
