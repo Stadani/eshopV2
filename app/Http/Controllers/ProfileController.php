@@ -71,8 +71,10 @@ class ProfileController extends Controller
 
         $user = Auth::user();
         if ($user->profile_picture) {
-            $oldFilePath = storage_path('app/public/profile_pictures/' . basename($user->profile_picture));
-            File::delete($oldFilePath);
+            if (!basename('albertwhisker.png')) {
+                $oldFilePath = storage_path('app/public/profile_pictures/' . basename($user->profile_picture));
+                File::delete($oldFilePath);
+            }
         }
 
 

@@ -16,6 +16,7 @@ use App\Services\SteamService;
 use Illuminate\Http\Request;
 use App\Services\RawgService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use function Laravel\Prompts\search;
 
 
@@ -523,6 +524,20 @@ class GameController extends Controller
                 break;
             case '-rating':
                 $gamesQuery->orderByDesc('rating');
+                break;
+            case 'urating':
+                $gamesQuery->leftJoin('reviews', 'games.id', '=', 'reviews.game_id')
+                    ->select('games.id', 'games.name', 'games.game_picture', 'games.rating', DB::raw('AVG(reviews.rating) as avg_rating'))
+                    ->groupBy('games.id', 'games.name', 'games.game_picture', 'games.rating')
+                    ->orderBy('avg_rating');
+
+                break;
+            case '-urating':
+                $gamesQuery->leftJoin('reviews', 'games.id', '=', 'reviews.game_id')
+                    ->select('games.id', 'games.name', 'games.game_picture', 'games.rating', DB::raw('AVG(reviews.rating) as avg_rating'))
+                    ->groupBy('games.id', 'games.name', 'games.game_picture', 'games.rating')
+                    ->orderByDesc('avg_rating');
+
                 break;
         }
 

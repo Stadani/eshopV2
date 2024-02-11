@@ -4,6 +4,7 @@
         <div class="postUser">
             <img src="{{ $comment->user->ProfilePictureURL }}" alt="profile">
             <h5 class="username">{{ $comment->user->name }}</h5>
+            @if(auth()->user() != null)
             @if((auth()->user() && auth()->user()->id === $comment->user->id) || auth()->user()->is_admin == 1 )
                 <div class="postNameAndTags eanddbuttons comment">
                     <button title="Edit" class="button_bar" onclick="toggleEditForm({{ $comment->id }})"><i
@@ -16,6 +17,7 @@
                         </button>
                     </form>
                 </div>
+            @endif
             @endif
         </div>
 {{--CONTENT OF COMMENT--}}

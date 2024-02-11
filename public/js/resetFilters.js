@@ -1,29 +1,13 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var resetButton = document.getElementById('resetFilters');
+$(document).ready(function () {
+    // Reset button click event
+    $('#resetFiltersButton').click(function () {
+        // Clear all checkboxes
+        $('input[type=checkbox]').prop('checked', false);
 
-    resetButton.addEventListener('click', function() {
-        // Reset text input
-        var searchInput = document.querySelector('.searchbar');
-        if (searchInput) {
-            searchInput.value = '';
-        }
+        // Reset ordering dropdown to default
+        $('#ordering').val('');
 
-        // Reset all checkboxes
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(function(checkbox) {
-            checkbox.checked = false;
-        });
-
-        // Reset select elements
-        var selects = document.querySelectorAll('select');
-        selects.forEach(function(select) {
-            select.value = '';
-        });
-
-        // Submit the form after reset
-        var form = document.querySelector('form[action="/list"]');
-        if (form) {
-            form.submit();
-        }
+        // Submit the form to reset the filters
+        $('#filterForm').submit();
     });
 });

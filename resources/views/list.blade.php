@@ -100,6 +100,10 @@
                         </option>
                         <option value="rating" {{ request('ordering') == 'rating' ? 'selected' : '' }}>Rating Asc
                         </option>
+                        <option value="-urating" {{ request('ordering') == '-urating' ? 'selected' : '' }}>User rating Desc
+                        </option>
+                        <option value="urating" {{ request('ordering') == 'urating' ? 'selected' : '' }}>User rating Asc
+                        </option>
                     </select>
                 </div>
                 {{--                    GENRES--}}
@@ -189,7 +193,7 @@
                 @endif
 
                 <button type="submit" class="button_bar mt-4">Filter</button>
-                <button type="button" id="resetFilters" class="button_bar mt-4">Reset Filters</button>
+                <button type="button" id="resetFiltersButton" class="button_bar mt-4">Reset Filters</button>
             </form>
         </div>
     </div>
