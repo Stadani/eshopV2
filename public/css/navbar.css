@@ -63,3 +63,8 @@ ul{
 .dropdown_navbar.open {
     height: auto;
 }
+@media (min-width: 830px) {
+    .profileHamburger {
+        display: none;
+    }
+}

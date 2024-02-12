@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <title>PixelNexus | Form</title>
 
-    <!-- Add these lines in your HTML -->
-
-
     @extends('components/layout')
     @section('listcss')
         <link rel="stylesheet" href="/css/forumStyle.css">
@@ -43,7 +40,7 @@
                     @method('PATCH')
                 @endif
                 <div>
-                    <input type="text" id="title" class="searchbarPostForm" name="title"
+                    <input type="text" id="title" class="searchbarPostForm" name="title" required
                            value="{{ old('title', isset($post) ? $post->title : '') }}" placeholder="Title...">
                 </div>
                 <div>
@@ -59,7 +56,7 @@
                     </script>
                 </div>
                 <div>
-                    <textarea id="body" rows="5" cols="30" placeholder="Content of your post..."
+                    <textarea id="body" rows="5" cols="30" placeholder="Content of your post..." required
                               class="searchbarPostForm"
                               name="body">{{ old('body', isset($post) ? $post->body : '') }}</textarea>
                 </div>

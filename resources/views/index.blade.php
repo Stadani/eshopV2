@@ -104,8 +104,6 @@
             @enderror
         </div>
         <button type="submit" class="button_bar mt-1">SUBSCRIBE</button>
-
-
     </form>
 </div>
 <!--FOOTER-->

@@ -699,7 +699,36 @@ class GameController extends Controller
         }
     }
 
+    //functions for game form
+    public function createGameForm()
+    {
+        $genres = GameCategory::all();
+        $developers = GameDeveloper::all();
+        $publishers = GamePublisher::all();
+        $platforms = GamePlatform::all();
+        $games = Game::all();
 
+//        dd($developers[1]);
+        return view('gameForm', compact(
+            'genres','developers', 'publishers', 'platforms', 'games'
+        ));
+    }
+
+    public function storeGameForm()
+    {
+
+        return view('gameForm');
+    }
+
+    public function editGameForm(Game $game)
+    {
+        if (auth()->user()->is_admin == 1) {
+            return view('gameForm', [
+                'game' => $game,
+            ]);
+        }
+        return redirect()->back();
+    }
 
 
 }
