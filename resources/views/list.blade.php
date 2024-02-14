@@ -26,6 +26,9 @@
 @section('content')
 
     <!--HEADER-->
+    @if(auth()->user() && auth()->user()->is_admin == 1)
+    <a href="/gameForm"><button title="Edit" class="button_bar mt-3"><i class="fa-solid fa-plus"></i> ADD A GAME</button></a>
+    @endif
     <div class="container centring">
         {{--        SEARCHBAR--}}
         <div class="navbar_main centring">
@@ -99,6 +102,10 @@
                         <option value="-rating" {{ request('ordering') == '-rating' ? 'selected' : '' }}>Rating Desc
                         </option>
                         <option value="rating" {{ request('ordering') == 'rating' ? 'selected' : '' }}>Rating Asc
+                        </option>
+                        <option value="-urating" {{ request('ordering') == '-urating' ? 'selected' : '' }}>User rating Desc
+                        </option>
+                        <option value="urating" {{ request('ordering') == 'urating' ? 'selected' : '' }}>User rating Asc
                         </option>
                     </select>
                 </div>
@@ -189,7 +196,7 @@
                 @endif
 
                 <button type="submit" class="button_bar mt-4">Filter</button>
-                <button type="button" id="resetFilters" class="button_bar mt-4">Reset Filters</button>
+                <button type="button" id="resetFiltersButton" class="button_bar mt-4">Reset Filters</button>
             </form>
         </div>
     </div>

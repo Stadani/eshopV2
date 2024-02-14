@@ -85,7 +85,7 @@ class StripeController extends Controller
         }
 
         Session::forget('cart');
-        return "Thank you for you purchase. \n You will find your key(s) in your e-mail inbox.";
+        return redirect('inventory');
     }
 
     private function generateRandomKey()

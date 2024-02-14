@@ -10,6 +10,7 @@ class GameAndPlatform extends Model
     use HasFactory;
 
     protected $table = 'game_and_platform';
+    public $timestamps = false;
 
     protected $fillable = [
         'game_id',
@@ -17,6 +18,9 @@ class GameAndPlatform extends Model
         'price',
     ];
 
-
+    public function platform()
+    {
+        return $this->belongsTo(GamePlatform::class, 'platform_id');
+    }
 
 }

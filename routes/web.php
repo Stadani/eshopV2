@@ -38,7 +38,7 @@ Route::get('/list', function () {
 Route::get('/game', function () {
     return view('game');
 });
-Route::get('/list', [GameController::class, 'index']);
+Route::get('/list', [GameController::class, 'index'])->name('game.index');
 Route::get('/game/{id}', [GameController::class, 'show'])->name('game.show');
 
 Route::middleware('auth')->group(function () {
@@ -66,14 +66,12 @@ Route::get('/forum', [PostController::class, 'index']);
 Route::middleware('auth')->group(function () {
 Route::get('/postForm', [PostController::class, 'create']) ->name('create.post')->middleware('check.suspension');
 Route::post('/postForm', [PostController::class, 'store'])->name('store.post')->middleware('check.suspension');
-
 Route::get('/postForm/{post}', [PostController::class, 'edit'])->name('posts.edit')->middleware('check.suspension');
 Route::patch('/postForm/{post}', [PostController::class, 'update'])->name('update.post')->middleware('check.suspension');
 Route::delete('/post/{post:slug}', [PostController::class, 'delete'])->name('delete.post')->middleware('check.suspension');
 
 
 Route::post('/post/{post:slug}', [CommentController::class, 'store'])->name('store.comment')->middleware('check.suspension');
-
 Route::post('/posts/{post:slug}', [PostController::class, 'like'])->name('posts.like');
 //Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit')->middleware('check.suspension');
 Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('check.suspension');
@@ -81,9 +79,16 @@ Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name
 
 
 Route::post('/game/{game}', [UserReviewController::class, 'store'])->name('store.review')->middleware('check.suspension');
-Route::get('/game/{games}', [UserReviewController::class, 'index'])->name('index.review');
+//Route::get('/game/{games}', [UserReviewController::class, 'index'])->name('index.review');
 Route::put('/reviews/{review}', [UserReviewController::class, 'update'])->name('reviews.update')->middleware('check.suspension');
 Route::delete('/reviews/{review}', [UserReviewController::class, 'delete'])->name('reviews.delete')->middleware('check.suspension');
+
+
+Route::get('/gameForm', [GameController::class, 'createGameForm'])->name('create.game')->middleware('check.admin');
+Route::post('/gameForm', [GameController::class, 'storeGameForm'])->name('store.game')->middleware('check.admin');
+Route::get('/gameForm/{game}', [GameController::class, 'editGameForm'])->name('edit.game')->middleware('check.admin');
+Route::patch('/gameForm/{game}', [GameController::class, 'updateGameForm'])->name('update.game')->middleware('check.admin');
+Route::delete('/game/{game:id}', [GameController::class, 'deleteGameForm'])->name('delete.game')->middleware('check.admin');
 
 
 Route::get('/profile/{id}', [UserProfileController::class, 'show'])->name('profile.show');

@@ -67,10 +67,10 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:20|min:3',
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
-            'body' => 'required|string',
+            'body' => 'required|string|min:10',
         ]);
         $slug = Str::slug($request->title);
         $uSlug = $this->makeUniqueSlug($slug);
@@ -100,10 +100,10 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:20|min:3',
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
-            'body' => 'required|string',
+            'body' => 'required|string|min:10',
         ]);
 
         //keep slug if didnt change title

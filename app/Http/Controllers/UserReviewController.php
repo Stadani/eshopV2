@@ -12,7 +12,7 @@ class UserReviewController extends Controller
     public function store(Game $game)
     {
         request()->validate([
-            'body' => 'required'
+            'body' => 'required|string'
         ]);
 
         $game->review()->create([

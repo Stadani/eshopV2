@@ -29,7 +29,7 @@ class CommentController extends Controller
     public function store(Post $post)
     {
         request()->validate([
-            'body' => 'required'
+            'body' => 'required|min:5'
         ]);
 
         $post->comment()->create([
@@ -54,7 +54,7 @@ class CommentController extends Controller
     {
         if (auth()->user()->id === $comment->user_id) {
             $request->validate([
-                'body' => 'required|string',
+                'body' => 'required|string|min:5',
             ]);
 
             $comment->update([

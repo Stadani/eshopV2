@@ -14,7 +14,7 @@
                                 {{$post->title}}
                             </a>
                         </div>
-                        <div class="table_cell_info">
+                        <div class="table_cell_info" style="text-align: left;">
                             <a href="/profile/{{$post->user_id}}">{{ $post->user->name }}</a>
                         </div>
                     </div>

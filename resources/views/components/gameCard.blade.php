@@ -2,14 +2,21 @@
     <div>
         <div class="card mb-4 shadow-smd">
             @if(isset($game->game_picture))
-                <a href="{{ route('game.show', ['id' => $game->id]) }}">
-                    <img src="{{ $game->game_picture }}" alt="{{ $game->name }}">
-                </a>
+                @if(filter_var($game->game_picture, FILTER_VALIDATE_URL))
+                    <a href="{{ route('game.show', ['id' => $game->id]) }}">
+                        <img src="{{ $game->game_picture }}" alt="{{ $game->name }}">
+                    </a>
+                @else
+                    <a href="{{ route('game.show', ['id' => $game->id]) }}">
+                        <img src="{{ asset('storage/' . $game->game_picture) }}" alt="{{ $game->name }}">
+                    </a>
+                @endif
             @else
                 <a href="{{ route('game.show', ['id' => $game->id]) }}">
                     <img src="{{ asset('images/Background14.jpg') }}" alt="{{ $game->name }}">
                 </a>
             @endif
+
             <div class="">
                 <div class="cardTextContainer">
                     <div class="cardText">{{ $game->name }}</div>

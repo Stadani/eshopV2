@@ -16,7 +16,11 @@ use App\Services\SteamService;
 use Illuminate\Http\Request;
 use App\Services\RawgService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use function Laravel\Prompts\search;
+use function PHPUnit\Framework\isEmpty;
 
 
 class GameController extends Controller
@@ -524,6 +528,20 @@ class GameController extends Controller
             case '-rating':
                 $gamesQuery->orderByDesc('rating');
                 break;
+            case 'urating':
+                $gamesQuery->leftJoin('reviews', 'games.id', '=', 'reviews.game_id')
+                    ->select('games.id', 'games.name', 'games.game_picture', 'games.rating', DB::raw('AVG(reviews.rating) as avg_rating'))
+                    ->groupBy('games.id', 'games.name', 'games.game_picture', 'games.rating')
+                    ->orderBy('avg_rating');
+
+                break;
+            case '-urating':
+                $gamesQuery->leftJoin('reviews', 'games.id', '=', 'reviews.game_id')
+                    ->select('games.id', 'games.name', 'games.game_picture', 'games.rating', DB::raw('AVG(reviews.rating) as avg_rating'))
+                    ->groupBy('games.id', 'games.name', 'games.game_picture', 'games.rating')
+                    ->orderByDesc('avg_rating');
+
+                break;
         }
 
         $games = $gamesQuery->paginate(24);
@@ -684,7 +702,366 @@ class GameController extends Controller
         }
     }
 
+    //functions for game form
+    public function createGameForm()
+    {
+        $genres = GameCategory::all();
+        $developers = GameDeveloper::all();
+        $publishers = GamePublisher::all();
+        $platforms = GamePlatform::all();
+        $games = Game::all();
 
+//        dd($developers[1]);
+        return view('gameForm', compact(
+            'genres', 'developers', 'publishers', 'platforms', 'games'
+        ));
+    }
+
+    public function storeGameForm(Request $request, Game $game)
+    {
+//        dd($request->all());
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'game_picture' => 'required|image|mimes:jpeg,png,jpg|max:4096',
+            'release_date' => 'required',
+            'rating' => 'required|integer|min:0|max:5',
+            'description' => 'required|string',
+            'developers' => 'required|array',
+            'developers.*' => 'exists:developers,id',
+            'publishers' => 'required|array',
+            'publishers.*' => 'exists:publishers,id',
+            'trailers.*' => 'mimes:mp4,mov,avi|max:100000',
+            'screenshots.*' => 'image|mimes:jpeg,png,jpg|max:100000',
+            'genres' => 'required|array',
+            'genres.*' => 'exists:game_categories,id',
+            'platforms' => 'required|array',
+            'platforms.*' => 'required|string',
+            'prices' => 'required|array',
+            'prices.*' => 'required|numeric',
+            'dlcs.*' => 'nullable|required_with:dlc_prices.*',
+            'dlc_prices.*' => 'nullable|required_with:dlcs.*',
+        ], [
+            'dlc_prices.*.required_with' => 'Price is required when a DLC is provided.',
+            'dlcs.*.required_with' => 'DLC is required when a price is provided.',
+        ]);
+
+        $path = $request->file('game_picture')->store('database_pictures', 'public');
+
+        $game->name = $validatedData['name'];
+        $game->game_picture = $path;
+        $game->release_date = $validatedData['release_date'];
+        $game->rating = $validatedData['rating'];
+        $game->description = $validatedData['description'];
+
+        $game->save();
+        $game->developer()->sync($request->developers);
+        $game->publisher()->sync($request->publishers);
+
+        if ($request->hasFile('trailers')) {
+            foreach ($request->file('trailers') as $trailer) {
+                $path = $trailer->store('database_trailers', 'public');
+                $game->trailer()->create([
+                    'trailer' => $path,
+                ]);
+            }
+        }
+
+        if ($request->hasFile('screenshots')) {
+            foreach ($request->file('screenshots') as $screenshot) {
+                $path = $screenshot->store('database_pictures', 'public');
+                $game->screenshot()->create([
+                    'screenshot' => $path,
+                ]);
+            }
+        }
+        $game->category()->sync($request->genres);
+
+
+        $platforms = $request->input('platforms');
+        $prices = $request->input('prices');
+        $nonNullPlatforms = array_filter($platforms, function ($value) {
+            return $value !== null;
+        });
+        $nonNullPrices = array_filter($prices, function ($value) {
+            return $value !== null;
+        });
+
+        if (count($nonNullPlatforms) !== count($nonNullPrices)) {
+            return redirect()->back()->with('error', 'Platform and price arrays must have the same length.');
+        }
+
+        foreach ($platforms as $index => $platform) {
+            $gameAndPlatform = new GameAndPlatform();
+
+            $platformModel = GamePlatform::firstOrCreate(['name' => $platform]);
+
+            $gameAndPlatform->game_id = $game->id;
+            $gameAndPlatform->platform_id = $platformModel->id;
+            $gameAndPlatform->price = $prices[$index];
+
+            $gameAndPlatform->save();
+        }
+
+
+        $dlcsData = $request->input('dlcs');
+        $dlcPricesData = $request->input('dlc_prices');
+
+
+        $nonNullDlcs = array_filter($dlcsData, function ($value) {
+            return $value !== null;
+        });
+        $nonNullDlcPrices = array_filter($dlcPricesData, function ($value) {
+            return $value !== null;
+        });
+        if (count($nonNullDlcs) !== count($nonNullDlcPrices)) {
+            return redirect()->back()->with('error', 'DLC name and price arrays must have the same length.');
+        }
+        if ($nonNullDlcs && $nonNullDlcPrices) {
+            foreach ($dlcsData as $index => $dlcName) {
+                $dlcPrice = $nonNullDlcPrices[$index];
+
+                $dlc = new GameDLC();
+                $dlc->game_id = $game->id;
+                $dlc->name = $dlcName;
+                $dlc->price = $dlcPrice;
+                $dlc->save();
+            }
+        }
+
+        $seriesData = $request->input('series');
+        if ($seriesData != null) {
+            foreach ($seriesData as $seriesId) {
+                $sameSeriesGame = new SameSeriesGame();
+                $sameSeriesGame->original_id = $game->id;
+                $sameSeriesGame->series_id = $seriesId;
+                $sameSeriesGame->save();
+            }
+        }
+
+        return redirect()->route('game.show', ['id' => $game->id])->with('success', 'Game created successfully.');
+    }
+
+
+
+    public function editGameForm(Game $game)
+    {
+        $genres = GameCategory::all();
+        $developers = GameDeveloper::all();
+        $publishers = GamePublisher::all();
+        $platforms = GamePlatform::all();
+        $games = Game::all();
+        $gameAndPlatforms = GameAndPlatform::where('game_id', $game->id)->orderBy('game_id', 'desc')->get();
+        $gameAndDlcs = GameDLC::where('game_id', $game->id)->get();
+
+        if (auth()->user()->is_admin == 1) {
+            return view('gameForm', [
+                'game' => $game,
+                'genres' => $genres,
+                'developers' => $developers,
+                'publishers' => $publishers,
+                'platforms' => $platforms,
+                'games' => $games,
+                'gameAndPlatforms' => $gameAndPlatforms,
+                'gameAndDlcs' => $gameAndDlcs,
+            ]);
+        }
+        return redirect()->back();
+    }
+
+    public function updateGameForm(Request $request, Game $game)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'game_picture' => 'image|mimes:jpeg,png,jpg|max:4096',
+            'release_date' => 'required',
+            'rating' => 'required|integer|min:0|max:5',
+            'description' => 'required|string',
+            'developers' => 'required|array',
+            'developers.*' => 'exists:developers,id',
+            'publishers' => 'required|array',
+            'publishers.*' => 'exists:publishers,id',
+            'trailers.*' => 'mimes:mp4,mov,avi|max:100000',
+            'screenshots.*' => 'image|mimes:jpeg,png,jpg|max:100000',
+            'genres' => 'required|array',
+            'genres.*' => 'exists:game_categories,id',
+            'platforms' => 'required|array',
+            'platforms.*' => 'required|string',
+            'prices' => 'required|array',
+            'prices.*' => 'required|numeric',
+            'dlcs.*' => 'nullable|required_with:dlc_prices.*',
+            'dlc_prices.*' => 'nullable|required_with:dlcs.*',
+        ], [
+            'dlc_prices.*.required_with' => 'Price is required when a DLC is provided.',
+            'dlcs.*.required_with' => 'DLC is required when a price is provided.',
+        ]);
+
+        if ($request->hasFile('game_picture')) {
+            Storage::delete($game->game_picture);
+            $path = $request->file('game_picture')->store('database_pictures', 'public');
+            $game->game_picture = $path;
+        }
+
+        $game->name = $validatedData['name'];
+        $game->release_date = $validatedData['release_date'];
+        $game->rating = $validatedData['rating'];
+        $game->description = $validatedData['description'];
+
+        $game->update();
+        $game->developer()->sync($request->developers);
+        $game->publisher()->sync($request->publishers);
+        $game->category()->sync($request->genres);
+
+        if ($request->hasFile('trailers')) {
+            $game->trailer()->delete();
+            foreach ($request->file('trailers') as $trailer) {
+                $path = $trailer->store('database_trailers', 'public');
+                $game->trailer()->create([
+                    'trailer' => $path,
+                ]);
+            }
+        }
+
+        if ($request->hasFile('screenshots')) {
+            $game->screenshot()->delete();
+            foreach ($request->file('screenshots') as $screenshot) {
+                $path = $screenshot->store('database_pictures', 'public');
+                $game->screenshot()->create([
+                    'screenshot' => $path,
+                ]);
+            }
+        }
+
+        $platforms = $request->input('platforms');
+        $prices = $request->input('prices');
+
+        if (count($platforms) !== count($prices)) {
+            return redirect()->back()->with('error', 'Platform and price arrays must have the same length.');
+        }
+
+
+        foreach ($platforms as $index => $platform) {
+
+            $platformId = GamePlatform::where('name', $platform)->first();
+            $exists = GameAndPlatform::where('game_id', $game->id)
+                ->where('platform_id', $platformId->id)
+                ->exists();
+
+
+            if ($exists) {
+                GameAndPlatform::where('game_id', $game->id)
+                    ->where('platform_id', $platformId->id)
+                    ->update(['price' => $prices[$index]]);
+//                dd($gameAndPlatform);
+            } else {
+
+                $gameAndPlatform = new GameAndPlatform();
+                $gameAndPlatform->game_id = $game->id;
+                $gameAndPlatform->platform_id = $platformId->id;
+                $gameAndPlatform->price = $prices[$index];
+                $gameAndPlatform->save();
+            }
+        }
+
+        $existingPlatformNames = collect($platforms);
+        $existingPlatforms = $game->platform;
+        foreach ($existingPlatforms as $existingPlatform) {
+            if (!$existingPlatformNames->contains($existingPlatform->name)) {
+
+                $game->platform()->detach($existingPlatform->id);
+            }
+        }
+
+
+        $dlcsData = $request->input('dlcs');
+        $dlcPricesData = $request->input('dlc_prices');
+
+        if ($dlcsData && $dlcPricesData) {
+
+            if ($dlcsData) {
+                $nonNullDlcs = array_filter($dlcsData, function ($value) {
+                    return $value !== null;
+                });
+            }
+            if ($dlcPricesData) {
+                $nonNullDlcPrices = array_filter($dlcPricesData, function ($value) {
+                    return $value !== null;
+                });
+            }
+
+            if (count($nonNullDlcs) !== count($nonNullDlcPrices)) {
+                return redirect()->back()->with('error', 'DLC name and price arrays must have the same length.');
+            }
+
+            foreach ($nonNullDlcs as $index => $dlc) {
+                $dlcName = GameDLC::where('name', $dlc)->first();
+                if ($dlcName !== null) {
+                    GameDLC::where('game_id', $game->id)
+                        ->where('name', $dlcName->name)
+                        ->update(['price' => $nonNullDlcPrices[$index]]);
+                } else {
+                    $gameAndDlc = new GameDLC();
+                    $gameAndDlc->game_id = $game->id;
+                    $gameAndDlc->name = $dlc;
+                    $gameAndDlc->price = $nonNullDlcPrices[$index];
+                    $gameAndDlc->save();
+                }
+            }
+
+            $existingDlcNames = collect($dlcsData);
+
+            $existingDlcs = $game->gameDLCs;
+
+            foreach ($existingDlcs as $existingDlc) {
+                if (!$existingDlcNames->contains($existingDlc->name)) {
+                    $game->gameDLCs()->where('name', $existingDlc->name)->delete();
+                }
+            }
+        }
+        return redirect()->route('game.show', ['id' => $game->id])->with('success', 'Game updated successfully.');
+
+    }
+
+    public function deleteGameForm(Game $game)
+    {
+        if (auth()->user() && auth()->user()->is_admin == 1) {
+            foreach ($game->screenshot as $screenshot) {
+                $filePath = 'storage/database_pictures/' . basename($screenshot->screenshot);
+
+                try {
+                    if (Storage::exists($filePath)) {
+                        $deleted = Storage::delete($filePath);
+                        if ($deleted) {
+                            echo "File deleted: $filePath<br>";
+                        } else {
+                            echo "Failed to delete file: $filePath<br>";
+                        }
+                    } else {
+                        echo "File not found: $filePath<br>";
+                    }
+                } catch (\Exception $e) {
+                    echo "Error deleting file: " . $e->getMessage() . "<br>";
+                }
+            }
+
+            foreach ($game->trailer as $trailer) {
+                $filePath = 'storage/database_trailers/' . basename($trailer->trailer);
+                try {
+                    if (Storage::exists($filePath)) {
+                        Storage::delete($filePath);
+                    } else {
+                        echo "Trailer file not found: $filePath<br>";
+                    }
+                } catch (\Exception $e) {
+                    echo "Error deleting trailer file: " . $e->getMessage() . "<br>";
+                }
+            }
+
+            $game->delete();
+            return redirect()->route('game.index')->with('success', 'Game deleted successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Cannot perform this action');
+        }
+    }
 
 
 }
