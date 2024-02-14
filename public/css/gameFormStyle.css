@@ -10,8 +10,8 @@ label {
 }
 
 .searchbar, select, .text, textarea, input {
-    /*max-width: 900px; !* Set maximum width *!*/
-    width: 1000px; /* Initially take full width */
+    /*max-width: 900px; */
+    width: 100%;
 }
 
 

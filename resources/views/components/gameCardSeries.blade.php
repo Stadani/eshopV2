@@ -8,7 +8,15 @@
             <div class="card mb-4 shadow-smd {{ $index >= 4 ? 'hidden' : '' }}">
 
                 @if(isset($game->game_picture))
-                    <img src="{{ $game->game_picture }}" alt="{{ $game->name }}">
+                    @if(filter_var($game->game_picture, FILTER_VALIDATE_URL))
+                        <a href="{{ route('game.show', ['id' => $game->id]) }}">
+                            <img src="{{ $game->game_picture }}" alt="{{ $game->name }}">
+                        </a>
+                    @else
+                        <a href="{{ route('game.show', ['id' => $game->id]) }}">
+                            <img src="{{ asset('storage/' . $game->game_picture) }}" alt="{{ $game->name }}">
+                        </a>
+                    @endif
                 @endif
                 <div class="">
                     <div class="cardTextContainer">

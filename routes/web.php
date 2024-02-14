@@ -38,7 +38,7 @@ Route::get('/list', function () {
 Route::get('/game', function () {
     return view('game');
 });
-Route::get('/list', [GameController::class, 'index']);
+Route::get('/list', [GameController::class, 'index'])->name('game.index');
 Route::get('/game/{id}', [GameController::class, 'show'])->name('game.show');
 
 Route::middleware('auth')->group(function () {
@@ -79,7 +79,7 @@ Route::delete('/comments/{comment}', [CommentController::class, 'delete'])->name
 
 
 Route::post('/game/{game}', [UserReviewController::class, 'store'])->name('store.review')->middleware('check.suspension');
-Route::get('/game/{games}', [UserReviewController::class, 'index'])->name('index.review');
+//Route::get('/game/{games}', [UserReviewController::class, 'index'])->name('index.review');
 Route::put('/reviews/{review}', [UserReviewController::class, 'update'])->name('reviews.update')->middleware('check.suspension');
 Route::delete('/reviews/{review}', [UserReviewController::class, 'delete'])->name('reviews.delete')->middleware('check.suspension');
 

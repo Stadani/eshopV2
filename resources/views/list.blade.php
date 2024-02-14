@@ -26,7 +26,7 @@
 @section('content')
 
     <!--HEADER-->
-    @if(auth()->user()->is_admin == 1)
+    @if(auth()->user() && auth()->user()->is_admin == 1)
     <a href="/gameForm"><button title="Edit" class="button_bar mt-3"><i class="fa-solid fa-plus"></i> ADD A GAME</button></a>
     @endif
     <div class="container centring">

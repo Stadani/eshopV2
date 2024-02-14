@@ -31,7 +31,16 @@
     <div class="containerGeneral containerGame">
         <h1>{{$game->name}}</h1>
     </div>
-
+    @if(auth()->user() && auth()->user()->is_admin == 1)
+        <div class="postNameAndTags eanddbuttons">
+            <form action="{{ route('delete.game', $game) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button title="Delete" class="button_bar"><i class="fa-solid fa-trash-can"></i>  </button>
+            </form>
+            <a href="{{ route('edit.game', $game) }}"><button title="Edit" class="button_bar"><i class="fa-solid fa-file-pen"></i></button></a>
+        </div>
+    @endif
     {{--    MAIN PANEL--}}
     <div class="containerGeneral containerGame">
         <div class="containerGeneral videoPanel">
@@ -46,21 +55,29 @@
                     <div class="mediaContainer">
                         <div class="selectedTrailer">
                             @if($game->trailer->count() > 0)
-                                <video id="mainTrailer" controls>
-                                    <source src="{{ $game->trailer[0]['trailer'] }}" type="video/mp4">
-                                </video>
+                                @if(Str::startsWith($game->trailer[0]['trailer'], ['http://', 'https://']))
+                                    <video id="mainTrailer" controls>
+                                        <source src="{{ $game->trailer[0]['trailer'] }}" type="video/mp4">
+                                    </video>
+                                @else
+                                    <video id="mainTrailer" controls>
+                                        <source src="{{ asset('storage/' . $game->trailer[0]['trailer']) }}" type="video/mp4">
+                                    </video>
+                                @endif
                             @else
                                 No available trailers
                             @endif
                         </div>
                         <div class="thumbnails">
                             @foreach($game->trailer as $trailer)
-                                <img class="thumbnail" src="{{ asset('storage/' . $trailer->preview) }}"
-                                     alt="trailerThumbnail"
-                                     onclick="showTrailer('{{ $trailer->trailer }}')">
+                                @if(Str::startsWith($trailer->trailer, ['http://', 'https://']))
+                                    <img class="thumbnail" src="{{ asset('storage/' . $trailer->preview) }}" alt="trailerThumbnail"
+                                         onclick="showTrailer('{{ $trailer->trailer }}')">
+                                @else
+                                    <img class="thumbnail" src="{{ asset('storage/' . $trailer->preview) }}" alt="trailerThumbnail"
+                                         onclick="showTrailer('{{ asset('storage/' . $trailer->trailer) }}')">
+                                @endif
                             @endforeach
-
-
                         </div>
                     </div>
                 </div>
@@ -70,8 +87,13 @@
                     <div class="mediaContainer">
                         <div class="selectedImage">
                             @if($game->screenshot->count() > 0)
+                                @if(Str::startsWith($game->screenshot[0]['screenshot'], ['http://', 'https://']))
                                 <img id="mainImage"
                                      src={{ $game->screenshot[0]['screenshot'] }} alt="selectedImage">
+                                @else
+                                    <img id="mainImage"
+                                         src={{ asset('storage/' . $game->screenshot[0]['screenshot'])  }} alt="selectedImage">
+                                @endif
                             @else
                                 No available screenshots
                             @endif
@@ -79,10 +101,14 @@
                         </div>
                         <div class="thumbnails">
                             @foreach($game->screenshot as $screenshot)
-                                <img class="thumbnail" src="{{ $screenshot['screenshot'] }}" alt="thumbnail"
-                                     onclick="showImage('{{ $screenshot['screenshot'] }}')">
+                                @if(Str::startsWith($screenshot->screenshot, ['http://', 'https://']))
+                                    <img class="thumbnail" src="{{ $screenshot->screenshot }}" alt="thumbnail" onclick="showImage('{{ $screenshot->screenshot }}')">
+                                @else
+                                    <img class="thumbnail" src="{{ asset('storage/' . $screenshot->screenshot) }}" alt="thumbnail" onclick="showImage('{{ asset('storage/' . $screenshot->screenshot) }}')">
+                                @endif
                             @endforeach
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -91,7 +117,15 @@
         {{--        SIDE PANEL--}}
         <div class="containerGeneral sidePanel">
             <div class="sidePanelImage">
-                <img src="{{$game->game_picture}}" alt="{{$game->id}}">
+                @if(filter_var($game->game_picture, FILTER_VALIDATE_URL))
+                    <a href="{{ route('game.show', ['id' => $game->id]) }}">
+                        <img src="{{ $game->game_picture }}" alt="{{ $game->name }}">
+                    </a>
+                @else
+                    <a href="{{ route('game.show', ['id' => $game->id]) }}">
+                        <img src="{{ asset('storage/' . $game->game_picture) }}" alt="{{ $game->name }}">
+                    </a>
+                @endif
             </div>
             <div>
                 <div>
