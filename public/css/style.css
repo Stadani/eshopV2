@@ -96,10 +96,8 @@ footer{
 }
 .profilePicture{
     width: 35px;
-    height: auto;
-
-    object-fit: contain;
-
+    height: 35px;
+    object-fit: fill;
 }
 .messageBL{
     position: fixed;

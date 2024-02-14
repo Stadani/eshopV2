@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>PixelNexus | Inventory</title>
+    <title>PixelNexus | {{$user->name}}</title>
 
 
     @extends('components/layout')
@@ -21,7 +21,7 @@
 @endif
 <x-app-layout>
     <div class="containerGeneral paddingContainer" style="display: block">
-        <p><img src="{{$user->profile_picture_url}}" alt="ProfilePicture" width="200"></p>
+        <p><img src="{{$user->profile_picture_url}}" alt="ProfilePicture" class="profilePic"></p>
         <p> Username: {{$user->name }}</p>
         <p> Joined: {{$user->created_at->format('Y-m-d') }}</p>
         <p> Role: @if($user->is_admin === 1)
@@ -53,18 +53,25 @@
 
 
     </div>
-
+    <div class="containerGeneral paddingContainer" style="display: block">
+    {{ $posts->links() }}
+    </div>
     <div class="containerGeneral paddingContainer" style="display: block">
         <h3>Posts</h3>
-        {{ $posts->links() }}
+
         @foreach ($posts as $post)
             <ul>
                 <li><a href="/post/{{ $post->slug }}" class="linkText"><h4>{{ $post->title }}</h4></a></li>
             </ul>
         @endforeach
     </div>
-    <div class="containerGeneral paddingContainer">
+    <div class="containerGeneral paddingContainer" style="display: block">
         <h3>Reviews</h3>
+        @foreach ($reviews as $review)
+            <ul>
+                <li><a href="{{route('game.show', ['id' => $review->game_id])}}" class="linkText"><h4>{{ $review->game->name }}</h4></a></li>
+            </ul>
+        @endforeach
     </div>
 </x-app-layout>
 

@@ -12,7 +12,7 @@
     @endif
     <div class="containerGeneral profileCont">
         <div>
-            <img src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture" width="100">
+            <img src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture" class="profilePic">
         </div>
         <div class="ml-3">
             <p> Username: {{$user->name }}</p>

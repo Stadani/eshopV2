@@ -24,7 +24,7 @@
     <div class="postNameAndTags postNameAndTags">
         <ul>
             <li><h1>{{$post->title}}</h1></li>
-            <li><i class="fa-solid fa-user"></i> {{ $post->user->name }}</li>
+            <li><i class="fa-solid fa-user"></i> <a href="{{route('profile.show', ['id' => $post->user->id])}}">{{ $post->user->name }}</a></li>
             <li><time><i class="fa-solid fa-clock"></i> {{ $post->created_at }} </time></li>
             <li>
                 <dl>
@@ -72,7 +72,7 @@
 {{--        USER INFO PANEL--}}
         <div class="postUser">
             <img src="{{ $post->user->profilePictureUrl }}" alt="profile">
-            <h5 class="username">{{ $post->user->name }}</h5>
+            <h5 class="username"><a href="{{route('profile.show', ['id' => $post->user->id])}}">{{ $post->user->name }}</a></h5>
             <div>
                 <i class="fa-solid fa-eye" title="Views"></i> {{ $post->views }}
             </div>
@@ -117,7 +117,9 @@
             </div>
         </form>
     @endauth
-
+@error('body')
+<li class="error-message alert alert-danger">{{ $message }}</li>
+@enderror
 {{--DISPLAY COMMENTS--}}
 <div class="container arrow_bar just">
     <div id="paginationContainer" class="navbar_main px-2">

@@ -9,6 +9,11 @@
     flex-direction: row;
 
 }
+.profilePic{
+    width: 150px;
+    height: 150px;
+    object-fit: fill;
+}
 .button_bar{
     background-color: #4E31AA;
     color:#EEEEEE;

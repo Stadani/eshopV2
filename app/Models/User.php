@@ -42,6 +42,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(InventoryGame::class);
     }
+    public function reviews()
+    {
+        return $this->hasMany(UserReview::class);
+    }
 
     public function getProfilePictureUrlAttribute()
     {

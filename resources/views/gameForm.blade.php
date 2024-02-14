@@ -24,12 +24,6 @@
 <body>
 @extends('components.navbar')
 @section('content')
-    @if(session()->has('error'))
-        <div id="errorMessage" class="alert alert-danger messageBL">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="containerGeneral gameForm">
         {{--        INPUT FIELDS--}}
         <form action="{{ isset($game) ? route('update.game', $game) : route('store.game') }}" method="POST"
@@ -195,7 +189,6 @@
                 <label for="dlcs">DLCs & Price:</label>
                 <table id="dlcsTable">
                     @if(isset($gameAndDlcs))
-{{--                        @dd($gameAndDlcs->isEmpty())--}}
                         @if($gameAndDlcs->isEmpty())
                             <tr>
                                 <td>

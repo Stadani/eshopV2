@@ -10,10 +10,12 @@ class UserProfileController extends Controller
 {
     public function show($id)
     {
+        $perPage = 10;
         $user = User::findOrFail($id);
-        $posts = $user->posts()->paginate(10);
+        $posts = $user->posts()->paginate($perPage);
+        $reviews = $user->reviews()->paginate($perPage);
 
-        return view('profile', compact('user', 'posts'));
+        return view('profile', compact('user', 'posts', 'reviews'));
     }
 
     public function suspendUser(User $user)

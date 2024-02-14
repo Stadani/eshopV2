@@ -3,7 +3,8 @@
 {{--        USER INFO--}}
         <div class="postUser">
             <img src="{{ $comment->user->ProfilePictureURL }}" alt="profile">
-            <h5 class="username">{{ $comment->user->name }}</h5>
+            <h5 class="username"><a href="{{route('profile.show', ['id' => $comment->user->id])}}">{{ $comment->user->name }}</a></h5>
+
             @if(auth()->user() != null)
             @if((auth()->user() && auth()->user()->id === $comment->user->id) || auth()->user()->is_admin == 1 )
                 <div class="postNameAndTags eanddbuttons comment">
@@ -24,7 +25,7 @@
         <div class="postContent">
             <div class="hiddenName">
                 <div class="navbar_main">
-                    {{$comment->user->name}}
+                    <a class="" href="{{route('profile.show', ['id' => $comment->user->id])}}">{{ $comment->user->name }}</a>
                 </div>
                 <div class="sidenav">
                     <button title="Edit" class="button_bar" onclick="toggleEditForm({{ $comment->id }})"><i

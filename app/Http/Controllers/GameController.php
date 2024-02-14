@@ -779,6 +779,12 @@ class GameController extends Controller
 
         $platforms = $request->input('platforms');
         $prices = $request->input('prices');
+
+        $uniquePlatforms = array_unique($platforms);
+        if(count($platforms) != count($uniquePlatforms)) {
+            return redirect()->back()->with('error', 'Duplicate platforms are not allowed.');
+        }
+
         $nonNullPlatforms = array_filter($platforms, function ($value) {
             return $value !== null;
         });
@@ -805,7 +811,10 @@ class GameController extends Controller
 
         $dlcsData = $request->input('dlcs');
         $dlcPricesData = $request->input('dlc_prices');
-
+        $uniqueDlcs = array_unique($dlcsData);
+        if(count($dlcsData) != count($uniqueDlcs)) {
+            return redirect()->back()->with('error', 'Duplicate DLCs are not allowed.');
+        }
 
         $nonNullDlcs = array_filter($dlcsData, function ($value) {
             return $value !== null;

@@ -43,7 +43,7 @@
                         <a href="/register" class="nav_button"><i class="fa-solid fa-pencil"></i> Sign In</a>
                     @endguest
                     @auth()
-                         <a class="nav_button" href="/profile"><img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" alt="Profile Picture">
+                         <a class="nav_button" href="/profile"><img class="profilePicture" src="{{ Auth::user()->profile_picture_url }}" width="10" alt="Profile Picture">
                              {{ Auth::user()->name }}
                              </a>
                             <a class="nav_button" href="/cart">
