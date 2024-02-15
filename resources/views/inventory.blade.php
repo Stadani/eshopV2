@@ -32,10 +32,21 @@
                         <div class="row productDetails">
                             <div class="col-auto">
                                 @if ($purchase->dlc_id == null)
-                                    <img src="{{ $itemDetails[$index]->game_picture }}" alt="product_img">
+                                    @if(Str::startsWith($itemDetails[$index]->game_picture, ['http://', 'https://']))
+                                        <img src="{{ $itemDetails[$index]->game_picture }}" alt="productImg">
+                                    @else
+                                        <img id="mainImage"
+                                             src="{{ asset('storage/' . $itemDetails[$index]->game_picture)  }}" alt="productImg">
+                                    @endif
                                 @else
-                                    <img src="{{ \App\Models\Game::find($itemDetails[$index]->game_id)->game_picture }}"
-                                         alt="dlc_img">
+                                    @if(Str::startsWith(\App\Models\Game::find($itemDetails[$index]->game_id)->game_picture, ['http://', 'https://']))
+                                        <img src="{{ \App\Models\Game::find($itemDetails[$index]->game_id)->game_picture }}"
+                                             alt="dlcImg">
+                                    @else
+                                        <img id="mainImage"
+                                             src="{{ asset('storage/' . \App\Models\Game::find($itemDetails[$index]->game_id)->game_picture)  }}" alt="dlcImg">
+                                    @endif
+
                                 @endif
                             </div>
                             <div class="col">

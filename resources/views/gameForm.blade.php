@@ -48,7 +48,7 @@
                 <label for="game_picture">Game Picture URL:</label>
                 @if(isset($game) && $game->game_picture)
                     Old picture:
-                    <img src="{{ asset('storage/' . $game->game_picture) }}" alt="Old Game Picture" width="300px">
+                    <img src="{{ asset('storage/' . $game->game_picture) }}" alt="oldGamePicture" width="100px">
                     <input type="file" name="game_picture" id="game_picture" accept="image/*">
                 @else
                     <input type="file" name="game_picture" id="game_picture" accept="image/*" required>
@@ -76,7 +76,7 @@
 
             <div>
                 <label for="developers">Developers:</label>
-                <select name="developers[]" id="developers" multiple>
+                <select name="developers[]" id="developers" class="specialSelect" multiple>
                     @foreach($developers as $developer)
                         <option
                             value="{{ $developer->id }}" {{ in_array($developer->id, old('developers', isset($game) ? $game->developer->pluck('id')->toArray() : [])) ? 'selected' : '' }}>{{ $developer->name }}</option>
@@ -89,7 +89,7 @@
 
             <div>
                 <label for="publishers">Publishers:</label>
-                <select name="publishers[]" id="publishers" multiple>
+                <select name="publishers[]" id="publishers" class="specialSelect" multiple>
                     @foreach($publishers as $publisher)
                         <option
                             value="{{ $publisher->id }}" {{ in_array($publisher->id, old('publishers', isset($game) ? $game->publisher->pluck('id')->toArray() : [])) ? 'selected' : '' }}>{{ $publisher->name }}</option>
@@ -123,7 +123,7 @@
 
             <div>
                 <label for="genres">Genres:</label>
-                <select name="genres[]" id="genres" multiple>
+                <select name="genres[]" id="genres" class="specialSelect" multiple>
                     @foreach($genres as $genre)
                         <option
                             value="{{ $genre->id }}" {{ in_array($genre->id, old('genres', isset($game) ? $game->publisher->pluck('id')->toArray() : [])) ? 'selected' : '' }}>{{ $genre->category }}</option>
@@ -172,7 +172,7 @@
                                 </datalist>
                             </td>
                             <td>
-                                <input type="number" name="prices[]">
+                                <input type="number" name="prices[]" step="any">
                             </td>
                             <td>
                                 <button type="button" class="addRow button_bar"><i class="fa-solid fa-plus"></i>
@@ -195,7 +195,7 @@
                                     <input type="text" name="dlcs[]" class="dlcInput">
                                 </td>
                                 <td>
-                                    <input type="number" name="dlc_prices[]">
+                                    <input type="number" name="dlc_prices[]" step="any">
                                 </td>
                                 <td>
                                     <button type="button" class="addRowDLC button_bar"><i class="fa-solid fa-plus"></i>
@@ -234,7 +234,7 @@
                                 <input type="text" name="dlcs[]" class="dlcInput">
                             </td>
                             <td>
-                                <input type="number" name="dlc_prices[]">
+                                <input type="number" name="dlc_prices[]" step="any">
                             </td>
                             <td>
                                 <button type="button" class="addRowDLC button_bar"><i class="fa-solid fa-plus"></i>
@@ -251,7 +251,7 @@
 
             <div>
                 <label for="same_series">Games of Same Series:</label>
-                <select name="series[]" id="series" multiple>
+                <select name="series[]" id="series" class="specialSelect" multiple>
                     @foreach($games as $gameO)
                         <option
                             value="{{ $gameO->id }}" {{ in_array($gameO->id, old('series', isset($game) ? $game->publisher->pluck('id')->toArray() : [])) ? 'selected' : '' }}>{{ $gameO->name }}</option>
@@ -260,7 +260,6 @@
                 <script>
                     new MultiSelectTag('series')  // id
                 </script>
-
             </div>
 
             <div id="serverErrCont">
@@ -319,7 +318,7 @@
                 <li class="error-message alert alert-danger">{{ $message }}</li>
                 @enderror
             </div>
-            <div>
+            <div class="mt-3 mb-3">
                 <button type="submit" class="button_bar">Post</button>
             </div>
         </form>
@@ -403,5 +402,8 @@
             }
         });
     </script>
+    <x-footer>
+
+    </x-footer>
 @endsection
 </body>

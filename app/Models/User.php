@@ -51,7 +51,10 @@ class User extends Authenticatable
     {
         return $this->profile_picture ? asset('storage/' . $this->profile_picture) : asset('profile_pictures/albertwhisker.png');
     }
-
+    public function suspension()
+    {
+        return $this->hasOne(UserSuspended::class);
+    }
 
 }
 

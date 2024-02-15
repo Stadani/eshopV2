@@ -48,7 +48,12 @@
                         <td>
                             <div class="row productDetails">
                                 <div class="col-auto">
-                                    <img src="{{$details['thumbnail']}}" alt="product_img">
+                                    @if(Str::startsWith($details['thumbnail'], ['http://', 'https://']))
+                                        <img src="{{$details['thumbnail']}}" alt="productImg">
+                                    @else
+                                        <img id="mainImage"
+                                             src="{{ asset('storage/' . $details['thumbnail'])  }}" alt="productImg">
+                                    @endif
                                 </div>
                                 <div class="col">
                                     <h4>{{$details['product_name']}}</h4>
@@ -88,6 +93,9 @@
             </tfoot>
         </table>
     </div>
+    <x-footer>
+
+    </x-footer>
 @endsection
 <script>
     var removeFromCartRoute = '{{ route('removeFromCart') }}';

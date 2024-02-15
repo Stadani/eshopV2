@@ -89,10 +89,10 @@
                             @if($game->screenshot->count() > 0)
                                 @if(Str::startsWith($game->screenshot[0]['screenshot'], ['http://', 'https://']))
                                 <img id="mainImage"
-                                     src={{ $game->screenshot[0]['screenshot'] }} alt="selectedImage">
+                                     src="{{ $game->screenshot[0]['screenshot'] }} " alt="selectedImage">
                                 @else
                                     <img id="mainImage"
-                                         src={{ asset('storage/' . $game->screenshot[0]['screenshot'])  }} alt="selectedImage">
+                                         src="{{ asset('storage/' . $game->screenshot[0]['screenshot'])  }}" alt="selectedImage">
                                 @endif
                             @else
                                 No available screenshots
@@ -108,7 +108,6 @@
                                 @endif
                             @endforeach
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -329,7 +328,9 @@
     <script src="{{ asset('js/rating.js') }}"></script>
     <script src="{{ asset('js/checkFields.js') }}"></script>
     <script src="/js/toggleEditComment.js"></script>
+    <x-footer>
 
+    </x-footer>
 @endsection
 
 </body>

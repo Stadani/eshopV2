@@ -76,12 +76,15 @@
                 <div id="titleErr" class="alert alert-danger" style="display: none"></div>
                 <div id="tagsErr" class="alert alert-danger" style="display: none"></div>
                 <div id="bodyErr" class="alert alert-danger" style="display: none"></div>
-                <div>
+                <div class="mb-3">
                     <button type="submit" class="button_bar">Post</button>
                 </div>
             </form>
         </div>
     </div>
+    <x-footer>
+
+    </x-footer>
 @endsection
 <script src="/js/postFormError.js"></script>
 </body>

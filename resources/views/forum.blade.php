@@ -110,7 +110,9 @@
 
         </x-forumItem>
     </div>
+    <x-footer>
 
+    </x-footer>
 @endsection
 
 {{--<script src="{{ asset('js/dropdownSubmit.js') }}"></script>--}}

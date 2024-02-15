@@ -52,7 +52,7 @@ Route::get('/cancel', [StripeController::class, 'cancel'])->name('cancel');
 });
 
 
-Route::get('post/{post:slug}', [PostController::class, 'show']);
+Route::get('post/{post:slug}', [PostController::class, 'show'])->name('show.post');
 Route::get('/post/{post:slug}', [CommentController::class, 'index'])->name('index.comment');
 
 Route::get('tags/{tag:slug}', function (Tag $tag) {

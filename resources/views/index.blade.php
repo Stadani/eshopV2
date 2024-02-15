@@ -107,18 +107,9 @@
     </form>
 </div>
 <!--FOOTER-->
-    <footer>
-       <div class="footer_content_block">
-           <p><i class="fa-regular fa-clipboard"></i> About Us</p>
-           PixelNexus is shop and forum at the same time.
-           Users can buy, rate, comment and discuss video games.
-       </div>
-       <div class="footer_content_block">
-           <p><i class="fa-regular fa-envelope"></i> Contact</p>
-            E-mail: stadani2@stud.uniza.sk
-       </div>
+    <x-footer>
 
-    </footer>
+    </x-footer>
 
 </body>
 </html>

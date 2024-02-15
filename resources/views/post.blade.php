@@ -44,13 +44,14 @@
             <li class="hiddenName">
                 <i class="fa-solid fa-thumbs-up" title="Likes"></i> {{ $post->likes()->count() }}
                 @auth()
-                    <form method="POST" action="{{ route('posts.like', $post) }}">
+                    <form id="likeForm" method="POST" action="{{ route('posts.like', $post) }}">
                         @csrf
-                        <button type="submit"  class="button_bar">
+                        <button id="likeButton" type="button" class="button_bar">
                             {{ $post->likes()->where('user_id', auth()->id())->exists() ? 'Unlike' : 'Like' }}
                         </button>
                     </form>
                 @endauth
+
             </li>
         </ul>
     </div>
@@ -140,7 +141,9 @@
 
         </x-comment>
     </div>
+<x-footer>
 
+</x-footer>
 @endsection
 <script src="/js/toggleEditComment.js"></script>
 <script src="{{ asset('js/postAjax.js') }}"></script>

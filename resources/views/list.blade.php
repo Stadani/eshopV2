@@ -26,9 +26,11 @@
 @section('content')
 
     <!--HEADER-->
-    @if(auth()->user() && auth()->user()->is_admin == 1)
-    <a href="/gameForm"><button title="Edit" class="button_bar mt-3"><i class="fa-solid fa-plus"></i> ADD A GAME</button></a>
-    @endif
+    <div class="container centring" style="background-color: inherit">
+        @if(auth()->user() && auth()->user()->is_admin == 1)
+            <a href="/gameForm"><button title="Edit" class="button_bar mt-3"><i class="fa-solid fa-plus"></i> ADD A GAME</button></a>
+        @endif
+    </div>
     <div class="container centring">
         {{--        SEARCHBAR--}}
         <div class="navbar_main centring">
@@ -200,7 +202,9 @@
             </form>
         </div>
     </div>
+    <x-footer>
 
+    </x-footer>
 @endsection
 
 <script src="{{ asset('js/toggleFilters.js') }}"></script>
@@ -210,6 +214,7 @@
 <script src="{{ asset('js/developerButtons.js') }}"></script>
 <script src="{{ asset('js/publisherButtons.js') }}"></script>
 <script src="{{ asset('js/resetFilters.js') }}"></script>
+
 
 </body>
 </html>

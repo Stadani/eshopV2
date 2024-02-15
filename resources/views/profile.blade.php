@@ -20,41 +20,51 @@
     </div>
 @endif
 <x-app-layout>
-    <div class="containerGeneral paddingContainer" style="display: block">
-        <p><img src="{{$user->profile_picture_url}}" alt="ProfilePicture" class="profilePic"></p>
-        <p> Username: {{$user->name }}</p>
-        <p> Joined: {{$user->created_at->format('Y-m-d') }}</p>
-        <p> Role: @if($user->is_admin === 1)
-                Admin
-            @else
-                User
+    <div class="containerGeneral profileCont">
+        <div>
+            <img src="{{ $user->profile_picture_url }}" alt="Profile Picture" class="profilePic">
+        </div>
+        <div class="ml-3">
+            <p> Username: {{$user->name }}</p>
+            <p> Joined: {{$user->created_at->format('Y-m-d') }}</p>
+            <p> Role: @if($user->is_admin === 1)
+                    Admin
+                @else
+                    User
+                @endif
+            </p>
+            <p>Status: @if($user->is_suspended === 1)
+                    Suspended
+                @else
+                    Normal
+                @endif
+            </p>
+        </div>
+        <div class="ml-3">
+            @if(auth()->user()->is_admin == 1 && $user->email !== auth()->user()->email)
+                <div class="buttons">
+                    <form action="{{ route('profile.suspend', $user) }}" method="POST">
+                        @csrf
+                        <textarea type="text" name="reason" placeholder="Reason for suspension"
+                                  style="color: #222222" cols="40"></textarea>
+                        <button title="Suspend" class="button_bar align-top" type="submit"><i class="fa-solid fa-user-slash"></i></button>
+                    </form>
+                    <div>
+                        <form action="{{ route('profile.delete', $user) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <textarea type="text" name="reason" placeholder="Reason for deleting"
+                                      style="color: #222222" cols="40"></textarea>
+                            <button title="Delete" class="button_bar align-top px-2" type="submit"><i
+                                    class="fa-solid fa-trash-can"></i></button>
+                        </form>
+                    </div>
+                </div>
             @endif
-        </p>
-        <p>Status: @if($user->is_suspended === 1)
-                Suspended
-            @else
-                Normal
-            @endif
-        </p>
-
-        @if(auth()->user()->is_admin == 1 && $user->email !== auth()->user()->email)
-            <div class="buttons">
-                <form action="{{ route('profile.suspend', $user) }}" method="POST">
-                    @csrf
-                    <button title="Suspend" class="button_bar "><i class="fa-solid fa-user-slash"></i></button>
-                </form>
-                <form action="{{ route('profile.delete', $user) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button title="Delete" class="button_bar ml-4"><i class="fa-solid fa-trash-can"></i></button>
-                </form>
-            </div>
-        @endif
-
-
+        </div>
     </div>
     <div class="containerGeneral paddingContainer" style="display: block">
-    {{ $posts->links() }}
+        {{ $posts->links() }}
     </div>
     <div class="containerGeneral paddingContainer" style="display: block">
         <h3>Posts</h3>
@@ -69,7 +79,8 @@
         <h3>Reviews</h3>
         @foreach ($reviews as $review)
             <ul>
-                <li><a href="{{route('game.show', ['id' => $review->game_id])}}" class="linkText"><h4>{{ $review->game->name }}</h4></a></li>
+                <li><a href="{{route('game.show', ['id' => $review->game_id])}}" class="linkText">
+                        <h4>{{ $review->game->name }}</h4></a></li>
             </ul>
         @endforeach
     </div>

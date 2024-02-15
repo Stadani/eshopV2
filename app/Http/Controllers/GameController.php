@@ -544,7 +544,7 @@ class GameController extends Controller
                 break;
         }
 
-        $games = $gamesQuery->paginate(24);
+        $games = $gamesQuery->paginate(24)->appends(request()->query());
 
         $genres = GameCategory::all();
         $platforms = GamePlatform::all();
@@ -734,15 +734,17 @@ class GameController extends Controller
             'screenshots.*' => 'image|mimes:jpeg,png,jpg|max:100000',
             'genres' => 'required|array',
             'genres.*' => 'exists:game_categories,id',
-            'platforms' => 'required|array',
-            'platforms.*' => 'required|string',
-            'prices' => 'required|array',
-            'prices.*' => 'required|numeric',
+            'platforms' => 'array',
+            'platforms.*' => 'required_with:prices.*',
+            'prices' => 'array',
+            'prices.*' => 'required_with:platforms.*',
             'dlcs.*' => 'nullable|required_with:dlc_prices.*',
             'dlc_prices.*' => 'nullable|required_with:dlcs.*',
         ], [
             'dlc_prices.*.required_with' => 'Price is required when a DLC is provided.',
             'dlcs.*.required_with' => 'DLC is required when a price is provided.',
+            'platforms.*.required_with' => 'Platform is required when a price is provided.',
+            'prices.*.required_with' => 'Price is required when a Platform is provided.',
         ]);
 
         $path = $request->file('game_picture')->store('database_pictures', 'public');
@@ -781,8 +783,8 @@ class GameController extends Controller
         $prices = $request->input('prices');
 
         $uniquePlatforms = array_unique($platforms);
-        if(count($platforms) != count($uniquePlatforms)) {
-            return redirect()->back()->with('error', 'Duplicate platforms are not allowed.');
+        if (count($platforms) != count($uniquePlatforms)) {
+            return redirect()->back()->withInput()->with('error', 'Duplicate platforms are not allowed.');
         }
 
         $nonNullPlatforms = array_filter($platforms, function ($value) {
@@ -793,12 +795,17 @@ class GameController extends Controller
         });
 
         if (count($nonNullPlatforms) !== count($nonNullPrices)) {
-            return redirect()->back()->with('error', 'Platform and price arrays must have the same length.');
+            return redirect()->back()->withInput()->with('error', 'Platform and price arrays must have the same length.');
         }
 
         foreach ($platforms as $index => $platform) {
-            $gameAndPlatform = new GameAndPlatform();
+            $existingPlatform = GamePlatform::where('name', $platform)->first();
 
+            if (!$existingPlatform) {
+                return redirect()->back()->withInput()->with('error', 'Platform "' . $platform . '" does not exist in the database.');
+            }
+
+            $gameAndPlatform = new GameAndPlatform();
             $platformModel = GamePlatform::firstOrCreate(['name' => $platform]);
 
             $gameAndPlatform->game_id = $game->id;
@@ -812,8 +819,8 @@ class GameController extends Controller
         $dlcsData = $request->input('dlcs');
         $dlcPricesData = $request->input('dlc_prices');
         $uniqueDlcs = array_unique($dlcsData);
-        if(count($dlcsData) != count($uniqueDlcs)) {
-            return redirect()->back()->with('error', 'Duplicate DLCs are not allowed.');
+        if (count($dlcsData) != count($uniqueDlcs)) {
+            return redirect()->back()->withInput()->with('error', 'Duplicate DLCs are not allowed.');
         }
 
         $nonNullDlcs = array_filter($dlcsData, function ($value) {
@@ -823,7 +830,7 @@ class GameController extends Controller
             return $value !== null;
         });
         if (count($nonNullDlcs) !== count($nonNullDlcPrices)) {
-            return redirect()->back()->with('error', 'DLC name and price arrays must have the same length.');
+            return redirect()->back()->withInput()->with('error', 'DLC name and price arrays must have the same length.');
         }
         if ($nonNullDlcs && $nonNullDlcPrices) {
             foreach ($dlcsData as $index => $dlcName) {
@@ -849,7 +856,6 @@ class GameController extends Controller
 
         return redirect()->route('game.show', ['id' => $game->id])->with('success', 'Game created successfully.');
     }
-
 
 
     public function editGameForm(Game $game)
@@ -893,15 +899,17 @@ class GameController extends Controller
             'screenshots.*' => 'image|mimes:jpeg,png,jpg|max:100000',
             'genres' => 'required|array',
             'genres.*' => 'exists:game_categories,id',
-            'platforms' => 'required|array',
-            'platforms.*' => 'required|string',
-            'prices' => 'required|array',
-            'prices.*' => 'required|numeric',
+            'platforms' => 'array',
+            'platforms.*' => 'required_with:prices.*',
+            'prices' => 'array',
+            'prices.*' => 'required_with:platforms.*',
             'dlcs.*' => 'nullable|required_with:dlc_prices.*',
             'dlc_prices.*' => 'nullable|required_with:dlcs.*',
         ], [
             'dlc_prices.*.required_with' => 'Price is required when a DLC is provided.',
             'dlcs.*.required_with' => 'DLC is required when a price is provided.',
+            'platforms.*.required_with' => 'Platform is required when a price is provided.',
+            'prices.*.required_with' => 'Price is required when a Platform is provided.',
         ]);
 
         if ($request->hasFile('game_picture')) {
@@ -942,13 +950,21 @@ class GameController extends Controller
 
         $platforms = $request->input('platforms');
         $prices = $request->input('prices');
-
+        $uniquePlatforms = array_unique($platforms);
+        if (count($platforms) != count($uniquePlatforms)) {
+            return redirect()->back()->with('error', 'Duplicate platforms are not allowed.');
+        }
         if (count($platforms) !== count($prices)) {
             return redirect()->back()->with('error', 'Platform and price arrays must have the same length.');
         }
 
 
         foreach ($platforms as $index => $platform) {
+            $existingPlatform = GamePlatform::where('name', $platform)->first();
+
+            if (!$existingPlatform) {
+                return redirect()->back()->withInput()->with('error', 'Platform "' . $platform . '" does not exist in the database.');
+            }
 
             $platformId = GamePlatform::where('name', $platform)->first();
             $exists = GameAndPlatform::where('game_id', $game->id)
@@ -960,7 +976,6 @@ class GameController extends Controller
                 GameAndPlatform::where('game_id', $game->id)
                     ->where('platform_id', $platformId->id)
                     ->update(['price' => $prices[$index]]);
-//                dd($gameAndPlatform);
             } else {
 
                 $gameAndPlatform = new GameAndPlatform();
@@ -983,7 +998,10 @@ class GameController extends Controller
 
         $dlcsData = $request->input('dlcs');
         $dlcPricesData = $request->input('dlc_prices');
-
+        $uniqueDlcs = array_unique($dlcsData);
+        if (count($dlcsData) != count($uniqueDlcs)) {
+            return redirect()->back()->with('error', 'Duplicate DLCs are not allowed.');
+        }
         if ($dlcsData && $dlcPricesData) {
 
             if ($dlcsData) {
@@ -1033,36 +1051,19 @@ class GameController extends Controller
     public function deleteGameForm(Game $game)
     {
         if (auth()->user() && auth()->user()->is_admin == 1) {
-            foreach ($game->screenshot as $screenshot) {
-                $filePath = 'storage/database_pictures/' . basename($screenshot->screenshot);
-
-                try {
-                    if (Storage::exists($filePath)) {
-                        $deleted = Storage::delete($filePath);
-                        if ($deleted) {
-                            echo "File deleted: $filePath<br>";
-                        } else {
-                            echo "Failed to delete file: $filePath<br>";
-                        }
-                    } else {
-                        echo "File not found: $filePath<br>";
-                    }
-                } catch (\Exception $e) {
-                    echo "Error deleting file: " . $e->getMessage() . "<br>";
+            foreach ($game->trailer as $trailer) {
+                if (Storage::disk('public')->exists($trailer->trailer)) {
+                    Storage::disk('public')->delete($trailer->trailer);
                 }
             }
-
-            foreach ($game->trailer as $trailer) {
-                $filePath = 'storage/database_trailers/' . basename($trailer->trailer);
-                try {
-                    if (Storage::exists($filePath)) {
-                        Storage::delete($filePath);
-                    } else {
-                        echo "Trailer file not found: $filePath<br>";
-                    }
-                } catch (\Exception $e) {
-                    echo "Error deleting trailer file: " . $e->getMessage() . "<br>";
+            foreach ($game->screenshot as $screenshot) {
+                if (Storage::disk('public')->exists($screenshot->screenshot)) {
+                    Storage::disk('public')->delete($screenshot->screenshot);
                 }
+            }
+            if (Storage::disk('public')->exists($game->game_picture)) {
+                Storage::disk('public')->delete($game->game_picture);
+
             }
 
             $game->delete();

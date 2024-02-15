@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserSuspended;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\UserSuspendedMail;
 
 class UserProfileController extends Controller
 {
@@ -18,13 +21,20 @@ class UserProfileController extends Controller
         return view('profile', compact('user', 'posts', 'reviews'));
     }
 
-    public function suspendUser(User $user)
+    public function suspendUser(User $user, Request $request)
     {
-        if ($user->is_suspended == 1) {
-            $user->update(['is_suspended' => 0]);
-        } else {
-            $user->update(['is_suspended' => 1]);
-        }
+        $request->validate([
+            'reason' => 'required|string',
+        ]);
+
+        $user->update(['is_suspended' => !$user->is_suspended]);
+
+        UserSuspended::updateOrCreate(
+            ['user_id' => $user->id],
+            ['reason' => $request->input('reason')]
+        );
+
+        Mail::to($user->email)->send(new UserSuspendedMail($user, $request->input('reason')));
 
         return back()->with('success', 'User suspended successfully.');
     }
@@ -33,7 +43,9 @@ class UserProfileController extends Controller
     {
         if($user->profile_picture) {
             if (!basename('albertwhisker.png')) {
-                Storage::delete('app/public/profile_pictures/' . basename($user->profile_picture));
+                if (Storage::disk('public')->exists($user->profile_picture)) {
+                    Storage::disk('public')->delete($user->profile_picture);
+                }
             }
         }
 
