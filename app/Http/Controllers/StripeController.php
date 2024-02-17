@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReceiptMail;
 use App\Models\Game;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\Session;
 use App\Models\InventoryGame;
@@ -83,6 +85,8 @@ class StripeController extends Controller
                 }
             }
         }
+
+        Mail::to($user->email)->send(new ReceiptMail($user, $cart));
 
         Session::forget('cart');
         return redirect('inventory');

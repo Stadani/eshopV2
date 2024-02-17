@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContentDeletedMail;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CommentController extends Controller
 {
@@ -67,11 +70,15 @@ class CommentController extends Controller
     }
 
 
-    public function delete(Comment $comment)
+    public function delete(Comment $comment, Request $request)
     {
-        if ((auth()->user()->id === $comment->user_id) || auth()->user()->is_admin == 1) {
+        if ((auth()->user()->id === $comment->user_id)) {
             $comment->delete();
-            return back();
+            return redirect()->back()->with('success', 'Comment deleted successfully.');
+        } elseif (auth()->user()->is_admin == 1) {
+            Mail::to($comment->user->email)->send(new ContentDeletedMail($comment->user, $request->input('reason')));
+            $comment->delete();
+            return redirect()->back()->with('success', 'Comment deleted successfully.');
         }
         return back();
     }

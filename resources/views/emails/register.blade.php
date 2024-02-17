@@ -7,8 +7,8 @@
 </head>
 <body>
 <p>Dear {{ $user->name }},</p>
-<p>Your account has been suspended for the following reason:</p>
-<p>{{ $reason }}</p>
+<p>Thank you for registering at PixelNexus.</p>
+<p>If you want to receive news about our website please consider subscribing to our newsletter located at the home page.</p>
 <p>If you have any questions or concerns, please contact us at stadani2@stud.uniza.sk.</p>
 <p>Thank you,</p>
 <p>PixelNexus</p>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContentDeletedMail;
 use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Models\Post;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -124,11 +126,15 @@ class PostController extends Controller
     }
 
 
-    public function delete(Post $post)
+    public function delete(Post $post, Request $request)
     {
-        if (auth()->user() && (auth()->user()->id === $post->user->id || auth()->user()->is_admin == 1)) {
+        if (auth()->user() && (auth()->user()->id === $post->user->id)) {
             $post->delete();
-            return redirect('/forum');
+            return redirect()->route('index.forum')->with('success', 'Post deleted successfully.');
+        } elseif (auth()->user()->is_admin == 1) {
+            Mail::to($post->user->email)->send(new ContentDeletedMail($post->user, $request->input('reason')));
+            $post->delete();
+            return redirect()->route('index.forum')->with('success', 'Post deleted successfully.');
         }
         return redirect()->back();
     }

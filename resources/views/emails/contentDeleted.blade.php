@@ -7,7 +7,7 @@
 </head>
 <body>
 <p>Dear {{ $user->name }},</p>
-<p>Your account has been suspended for the following reason:</p>
+<p>Your content has been deleted for the following reason:</p>
 <p>{{ $reason }}</p>
 <p>If you have any questions or concerns, please contact us at stadani2@stud.uniza.sk.</p>
 <p>Thank you,</p>

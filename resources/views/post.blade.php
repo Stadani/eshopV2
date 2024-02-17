@@ -59,11 +59,15 @@
 {{--EDIT AND DELETE BUTTONS--}}
     @if(auth()->user() && (auth()->user()->id === $post->user->id || auth()->user()->is_admin == 1))
         <div class="postNameAndTags eanddbuttons">
+            @if(auth()->user()->is_admin == 1)
+                <button title="Delete" class="button_bar"  onclick="toggleDeletePostForm({{ $post->id }})"><i class="fa-solid fa-trash-can"></i></button>
+            @else
             <form action="{{ route('delete.post', $post) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button title="Delete" class="button_bar"><i class="fa-solid fa-trash-can"></i>  </button>
             </form>
+            @endif
             <a href="{{ route('posts.edit', $post) }}"><button title="Edit" class="button_bar"><i class="fa-solid fa-file-pen"></i></button></a>
         </div>
     @endif
@@ -91,6 +95,14 @@
         </div>
 {{--CONTENT OF POST PANEL--}}
         <div class="postContent">
+            <div id="deletePostForm{{ $post->id }}" style="display: none;">
+                <form action="{{ route('delete.post', $post->slug) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <textarea name="reason" placeholder="Reason for deletion"></textarea>
+                    <button type="submit" class="button_bar">Delete</button>
+                </form>
+            </div>
             {{$post->body}}
         </div>
     </div>
@@ -146,6 +158,8 @@
 </x-footer>
 @endsection
 <script src="/js/toggleEditComment.js"></script>
+<script src="/js/toggleDeleteComment.js"></script>
+<script src="/js/toggleDeletePost.js"></script>
 <script src="{{ asset('js/postAjax.js') }}"></script>
 <script>
     var postSlug = "{{ $post->slug }}";

@@ -61,7 +61,7 @@ Route::get('tags/{tag:slug}', function (Tag $tag) {
     ]);
 });
 
-Route::get('/forum', [PostController::class, 'index']);
+Route::get('/forum', [PostController::class, 'index'])->name('index.forum');
 
 Route::middleware('auth')->group(function () {
 Route::get('/postForm', [PostController::class, 'create']) ->name('create.post')->middleware('check.suspension');

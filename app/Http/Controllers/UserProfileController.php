@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserDeletedMail;
 use App\Models\User;
 use App\Models\UserSuspended;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class UserProfileController extends Controller
         return view('profile', compact('user', 'posts', 'reviews'));
     }
 
-    public function suspendUser(User $user, Request $request)
+    public function suspendUser(User $user, Request $request, UserSuspended $userSuspended)
     {
         $request->validate([
             'reason' => 'required|string',
@@ -29,17 +30,19 @@ class UserProfileController extends Controller
 
         $user->update(['is_suspended' => !$user->is_suspended]);
 
-        UserSuspended::updateOrCreate(
-            ['user_id' => $user->id],
-            ['reason' => $request->input('reason')]
-        );
+        $userSuspended->where('user_id', $user->id)->update([
+            'reason' => $request->input('reason')
+        ]);
 
-        Mail::to($user->email)->send(new UserSuspendedMail($user, $request->input('reason')));
+
+        if ($user->is_suspended == 1) {
+            Mail::to($user->user->email)->send(new UserSuspendedMail($user, $request->input('reason')));
+        }
 
         return back()->with('success', 'User suspended successfully.');
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser(User $user, Request $request,)
     {
         if($user->profile_picture) {
             if (!basename('albertwhisker.png')) {
@@ -48,6 +51,8 @@ class UserProfileController extends Controller
                 }
             }
         }
+
+        Mail::to($user->email)->send(new UserDeletedMail($user, $request->input('reason')));
 
         $user->delete();
         return redirect('/')->with('success', 'User deleted successfully.');
