@@ -14,8 +14,13 @@ class StripeController extends Controller
 {
     public function session(Request $request)
     {
+        if (session('cart') === null) {
+            return redirect()->back()->with('error', 'Your cart is empty.');
+        }
+
         $user = auth()->user();
         $product = [];
+
 
         Stripe::setApiKey(config('stripe.sk'));
 
@@ -37,6 +42,8 @@ class StripeController extends Controller
                 'quantity' =>$quantity
             ];
         }
+
+
 
         $checkout = \Stripe\Checkout\Session::create([
             'line_items' => [$product],

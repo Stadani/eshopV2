@@ -36,9 +36,11 @@
             <form action="{{ route('delete.game', $game) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button title="Delete" class="button_bar"><i class="fa-solid fa-trash-can"></i>  </button>
+                <button title="Delete" class="button_bar"><i class="fa-solid fa-trash-can"></i></button>
             </form>
-            <a href="{{ route('edit.game', $game) }}"><button title="Edit" class="button_bar"><i class="fa-solid fa-file-pen"></i></button></a>
+            <a href="{{ route('edit.game', $game) }}">
+                <button title="Edit" class="button_bar"><i class="fa-solid fa-file-pen"></i></button>
+            </a>
         </div>
     @endif
     {{--    MAIN PANEL--}}
@@ -61,7 +63,8 @@
                                     </video>
                                 @else
                                     <video id="mainTrailer" controls>
-                                        <source src="{{ asset('storage/' . $game->trailer[0]['trailer']) }}" type="video/mp4">
+                                        <source src="{{ asset('storage/' . $game->trailer[0]['trailer']) }}"
+                                                type="video/mp4">
                                     </video>
                                 @endif
                             @else
@@ -71,10 +74,12 @@
                         <div class="thumbnails">
                             @foreach($game->trailer as $trailer)
                                 @if(Str::startsWith($trailer->trailer, ['http://', 'https://']))
-                                    <img class="thumbnail" src="{{ asset('storage/' . $trailer->preview) }}" alt="trailerThumbnail"
+                                    <img class="thumbnail" src="{{ asset('storage/' . $trailer->preview) }}"
+                                         alt="trailerThumbnail"
                                          onclick="showTrailer('{{ $trailer->trailer }}')">
                                 @else
-                                    <img class="thumbnail" src="{{ asset('storage/' . $trailer->preview) }}" alt="trailerThumbnail"
+                                    <img class="thumbnail" src="{{ asset('storage/' . $trailer->preview) }}"
+                                         alt="trailerThumbnail"
                                          onclick="showTrailer('{{ asset('storage/' . $trailer->trailer) }}')">
                                 @endif
                             @endforeach
@@ -88,11 +93,12 @@
                         <div class="selectedImage">
                             @if($game->screenshot->count() > 0)
                                 @if(Str::startsWith($game->screenshot[0]['screenshot'], ['http://', 'https://']))
-                                <img id="mainImage"
-                                     src="{{ $game->screenshot[0]['screenshot'] }} " alt="selectedImage">
+                                    <img id="mainImage"
+                                         src="{{ $game->screenshot[0]['screenshot'] }} " alt="selectedImage">
                                 @else
                                     <img id="mainImage"
-                                         src="{{ asset('storage/' . $game->screenshot[0]['screenshot'])  }}" alt="selectedImage">
+                                         src="{{ asset('storage/' . $game->screenshot[0]['screenshot'])  }}"
+                                         alt="selectedImage">
                                 @endif
                             @else
                                 No available screenshots
@@ -102,9 +108,12 @@
                         <div class="thumbnails">
                             @foreach($game->screenshot as $screenshot)
                                 @if(Str::startsWith($screenshot->screenshot, ['http://', 'https://']))
-                                    <img class="thumbnail" src="{{ $screenshot->screenshot }}" alt="thumbnail" onclick="showImage('{{ $screenshot->screenshot }}')">
+                                    <img class="thumbnail" src="{{ $screenshot->screenshot }}" alt="thumbnail"
+                                         onclick="showImage('{{ $screenshot->screenshot }}')">
                                 @else
-                                    <img class="thumbnail" src="{{ asset('storage/' . $screenshot->screenshot) }}" alt="thumbnail" onclick="showImage('{{ asset('storage/' . $screenshot->screenshot) }}')">
+                                    <img class="thumbnail" src="{{ asset('storage/' . $screenshot->screenshot) }}"
+                                         alt="thumbnail"
+                                         onclick="showImage('{{ asset('storage/' . $screenshot->screenshot) }}')">
                                 @endif
                             @endforeach
                         </div>
@@ -196,15 +205,25 @@
                         </td>
                         <td>
                             <div class="buttonContainer">
-                                <button class="button_bar buyButton" data-id="{{ $game->id }}"
-                                        data-platform="{{ $gameBuy->id }}" data-dlc="false">
+                                <button class="button_bar buyButton" data-id="{{ $game->id }}" data-platform="{{ $gameBuy->id }}" data-dlc="false">
                                     BUY
-                                    <span class="buttonPrice">{{$gameBuy->pivot->price}}$</span>
+                                    @php $showPrice = true; @endphp
+                                    @foreach($priceHistory as $history)
+                                        @if($history->platform_id == $gameBuy->id && $history->price > $gameBuy->pivot->price)
+                                            <span class="buttonPrice"><span class="discount">{{$history->price}}$</span> {{$gameBuy->pivot->price}}$</span>
+                                            @php $showPrice = false; @endphp
+                                            @break
+                                        @endif
+                                    @endforeach
+                                    @if($showPrice)
+                                        <span class="buttonPrice">{{$gameBuy->pivot->price}}$</span>
+                                    @endif
                                 </button>
                             </div>
                         </td>
                     </tr>
                 </div>
+
             @endforeach
         </table>
 
@@ -224,7 +243,18 @@
                             <button class="button_bar buyButton" data-id="{{ $dlc->id }}" data-platform="All"
                                     data-dlc="true">
                                 BUY
-                                <span class="buttonPrice">{{$dlc->price}}$</span>
+                                @php $showPrice = true; @endphp
+{{--                                @dd($dlcPriceHistory)--}}
+                                @foreach($dlcPriceHistory as $history)
+                                    @if($history->dlc_id == $dlc->id && $history->price > $dlc->price)
+                                        <span class="buttonPrice"><span class="discount">{{$history->price}}$</span> {{$dlc->price}}$</span>
+                                        @php $showPrice = false; @endphp
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if($showPrice)
+                                    <span class="buttonPrice">{{$dlc->price}}$</span>
+                                @endif
                             </button>
                         </div>
                     </td>
@@ -290,32 +320,32 @@
                 </form>
             @else
                 <div id="commentContainer">
-                <x-editUserReview :showUsersReview="$showUsersReview">
+                    <x-editUserReview :showUsersReview="$showUsersReview">
 
-                </x-editUserReview>
+                    </x-editUserReview>
                 </div>
             @endif
         @endauth
     </div>
-        <div class="container arrow_bar just">
-            <div id="paginationContainer" class="navbar_main px-2">
-                {{ $reviews->links() }}
-            </div>
-            <div class="sidenav py-3">
-                <select id="commentsPerPageDropdown" onchange="updateCommentsPerPage(this.value)">
-                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 per page</option>
-                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 per page</option>
-                    <option value="15" {{ $perPage == 15 ? 'selected' : '' }}>15 per page</option>
-                    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 per page</option>
-                </select>
-            </div>
+    <div class="container arrow_bar just">
+        <div id="paginationContainer" class="navbar_main px-2">
+            {{ $reviews->links() }}
         </div>
-
-        <div id="commentContainer">
-            <x-userReview :reviews="$reviews">
-
-            </x-userReview>
+        <div class="sidenav py-3">
+            <select id="commentsPerPageDropdown" onchange="updateCommentsPerPage(this.value)">
+                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 per page</option>
+                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 per page</option>
+                <option value="15" {{ $perPage == 15 ? 'selected' : '' }}>15 per page</option>
+                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 per page</option>
+            </select>
         </div>
+    </div>
+
+    <div id="commentContainer">
+        <x-userReview :reviews="$reviews">
+
+        </x-userReview>
+    </div>
 
 
 
@@ -337,7 +367,6 @@
 <script>
     var gameId = "{{ $game->id }}";
 </script>
-
 
 
 <script>

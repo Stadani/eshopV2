@@ -36,11 +36,11 @@
             <div>
                 <label for="name">Name:</label>
                 @if(isset($game))
-                    <input type="text" id="name" class="searchbarPostForm" name="name"
-                           value="{{ old('name', isset($game) ? $game->name : '') }}" placeholder="Title...">
+                    <input type="text" id="name" name="name"
+                           value="{{ old('name', isset($game) ? $game->name : '') }}">
                 @else
-                    <input type="text" id="name" class="searchbarPostForm" name="name" required
-                           value="{{ old('name', isset($game) ? $game->name : '') }}" placeholder="Title...">
+                    <input type="text" id="name" name="name" required
+                           value="{{ old('name', isset($game) ? $game->name : '') }}">
                 @endif
             </div>
 
@@ -272,51 +272,52 @@
                         </ul>
                     </div>
                 @endif
-                @error('name')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('game_picture')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('release_date')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('rating')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('description')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('developers')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('publishers')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('trailers')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('screenshots')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('genres')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('platforms')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('prices')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('dlcs')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('dlc_prices')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
-                @error('series')
-                <li class="error-message alert alert-danger">{{ $message }}</li>
-                @enderror
+
+{{--                @error('name')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('game_picture')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('release_date')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('rating')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('description')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('developers')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('publishers')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('trailers')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('screenshots')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('genres')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('platforms')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('prices')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('dlcs')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('dlc_prices')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
+{{--                @error('series')--}}
+{{--                <li class="error-message alert alert-danger">{{ $message }}</li>--}}
+{{--                @enderror--}}
             </div>
             <div class="mt-3 mb-3">
                 <button type="submit" class="button_bar">Post</button>

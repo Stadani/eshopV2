@@ -69,7 +69,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:20|min:3',
+            'title' => 'required|string|max:30|min:3',
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
             'body' => 'required|string|min:10',

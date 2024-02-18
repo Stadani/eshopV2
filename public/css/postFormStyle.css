@@ -32,6 +32,7 @@
 /*dropdown*/
 .mult-select-tag .body {
     border-color: #222222;
+    max-width: 600px;
 }
 .mult-select-tag .item-container {
     color: #222222;

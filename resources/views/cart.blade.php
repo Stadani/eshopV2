@@ -19,11 +19,11 @@
 
 @section('content')
 
-    @if(Session::has('error'))
-        <div id="errorMessage" class="alert alert-danger messageBL">
-            {{ Session::get('error') }}
-        </div>
-    @endif
+{{--    @if(Session::has('error'))--}}
+{{--        <div id="errorMessage" class="alert alert-danger messageBL">--}}
+{{--            {{ Session::get('error') }}--}}
+{{--        </div>--}}
+{{--    @endif--}}
 
     <div class="containerGeneral table-responsive">
 
@@ -82,7 +82,8 @@
             <tr>
                 <td colspan="6">
                     <div class="text-right">
-                        <form action="/session" method="POST">
+                        <form action="{{route('session')}}" method="POST">
+                            @csrf
                             <a href="/list" class="btn btn-danger">Continue shopping</a>
                             <input type="hidden" name="_token" value="{{csrf_token()}}">
                             <button type="submit" class="btn btn-success">Checkout</button>

@@ -86,5 +86,5 @@
 
     </x-footer>
 @endsection
-<script src="/js/postFormError.js"></script>
+{{--<script src="/js/postFormError.js"></script>--}}
 </body>

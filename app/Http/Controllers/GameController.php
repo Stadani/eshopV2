@@ -11,6 +11,8 @@ use App\Models\GamePlatform;
 use App\Models\GamePublisher;
 use App\Models\GameScreenshot;
 use App\Models\GameTrailer;
+use App\Models\PriceHistory;
+use App\Models\PriceHistoryDlc;
 use App\Models\SameSeriesGame;
 use App\Services\SteamService;
 use Illuminate\Http\Request;
@@ -583,8 +585,9 @@ class GameController extends Controller
         $reviews = $game->review()->paginate($perPage)->withQueryString();
         $showUsersReview = $game->review()->where('user_id', auth()->id())->get();
         $averageRating = $game->review()->where('game_id', $game->id)->avg('rating');
+        $priceHistory = PriceHistory::where('game_id', $game->id)->get();
+        $dlcPriceHistory = PriceHistoryDlc::all();
 
-//        dd($showUsersReview);
         if ($request->ajax()) {
             $forumItemsView = view('components.userReview', ['reviews' => $reviews])->render();
             $paginationView = $reviews->links()->render();
@@ -600,6 +603,8 @@ class GameController extends Controller
                 'perPage' => $perPage,
                 'showUsersReview' => $showUsersReview,
                 'averageRating' => $averageRating,
+                'priceHistory' => $priceHistory,
+                'dlcPriceHistory' => $dlcPriceHistory,
             ]);
         }
     }
@@ -755,6 +760,42 @@ class GameController extends Controller
         $game->rating = $validatedData['rating'];
         $game->description = $validatedData['description'];
 
+        $platforms = $request->input('platforms');
+        $prices = $request->input('prices');
+
+        $uniquePlatforms = array_unique($platforms);
+        if (count($platforms) != count($uniquePlatforms)) {
+            return redirect()->back()->withInput()->with('error', 'Duplicate platforms are not allowed.');
+        }
+
+        $nonNullPlatforms = array_filter($platforms, function ($value) {
+            return $value !== null;
+        });
+        $nonNullPrices = array_filter($prices, function ($value) {
+            return $value !== null;
+        });
+
+        if (count($nonNullPlatforms) !== count($nonNullPrices)) {
+            return redirect()->back()->withInput()->with('error', 'Platform and price arrays must have the same length.');
+        }
+
+        $dlcsData = $request->input('dlcs');
+        $dlcPricesData = $request->input('dlc_prices');
+        $uniqueDlcs = array_unique($dlcsData);
+        if (count($dlcsData) != count($uniqueDlcs)) {
+            return redirect()->back()->withInput()->with('error', 'Duplicate DLCs are not allowed.');
+        }
+
+        $nonNullDlcs = array_filter($dlcsData, function ($value) {
+            return $value !== null;
+        });
+        $nonNullDlcPrices = array_filter($dlcPricesData, function ($value) {
+            return $value !== null;
+        });
+        if (count($nonNullDlcs) !== count($nonNullDlcPrices)) {
+            return redirect()->back()->withInput()->with('error', 'DLC name and price arrays must have the same length.');
+        }
+
         $game->save();
         $game->developer()->sync($request->developers);
         $game->publisher()->sync($request->publishers);
@@ -779,24 +820,7 @@ class GameController extends Controller
         $game->category()->sync($request->genres);
 
 
-        $platforms = $request->input('platforms');
-        $prices = $request->input('prices');
 
-        $uniquePlatforms = array_unique($platforms);
-        if (count($platforms) != count($uniquePlatforms)) {
-            return redirect()->back()->withInput()->with('error', 'Duplicate platforms are not allowed.');
-        }
-
-        $nonNullPlatforms = array_filter($platforms, function ($value) {
-            return $value !== null;
-        });
-        $nonNullPrices = array_filter($prices, function ($value) {
-            return $value !== null;
-        });
-
-        if (count($nonNullPlatforms) !== count($nonNullPrices)) {
-            return redirect()->back()->withInput()->with('error', 'Platform and price arrays must have the same length.');
-        }
 
         foreach ($platforms as $index => $platform) {
             $existingPlatform = GamePlatform::where('name', $platform)->first();
@@ -816,22 +840,7 @@ class GameController extends Controller
         }
 
 
-        $dlcsData = $request->input('dlcs');
-        $dlcPricesData = $request->input('dlc_prices');
-        $uniqueDlcs = array_unique($dlcsData);
-        if (count($dlcsData) != count($uniqueDlcs)) {
-            return redirect()->back()->withInput()->with('error', 'Duplicate DLCs are not allowed.');
-        }
 
-        $nonNullDlcs = array_filter($dlcsData, function ($value) {
-            return $value !== null;
-        });
-        $nonNullDlcPrices = array_filter($dlcPricesData, function ($value) {
-            return $value !== null;
-        });
-        if (count($nonNullDlcs) !== count($nonNullDlcPrices)) {
-            return redirect()->back()->withInput()->with('error', 'DLC name and price arrays must have the same length.');
-        }
         if ($nonNullDlcs && $nonNullDlcPrices) {
             foreach ($dlcsData as $index => $dlcName) {
                 $dlcPrice = $nonNullDlcPrices[$index];
@@ -867,6 +876,8 @@ class GameController extends Controller
         $games = Game::all();
         $gameAndPlatforms = GameAndPlatform::where('game_id', $game->id)->orderBy('game_id', 'desc')->get();
         $gameAndDlcs = GameDLC::where('game_id', $game->id)->get();
+
+
 
         if (auth()->user()->is_admin == 1) {
             return view('gameForm', [
@@ -911,6 +922,8 @@ class GameController extends Controller
             'platforms.*.required_with' => 'Platform is required when a price is provided.',
             'prices.*.required_with' => 'Price is required when a Platform is provided.',
         ]);
+
+
 
         if ($request->hasFile('game_picture')) {
             Storage::delete($game->game_picture);
@@ -959,6 +972,7 @@ class GameController extends Controller
         }
 
 
+
         foreach ($platforms as $index => $platform) {
             $existingPlatform = GamePlatform::where('name', $platform)->first();
 
@@ -967,6 +981,19 @@ class GameController extends Controller
             }
 
             $platformId = GamePlatform::where('name', $platform)->first();
+
+            $previousPrices = [];
+            $previousPrices[$existingPlatform->id] = GameAndPlatform::where('game_id', $game->id)
+                ->where('platform_id', $platformId->id)->value('price');
+
+            PriceHistory::updateOrCreate([
+                'game_id' => $game->id,
+                'platform_id' => $existingPlatform->id,
+            ], [
+                    'price' => $previousPrices[$existingPlatform->id],
+                ]
+            );
+
             $exists = GameAndPlatform::where('game_id', $game->id)
                 ->where('platform_id', $platformId->id)
                 ->exists();
@@ -999,9 +1026,11 @@ class GameController extends Controller
         $dlcsData = $request->input('dlcs');
         $dlcPricesData = $request->input('dlc_prices');
         $uniqueDlcs = array_unique($dlcsData);
+
         if (count($dlcsData) != count($uniqueDlcs)) {
             return redirect()->back()->with('error', 'Duplicate DLCs are not allowed.');
         }
+
         if ($dlcsData && $dlcPricesData) {
 
             if ($dlcsData) {
@@ -1019,9 +1048,29 @@ class GameController extends Controller
                 return redirect()->back()->with('error', 'DLC name and price arrays must have the same length.');
             }
 
+
+
+
+            $previousPricesDlc = [];
+            foreach ($game->gameDLCs as $dlc) {
+                $previousPricesDlc[$dlc->id] = $dlc->price;
+            }
+
+
+
             foreach ($nonNullDlcs as $index => $dlc) {
                 $dlcName = GameDLC::where('name', $dlc)->first();
                 if ($dlcName !== null) {
+
+                    $dlcId = $dlcName->id;
+                    if (array_key_exists($dlcId, $previousPricesDlc)) {
+                        PriceHistoryDLC::updateOrCreate([
+                            'dlc_id' => $dlcId,
+
+                        ], [
+                            'price' => $previousPricesDlc[$dlcId],
+                        ]);
+                    }
                     GameDLC::where('game_id', $game->id)
                         ->where('name', $dlcName->name)
                         ->update(['price' => $nonNullDlcPrices[$index]]);
@@ -1044,6 +1093,9 @@ class GameController extends Controller
                 }
             }
         }
+
+
+
         return redirect()->route('game.show', ['id' => $game->id])->with('success', 'Game updated successfully.');
 
     }

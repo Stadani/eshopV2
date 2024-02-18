@@ -16,7 +16,9 @@
         <th scope="col" style="width: 10%">Quantity</th>
     </tr>
     @foreach($cart as $details)
+        @php
 
+ @endphp
         <tr>
             <td>
                 {{ $details['product_name'] }}
@@ -25,7 +27,7 @@
                 {{ $details['platform'] }}
             </td>
             <td>
-                {{ $details['price'] }}
+                {{ $details['price'] * $details['quantity'] }}
             </td>
             <td>
                 {{ $details['quantity'] }}

@@ -28,16 +28,28 @@ class UserProfileController extends Controller
             'reason' => 'required|string',
         ]);
 
-        $user->update(['is_suspended' => !$user->is_suspended]);
-
-        $userSuspended->where('user_id', $user->id)->update([
-            'reason' => $request->input('reason')
-        ]);
-
-
-        if ($user->is_suspended == 1) {
-            Mail::to($user->user->email)->send(new UserSuspendedMail($user, $request->input('reason')));
+        if ($user->is_suspended == 0) {
+            Mail::to($user->email)->send(new UserSuspendedMail($user, $request->input('reason')));
+            $user->update(['is_suspended' => !$user->is_suspended]);
+        } else {
+            $user->update(['is_suspended' => !$user->is_suspended]);
         }
+
+
+        if ($userSuspended->where('user_id', $user->id)->update([
+            'reason' => $request->input('reason')
+        ]) == 0) {
+            UserSuspended::create([
+                'user_id' => $user->id,
+                'reason' => $request->input('reason'),
+            ]);
+        } else {
+            $userSuspended->where('user_id', $user->id)->update([
+                'reason' => $request->input('reason')
+            ]);
+        }
+
+
 
         return back()->with('success', 'User suspended successfully.');
     }
