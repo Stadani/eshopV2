@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GameController;
 
 use App\Http\Controllers\PurchaseHistoryController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserReviewController;
@@ -89,6 +90,8 @@ Route::post('/gameForm', [GameController::class, 'storeGameForm'])->name('store.
 Route::get('/gameForm/{game}', [GameController::class, 'editGameForm'])->name('edit.game')->middleware('check.admin');
 Route::patch('/gameForm/{game}', [GameController::class, 'updateGameForm'])->name('update.game')->middleware('check.admin');
 Route::delete('/game/{game:id}', [GameController::class, 'deleteGameForm'])->name('delete.game')->middleware('check.admin');
+Route::get('/statistics', [StatisticsController::class, 'index'])->name('index.stats')->middleware('check.admin');
+
 
 
 Route::get('/profile/{id}', [UserProfileController::class, 'show'])->name('profile.show');

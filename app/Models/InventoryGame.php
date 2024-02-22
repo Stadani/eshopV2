@@ -17,4 +17,13 @@ class InventoryGame extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function game()
+    {
+        return $this->hasMany(Game::class);
+    }
+    public function dlc()
+    {
+        return $this->hasMany(GameDLC::class);
+    }
 }

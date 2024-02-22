@@ -90,9 +90,8 @@
 <div class="containerGeneral paragraphs">
     <p>Are you a gaming enthusiast always on the lookout for the latest updates, releases, and insights about your favorite games? Look no further! Our newsletter is tailored just for you.</p>
     <p>By subscribing to our newsletter, you'll get exclusive access to:</p>
-    <p>📰 Breaking News: Be the first to know about game releases, updates, and industry news.</p>
-    <p>🎉 Special Offers: Get notified about exclusive deals, discounts, and promotions on popular games and gaming accessories.</p>
-    <p>📅 Event Reminders: Never miss out on important gaming events, tournaments, and conventions happening in your area or online.></p>
+    <p>📰 Breaking News: Be the first to know about game releases and updates.</p>
+    <p>🎉 Special Offers: Get notified about exclusive deals, discounts, and promotions on popular games.</p>
     <p>🎁 Giveaways and Contests: Stand a chance to win exciting prizes, game keys, merchandise, and more through our regular giveaways and contests.</p>
 
     <form action="/newsletter" method="POST">

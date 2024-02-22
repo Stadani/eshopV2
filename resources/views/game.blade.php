@@ -357,7 +357,7 @@
     <script src="{{ asset('js/gameAjax.js') }}"></script>
     <script src="{{ asset('js/rating.js') }}"></script>
     <script src="{{ asset('js/checkFields.js') }}"></script>
-    <script src="/js/toggleEditComment.js"></script>
+    <script src="{{ asset('js/toggleEditComment.js') }}"></script>
     <x-footer>
 
     </x-footer>
