@@ -1,0 +1,11 @@
+.twoPies {
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+@media (max-width: 768px) {
+    .twoPies {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
