@@ -29,6 +29,7 @@
     <div class="container centring" style="background-color: inherit">
         @if(auth()->user() && auth()->user()->is_admin == 1)
             <a href="/gameForm"><button title="Edit" class="button_bar mt-3"><i class="fa-solid fa-plus"></i> ADD A GAME</button></a>
+            <a href="/statistics" style="padding-left: 10px "><button title="Stats" class="button_bar mt-3"><i class="fa-solid fa-chart-line"></i> Statistics</button></a>
         @endif
     </div>
     <div class="container centring">
