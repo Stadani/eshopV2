@@ -38,442 +38,11 @@ class GameController extends Controller
     }
 
 
+    /**
+     * Zobrazuje zoznam hier a umoznuje filtrovanie
+     */
     public function index(Request $request)
     {
-
-
-//GAMES
-
-//            $currentPage = 25;
-//            $totalPages = 50;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//                dd($gamesData);
-//                foreach ($gamesData as $gameData) {
-//                    Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-//
-
-//GAME DESCRIPTION
-
-//            $currentPage = 1;
-//            $totalPages = 50;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $gameDetails = $this->rawgApiService->getGameDetails($gameData['id']);
-//                    $fullDescription = $gameDetails['description'] ?? '';
-//                    $descriptions = explode('<p>Español<br />', $fullDescription);
-//                    $englishDescription = $descriptions[0] ?? '';
-//
-//                    $game->update(['description' => $englishDescription]);
-//                }
-//
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//CATEGORIES
-
-//            $currentPage = 1;
-//            $totalPages = 2;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGenres($request->all());
-//                $genresData = $response['results'] ?? [];
-////                dd($genresData);
-//                foreach ($genresData as $genreData) {
-//                    GameCategory::updateOrCreate(
-//                        ['slug' => $genreData['slug']],
-//                        [
-//                            'category' => $genreData['name'],
-//                            'slug' => $genreData['slug'],
-//                        ]
-//                    );
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages );
-
-//PLATFORMS
-
-//            $platformResponse = $this->rawgApiService->getPlatforms();
-//
-//            // Extract relevant information from the API response
-//            $platformsData = $platformResponse['results'] ?? [];
-////            {{dd($platformsData);}}
-//            // Insert categories into the database
-//            foreach ($platformsData as $platformData) {
-//                // Create a new category record or update if it already exists
-//                GamePlatform::updateOrCreate(
-//                    ['name' => $platformData['name']], // Check if the category already exists based on its slug
-//                    [
-//                        'name' => $platformData['name'],
-//                    ]
-//                );
-//            }
-
-//DEVELOPERS
-
-//            $currentPage = 1;
-//            $totalPages = 10;
-//            do {
-//                $developersResponse = $this->rawgApiService->getDevelopers(['page' => $currentPage]);
-//                $developersData = $developersResponse['results'] ?? [];
-//
-//                foreach ($developersData as $developerData) {
-//                    GameDeveloper::updateOrCreate(
-//                        ['name' => $developerData['name']],
-//                        [
-//                            'name' => $developerData['name'],
-//                        ]
-//                    );
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//PUBLISHERS
-
-//            $currentPage = 1;
-//            $totalPages = 10;
-//            do {
-//                $publishersResponse = $this->rawgApiService->getPublishers(['page' => $currentPage]);
-//                $publishersData = $publishersResponse['results'] ?? [];
-//                dd($publishersData);
-//                foreach ($publishersData as $publisherData) {
-//                    GamePublisher::updateOrCreate(
-//                        ['name' => $publisherData['name']],
-//                        [
-//                            'name' => $publisherData['name'],
-//                        ]
-//                    );
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//GAME AND CATEGORY PIVOT
-
-//            $currentPage = 40;
-//            $totalPages = 50;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $genres = $gameData['genres'] ?? [];
-//
-//                    foreach ($genres as $genre) {
-//                        $category = GameCategory::where('category', $genre['name'])->first();
-//
-//                        if ($category) {
-//                            if (!$game->category->contains($category->id)) {
-//                                $game->category()->attach($category->id);
-//                            }
-//                        }
-//                    }
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//GAME AND PLATFORM PIVOT
-
-//            $currentPage = 1;
-//            $totalPages = 50;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-////                dd($gamesData);
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $platforms = $gameData['platforms'] ?? [];
-//
-//                    foreach ($platforms as $platform) {
-////                        dd($platforms);
-//                        $platformEntry = GamePlatform::where('name', $platform['platform']['name'])->first();
-//
-//                        if ($platformEntry) {
-//                            if (!$game->platform->contains($platformEntry->id)) {
-//                                $game->platform()->attach($platformEntry->id);
-//                            }
-//                        }
-//                    }
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//GAME TRAILERS
-//
-//            $currentPage = 1;
-//            $totalPages = 1;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $trailersResponse = $this->rawgApiService->getTrailers($gameData['id']);
-//                    $trailersData = $trailersResponse['results'] ?? [];
-//
-//                    foreach ($trailersData as $trailer) {
-//
-//                        GameTrailer::updateOrCreate(
-//                            ['game_id' => $game->id, 'trailer' => $trailer['data']['max']],
-//                            ['game_id' => $game->id,
-//                                'trailer' => $trailer['data']['max'],
-//
-//                            ]);
-//                    }
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//GAME SCREENSHOTS
-
-//            $currentPage = 1;
-//            $totalPages = 50;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $screenshotsResponse = $this->rawgApiService->getScreenshots($gameData['id']);
-//                    $screenshotsData = $screenshotsResponse['results'] ?? [];
-//
-//                    foreach ($screenshotsData as $screenshot) {
-//                        GameScreenshot::updateOrCreate(
-//                            ['game_id' => $game->id, 'screenshot' => $screenshot['image']],
-//                            ['game_id' => $game->id, 'screenshot' => $screenshot['image']]
-//                        );
-//                    }
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//SAME SERIES GAMES
-
-//            $currentPage = 1;
-//            $totalPages = 50;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $seriesResponse = $this->rawgApiService->getSameSeries($gameData['id']);
-//                    $seriesData = $seriesResponse['results'] ?? [];
-//
-//                    foreach ($seriesData as $series) {
-//                        $seriesGame = Game::where('name', $series['name'])->first();
-//                        if ($seriesGame) {
-//                            SameSeriesGame::updateOrCreate(
-//                                [
-//                                    'original_id' => $game->id,
-//                                    'series_id' => $seriesGame->id,
-//                                ]
-//                            );
-//                        }
-//                    }
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//GAME DLCS
-
-//            $currentPage = 1;
-//            $totalPages = 50;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $dlcsResponse = $this->rawgApiService->getDLCs($gameData['id']);
-//                    $dlcsData = $dlcsResponse['results'] ?? [];
-//
-//                    foreach ($dlcsData as $dlcData) {
-//                        $dlc = GameDLC::updateOrCreate(
-//                            ['name' => $dlcData['name'], 'game_id' => $game->id],
-//                            [
-//                                'name' => $dlcData['name'],
-//                                'game_id' => $game->id,
-//                            ]
-//                        );
-//                    }
-//                }
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//GAME AND DEVELOPERS PIVOT
-
-//            $currentPage = 1;
-//            $totalPages = 1;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $developersResponse = $this->rawgApiService->getGameDetails($gameData['id']);
-//                    $developersData = $developersResponse['developers'] ?? [];
-//
-//                    foreach ($developersData as $developerData) {
-//                        $developerName = $developerData['name'] ?? null;
-//                        if ($developerName) {
-//                            $developer = GameDeveloper::where('name', $developerName)->first();
-//                            if ($developer) {
-//                                $game->developer()->syncWithoutDetaching([$developer->id]);
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                    $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-//GAME AND PUBLISHER PIVOT
-
-//            $currentPage = 48;
-//            $totalPages = 50;
-//
-//            do {
-//                $request->merge(['page' => $currentPage]);
-//                $response = $this->rawgApiService->getGames($request->all());
-//                $gamesData = $response['results'] ?? [];
-//
-//                foreach ($gamesData as $gameData) {
-//                    $game = Game::updateOrCreate(
-//                        ['name' => $gameData['name']],
-//                        [
-//                            'name' => $gameData['name'],
-//                            'game_picture' => $gameData['background_image'],
-//                            'release_date' => $gameData['released'],
-//                            'rating' => $gameData['rating'],
-//                        ]
-//                    );
-//
-//                    $publishersResponse = $this->rawgApiService->getGameDetails($gameData['id']);
-//                    $publishersData = $publishersResponse['publishers'] ?? [];
-//
-//                    foreach ($publishersData as $publisherData) {
-//                        $publisherName = $publisherData['name'] ?? null;
-//                        if ($publisherName) {
-//                            $publisher = GamePublisher::where('name', $publisherName)->first();
-//                            if ($publisher) {
-//                                $game->publisher()->syncWithoutDetaching([$publisher->id]);
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                $currentPage++;
-//            } while ($currentPage <= $totalPages);
-
-
         $searchQuery = $request->input('search');
 
         $gamesQuery = Game::query();
@@ -575,6 +144,9 @@ class GameController extends Controller
 
     }
 
+    /**
+     zobrazi obsah hry
+     */
     public function show($id, Request $request)
     {
         $dlc = GameDLC::all();
@@ -707,7 +279,9 @@ class GameController extends Controller
         }
     }
 
-    //functions for game form
+    /**
+        zobrazi formular na vytvorenie hry
+     */
     public function createGameForm()
     {
         $genres = GameCategory::all();
@@ -716,15 +290,17 @@ class GameController extends Controller
         $platforms = GamePlatform::all();
         $games = Game::all();
 
-//        dd($developers[1]);
         return view('gameForm', compact(
             'genres', 'developers', 'publishers', 'platforms', 'games'
         ));
     }
 
+
+    /**
+        ulozenie hry zadane vo formulary do DB
+     */
     public function storeGameForm(Request $request, Game $game)
     {
-//        dd($request->all());
         $validatedData = $request->validate([
             'name' => 'required|string',
             'game_picture' => 'required|image|mimes:jpeg,png,jpg|max:4096',
@@ -820,8 +396,6 @@ class GameController extends Controller
         $game->category()->sync($request->genres);
 
 
-
-
         foreach ($platforms as $index => $platform) {
             $existingPlatform = GamePlatform::where('name', $platform)->first();
 
@@ -838,7 +412,6 @@ class GameController extends Controller
 
             $gameAndPlatform->save();
         }
-
 
 
         if ($nonNullDlcs && $nonNullDlcPrices) {
@@ -876,7 +449,6 @@ class GameController extends Controller
         $games = Game::all();
         $gameAndPlatforms = GameAndPlatform::where('game_id', $game->id)->orderBy('game_id', 'desc')->get();
         $gameAndDlcs = GameDLC::where('game_id', $game->id)->get();
-
 
 
         if (auth()->user()->is_admin == 1) {
@@ -924,7 +496,6 @@ class GameController extends Controller
         ]);
 
 
-
         if ($request->hasFile('game_picture')) {
             Storage::delete($game->game_picture);
             $path = $request->file('game_picture')->store('database_pictures', 'public');
@@ -970,7 +541,6 @@ class GameController extends Controller
         if (count($platforms) !== count($prices)) {
             return redirect()->back()->with('error', 'Platform and price arrays must have the same length.');
         }
-
 
 
         foreach ($platforms as $index => $platform) {
@@ -1049,13 +619,10 @@ class GameController extends Controller
             }
 
 
-
-
             $previousPricesDlc = [];
             foreach ($game->gameDLCs as $dlc) {
                 $previousPricesDlc[$dlc->id] = $dlc->price;
             }
-
 
 
             foreach ($nonNullDlcs as $index => $dlc) {
@@ -1093,7 +660,6 @@ class GameController extends Controller
                 }
             }
         }
-
 
 
         return redirect()->route('game.show', ['id' => $game->id])->with('success', 'Game updated successfully.');

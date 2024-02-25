@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    /*
+    /**
      * show posts in forum that are in accordance with search query
      * filter passes request params to the scopeFilter
      * */

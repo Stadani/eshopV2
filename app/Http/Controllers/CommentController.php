@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Mail;
 
 class CommentController extends Controller
 {
+    /**
+        Zobrazuje komentare pod prispevkom a umoznuje zmenit pocet komentarov na stranke
+     */
     public function index(Post $post, Request $request)
     {
         $perPage = $request->input('perPage', 20);
@@ -44,15 +47,6 @@ class CommentController extends Controller
 
     }
 
-//    public function edit(Comment $comment)
-//    {
-//        if (auth()->user()->id === $comment->user_id) {
-//            return view('edit-comment', ['comment' => $comment]);
-//        }
-//
-//        return back();
-//    }
-
     public function update(Request $request, Comment $comment)
     {
         if (auth()->user()->id === $comment->user_id) {
@@ -70,6 +64,10 @@ class CommentController extends Controller
     }
 
 
+    /**
+        Vlastnik moze vymazat komentar alebo ak to je admin tak
+     * musi poskytnut aj dovod vymazania ktory dostane uzivatel do mailu
+     */
     public function delete(Comment $comment, Request $request)
     {
         if ((auth()->user()->id === $comment->user_id)) {

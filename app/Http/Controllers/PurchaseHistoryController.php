@@ -17,6 +17,7 @@ class PurchaseHistoryController extends Controller
         $this->rawgApiService = $rawgApiService;
     }
 
+
     public function index()
     {
 
@@ -24,7 +25,6 @@ class PurchaseHistoryController extends Controller
         $gameDetails = [];
         $dlcDetails = [];
         $itemDetails = [];
-//        dd($purchaseHistory);
         foreach ($purchaseHistory as $purchase) {
             $gameId = $purchase->game_id;
             $dlcId = $purchase->dlc_id;
@@ -49,24 +49,4 @@ class PurchaseHistoryController extends Controller
         ]);
     }
 }
-//$purchaseHistory = InventoryGame::where('user_id', auth()->id())->paginate(10);
-//$gameDetails = [];
-//$dlcDetails = [];
-//
-//foreach ($purchaseHistory as $purchase) {
-//    $gameId = $purchase->game_id;
-//    $game = Game::findOrFail($gameId);
-//    $gameDetails[] = $game;
-//}
-//
-//foreach ($purchaseHistory as $purchase) {
-//    $dlcId = $purchase->game_id;
-//    $dlc= Game::findOrFail($dlcId);
-//    $dlcDetails[] = $dlc;
-//}
-//
-//return view('inventory', [
-//    'purchaseHistory' => $purchaseHistory,
-//    'gameDetails' => $gameDetails,
-//    'dlcDetails' => $dlcDetails,
-//]);
+

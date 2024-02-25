@@ -12,6 +12,9 @@ use App\Models\InventoryGame;
 
 class StripeController extends Controller
 {
+    /**
+     * presunutie na platubnu branu
+     */
     public function session(Request $request)
     {
         if (session('cart') === null) {
@@ -58,6 +61,9 @@ class StripeController extends Controller
         return redirect()->away($checkout->url);
     }
 
+    /**
+     * vytvori kluc v inventari uzivatela po nakupe
+     */
     public function success()
     {
 
