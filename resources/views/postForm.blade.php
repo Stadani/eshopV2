@@ -10,9 +10,8 @@
         <link rel="stylesheet" href="/css/forumStyle.css">
         <link rel="stylesheet" href="/css/postFormStyle.css">
     @endsection
-    {{--    had to link like this because after opening post it doesnt work--}}
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon-32x32.png') }}">
-{{--    https://github.com/habibmhamadi/multi-select-tag--}}
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.0/dist/js/multi-select-tag.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -21,6 +20,10 @@
 
 </head>
 <body>
+{{--
+select na tagy mam z githubu
+https://github.com/habibmhamadi/multi-select-tag
+--}}
 @extends('components.navbar')
 @section('content')
 

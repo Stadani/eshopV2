@@ -14,6 +14,8 @@ class StripeController extends Controller
 {
     /**
      * presunutie na platubnu branu
+     * StripeController bol inspirovany youtube videom
+     * https://www.youtube.com/watch?v=XPE-pfvRHm4
      */
     public function session(Request $request)
     {

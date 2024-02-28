@@ -11,9 +11,7 @@
         <link rel="stylesheet" href="/css/postFormStyle.css">
         <link rel="stylesheet" href="/css/gameFormStyle.css">
     @endsection
-    {{--    had to link like this because after opening post it doesnt work--}}
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon-32x32.png') }}">
-    {{--    https://github.com/habibmhamadi/multi-select-tag--}}
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.0/dist/js/multi-select-tag.js"></script>
@@ -22,6 +20,10 @@
 
 </head>
 <body>
+{{--
+niektore selecty su z githubu
+https://github.com/habibmhamadi/multi-select-tag
+--}}
 @extends('components.navbar')
 @section('content')
     <div class="containerGeneral gameForm">

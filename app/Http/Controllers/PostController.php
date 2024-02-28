@@ -14,6 +14,8 @@ class PostController extends Controller
     /**
      * show posts in forum that are in accordance with search query
      * filter passes request params to the scopeFilter
+     * filtrovanie je inspirovane videom z laracastu
+     * https://laracasts.com/series/laravel-8-from-scratch/episodes/38
      * */
     public function index(Request $request)
     {

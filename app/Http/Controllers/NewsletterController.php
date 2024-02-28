@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class NewsletterController extends Controller
 {
+
+    /**
+     * vytvorenie newsletteru bolo inspirovane laracastom
+     * https://laracasts.com/series/laravel-8-from-scratch/episodes/60
+     */
     public function __invoke(Newsletter $newsletter)
     {
         request()->validate(['email' => 'required|email']);
